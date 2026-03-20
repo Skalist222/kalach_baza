@@ -60,15 +60,12 @@ function renderMap(data) {
     let current_arrival_id = current_arrival_el.id
     let map = document.getElementById("map")
     map.innerHTML = ""
-
-    let tooltip = document.getElementById('tooltip')
-    document.body.appendChild(tooltip);
     data.buildings.forEach(building => {
-        renderBuilding(map, building, data, current_arrival_id, tooltip)
+        renderBuilding(map, building, data, current_arrival_id)
     })
 
 }
-function renderBuilding(map, building, data, current_arrival_id, tooltip) {
+function renderBuilding(map, building, data, current_arrival_id) {
     let buildingDiv = document.createElement("div")
     buildingDiv.className = "building"
     let title = document.createElement("div")
@@ -78,11 +75,11 @@ function renderBuilding(map, building, data, current_arrival_id, tooltip) {
     /* комнаты корпуса */
     let rooms = data.rooms.filter(r => r.building_id == building.id)
     rooms.forEach(room => {
-        renderRoom(buildingDiv, room, data, current_arrival_id, tooltip)
+        renderRoom(buildingDiv, room, data, current_arrival_id)
     })
     map.appendChild(buildingDiv)
 }
-function renderRoom(buildingDiv, room, data, current_arrival_id, tooltip) {
+function renderRoom(buildingDiv, room, data, current_arrival_id) {
     let roomDiv = document.createElement("div")
     roomDiv.className = "room"
 
@@ -94,13 +91,13 @@ function renderRoom(buildingDiv, room, data, current_arrival_id, tooltip) {
     bedsContainer.className = "beds"
     /* койки комнаты */
     let beds = data.beds.filter(b => b.room_id == room.id)
-    beds.forEach(bed => { renderBed(bedsContainer, bed, data, current_arrival_id, tooltip) })
+    beds.forEach(bed => { renderBed(bedsContainer, bed, data, current_arrival_id) })
 
     roomDiv.appendChild(bedsContainer)
 
     buildingDiv.appendChild(roomDiv)
 }
-function renderBed(bedsContainer, bed, data, current_arrival_id, tooltip) {
+function renderBed(bedsContainer, bed, data, current_arrival_id) {
 
     let bedDiv = document.createElement("div")
     bedDiv.className = "bed free " + bed.position
