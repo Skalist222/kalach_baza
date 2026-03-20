@@ -39,6 +39,8 @@ async function addVisitor() {
     })
 
     nameInp.value = ""
+    dateInp.value = ""
+    phoneInp.value = ""
     loadData()
 }
 // Добавить заезд
