@@ -1,3 +1,22 @@
+function add_chase_tooltip(el, inform_text,visual_element) {
+    let tooltip = document.getElementById('tooltip')
+    let visualelement = document.getElementById('visual_element')
+    if(visual_element)visualelement.appendChild(visual_element)
+    el.addEventListener('mouseenter', (e) => {
+        tooltip.innerText = inform_text;
+        tooltip.style.display = 'block';
+        tooltip.style.left = e.pageX + 10 + 'px';
+        tooltip.style.top = e.pageY + 10 + 'px';
+    });
+    el.addEventListener('mousemove', (e) => {
+        tooltip.style.left = e.pageX + 10 + 'px';
+        tooltip.style.top = e.pageY + 10 + 'px';
+    });
+    el.addEventListener('mouseleave', (e) => {
+        tooltip.style.display = 'none';
+    });
+}
+
 function renderVisitors(visitors) {
 
     let sortElement = document.getElementById("sortVisitors")
@@ -16,16 +35,17 @@ function renderVisitors(visitors) {
             let el = document.createElement("div")
             el.className = "visitor";
             el.innerText = v.name
-            el.addEventListener('mouseenter', (e) => {
-                tooltip.innerText = "Крутой парень";
-                tooltip.style.display = 'block';
-                tooltip.style.left = e.pageX + 10 + 'px';
-                tooltip.style.top = e.pageY + 10 + 'px';
-            });
-            console.log(tooltip)
+            console.log(v)
+            let age = calculate_age_str(v.dr)
+            let toolInfo = v.dr + "\n"
+                + v.phone + "\n"
+                + (v.sex === true ? "М" : "Ж") + "\n"
+                + "Возраст:" + age + "\n"
+            add_chase_tooltip(el,toolInfo)
 
             el.draggable = true
             el.dataset.id = v.id
+
             el.addEventListener("dragstart", (e) => {
                 e.dataTransfer.setData("visitor_id", v.id)
             })
@@ -97,14 +117,14 @@ function renderBed(bedsContainer, bed, data, current_arrival_id, tooltip) {
 
     let placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == current_arrival_id)
     let position_rus =
-            bed.position === "upper" ? "Верхняя койка\n" :
+        bed.position === "upper" ? "Верхняя койка\n" :
             bed.position === "lower" ? "Нижняя койка\n" : "";
 
     if (placement) {
 
-        let status_rus = 
-            placement.status === "busy"     ? "Занято:\n":
-            placement.status === "reserved" ? "Зарезервированно:\n":"";
+        let status_rus =
+            placement.status === "busy" ? "Занято:\n" :
+                placement.status === "reserved" ? "Зарезервированно:\n" : "";
 
         bedDiv.className = "bed " + placement.status + " " + bed.position
         visitor = data.visitors.find(visitor => visitor.id === placement.visitor_id)
@@ -112,13 +132,8 @@ function renderBed(bedsContainer, bed, data, current_arrival_id, tooltip) {
         if (visitor.dr != null) age = calculate_age_str(visitor.dr)
         let name = ""
         if (visitor) name = visitor.name
-
-        bedDiv.addEventListener('mouseenter', (e) => {
-            tooltip.innerText = position_rus + status_rus + name;
-            tooltip.style.display = 'block';
-            tooltip.style.left = e.pageX + 10 + 'px';
-            tooltip.style.top = e.pageY + 10 + 'px';
-        });
+        add_chase_tooltip(bedDiv,position_rus + status_rus + name)
+        
         let sexColor = ""
         if (visitor && visitor.sex) sexColor = "boy"
         else sexColor = "girl"
@@ -129,21 +144,7 @@ function renderBed(bedsContainer, bed, data, current_arrival_id, tooltip) {
         bedDiv.appendChild(sex)
     }
     else {
-        bedDiv.addEventListener('mouseenter', (e) => {
-            tooltip.innerText = position_rus + "Пусто";
-            tooltip.style.display = 'block';
-            tooltip.style.left = e.pageX + 10 + 'px';
-            tooltip.style.top = e.pageY + 10 + 'px';
-        });
-
+        add_chase_tooltip(bedDiv,position_rus + "Пусто")
     }
-    bedDiv.addEventListener('mousemove', (e) => {
-        tooltip.style.left = e.pageX + 10 + 'px';
-        tooltip.style.top = e.pageY + 10 + 'px';
-    });
-    bedDiv.addEventListener('mouseleave', (e) => {
-        tooltip.style.display = 'none';
-    });
     bedsContainer.appendChild(bedDiv)
-
 }

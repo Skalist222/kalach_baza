@@ -19,6 +19,7 @@ h6{margin: 0px;}
     font-size: 12px;
     display: none;
     pointer-events: none;
+    border:solid 1px #333;
 }
 
 .left-panel {
