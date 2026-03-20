@@ -1,17 +1,3 @@
-function tooltip_element() {
-    const tooltip = document.createElement('div');
-    tooltip.style.position = 'absolute';
-    tooltip.style.background = '#fff';
-    tooltip.style.color = '#333';
-    tooltip.style.padding = '3px 5px';
-    tooltip.style.borderRadius = '3px';
-    tooltip.style.border = "solid 1px #333";
-    tooltip.style.fontSize = '12px';
-    tooltip.style.display = 'none';
-    tooltip.style.pointerEvents = 'none';
-    return tooltip
-}
-
 function renderVisitors(visitors) {
 
     let sortElement = document.getElementById("sortVisitors")
@@ -19,7 +5,7 @@ function renderVisitors(visitors) {
 
     let list = document.getElementById("visitorList")
     list.innerHTML = ""
-    let tooltip = tooltip_element()
+    let tooltip = document.getElementById('tooltip')
     visitors.forEach(v => {
         if (
             (sort != "" && (v.dr.includes(sort) || v.name.includes(sort) || v.phone.includes(sort)))
@@ -36,19 +22,15 @@ function renderVisitors(visitors) {
                 tooltip.style.left = e.pageX + 10 + 'px';
                 tooltip.style.top = e.pageY + 10 + 'px';
             });
-            /* делаем перетаскиваемым */
+            console.log(tooltip)
 
             el.draggable = true
-
             el.dataset.id = v.id
-
             el.addEventListener("dragstart", (e) => {
                 e.dataTransfer.setData("visitor_id", v.id)
             })
             list.appendChild(el)
         }
-
-
     })
 }
 
@@ -59,7 +41,7 @@ function renderMap(data) {
     let map = document.getElementById("map")
     map.innerHTML = ""
 
-    let tooltip = tooltip_element()
+    let tooltip = document.getElementById('tooltip')
     document.body.appendChild(tooltip);
     data.buildings.forEach(building => {
         renderBuilding(map, building, data, current_arrival_id, tooltip)
