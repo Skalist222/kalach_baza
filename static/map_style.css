@@ -1,0 +1,136 @@
+#map {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+    flex: 1;
+}
+
+/* корпус */
+
+.building {
+    border: 3px solid #444;
+    padding: 3px;
+
+    background: #f5f5f5;
+}
+
+.building_title {
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+/* комнаты */
+
+.room {
+    border: 1px solid #aaa;
+    padding: 0px;
+    margin: 3px;
+    display: inline-block;
+    border: 1px solid #777;
+    border-radius: 3px;
+    padding: 2px;
+    margin-bottom: 1px;
+    background: white;
+}
+
+.room_title {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* койки */
+
+.beds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+}
+
+.bed {
+    position:relative;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border: 1px solid #666;
+    border-radius: 3px;
+    padding: 3px;
+    margin: 1px;
+}
+.bedsex{
+    position: absolute; 
+    bottom: 0; right: 0;
+    width: 15px;
+    height: 13px;
+    border-top-left-radius: 3px;
+    font: 11px "Fira Sans", sans-serif;
+    text-align:center;
+}
+.girl{
+    background-color: #ff78b3;
+}
+.boy{
+    background-color: #78acff;
+}
+.agepos
+{
+
+    position: absolute; 
+    top: 0; 
+    left: 0;
+}
+
+#visitorList{
+    display: flex;
+    flex-direction: column;
+    gap:3px;
+}
+.visitor {
+    flex-direction: column;
+    padding:2px;
+    white-space: normal;
+    border: solid 1px black;
+    border-radius: 2px;
+}
+
+
+.formNewVisitor{
+    flex: 1;        /* ключевая строка */
+    padding: 2px;
+    width: 100%;
+    white-space: normal;
+    border: solid 1px #808080;
+    border-radius: 3px;
+}
+/* состояния */
+
+
+.disable-bed-hover .bed{
+    pointer-events: none;
+}
+
+.free {
+    background: transparent;
+}
+
+.busy {
+    background: rgb(143, 255, 143);
+}
+
+.reserved {
+    background: rgb(252, 169, 122);
+}
+
+.upper{
+    border-top: solid 3px;
+}
+.lower{
+    border-bottom: solid 3px;
+}
+
+.free.upper{
+    background: linear-gradient(rgb(255, 255, 255), rgb(255, 229, 234));
+}
+.free.lower{
+    background: linear-gradient(rgb(255, 229, 234),rgb(255, 255, 255));
+}

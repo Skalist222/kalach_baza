@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="/static/style.css">
+        <link rel="stylesheet" href="/static/map_style.css">
+        <link rel="stylesheet" href="/static/modal.css">
+    </head>
+
+    <body>
+        <div id="placementModal" class="modal">
+            <div id="modal_content">
+                <div id="modalText"></div>
+                <div id="modal_buttons">
+                </div>
+            </div>
+        </div>
+
+        <div class="greed column">
+            <div class="greed row left-panel">
+
+                <div class="greed row box adder">
+                    <div class="greed column">
+                        <div>Заезд:</div>
+                        <div>
+                            <select id="currentArrival"
+                                onchange="loadData()"></select>
+                        </div>
+                    </div>
+                    <input id="arrivalName"
+                        placeholder="Новый заезд">
+                    <button onclick="addArrival()">
+                        Добавить
+                    </button>
+                </div>
+
+                <div class="greed row box">
+                    <h3>Посетители</h3>
+                    <div class="greed row box adder">
+
+                        <h4>Добавить посетителя</h4>
+                        <input id="visitorName" placeholder="ФИО">
+                        <div class="greed column">
+                            <div class="left-column w10p">д/р: </div>
+                            <input class="rigth-column w90p" id="visitorDate"
+                                type="date">
+                        </div>
+                        <input id="visitorPhone" placeholder="Телефон" type="phone">
+                        <div>
+                            <input type="radio" name="sex" id="sexMen" checked>М</input>
+                            <input type="radio" name="sex" id="sexWomen">Ж</input>
+                        </div>
+                        <button onclick="addVisitor()">
+                            Добавить
+                        </button>
+                    </div>
+                    <div class="greed box">
+                        <input class ="full" id="sortVisitors" placeholder="Поиск">
+                    </div>
+                    <div class="row">
+                        <div id="visitorList"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="greed rigth-panel" id="map"></div>
+        </div>
+        <script src="/static/help.js"></script>
+        <script src="/static/lists.js"></script>
+        <script src="/static/api.js"></script>
+        <script src="/static/render.js"></script>
+        <script src="/static/script.js"></script>
+    </body>
+
+</html>

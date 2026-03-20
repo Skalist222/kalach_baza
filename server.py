@@ -1,0 +1,114 @@
+import datetime
+from xmlrpc.client import boolean
+
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+from database import *
+
+app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
+
+
+@app.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/api/map")
+def get_map():
+
+    db = Session()
+
+    buildings = db.query(Building).all()
+    rooms = db.query(Room).all()
+    beds = db.query(Bed).all()
+    placements = db.query(Placement).all()
+    visitors = db.query(Visitor).all()
+    arrivals = db.query(Arrival).all()
+
+    return {
+        "buildings": [b.__dict__ for b in buildings],
+        "rooms": [r.__dict__ for r in rooms],
+        "beds": [b.__dict__ for b in beds],
+        "placements": [p.__dict__ for p in placements],
+        "visitors": [v.__dict__ for v in visitors],
+        "arrivals": [a.__dict__ for a in arrivals],
+    }
+    
+@app.get("/api/visitors")
+def get_map():
+    db = Session()
+    visitors = db.query(Visitor).all()
+    return {
+        "visitors": [v.__dict__ for v in visitors],
+    }
+
+@app.post("/api/add_visitor")
+def add_visitor(name: str,dr:datetime.date,phone:str,sex:boolean):
+    db = Session()
+    v = Visitor(name=name,dr=dr,phone=phone,sex=sex)
+    print(v)
+    db.add(v)
+    db.commit()
+    return {"status": "ok"}
+
+@app.post("/api/add_arrival")
+def add_arrival(name: str):
+
+    db = Session()
+
+    a = Arrival(name=name)
+
+    db.add(a)
+    db.commit()
+
+    return {"status": "ok"}
+
+@app.post("/api/add_building")
+def add_building(name: str):
+
+    db = Session()
+
+    b = Building(name=name)
+
+    db.add(b)
+    db.commit()
+
+    return {"status": "ok"}
+
+@app.post("/api/place")
+def place(visitor_id: int, bed_id: int,status:str, arrival_id: int):
+
+    db = Session()
+
+    placement = Placement(
+        visitor_id=visitor_id,
+        bed_id=bed_id,
+        arrival_id=arrival_id,
+        status=status
+    )
+
+    db.add(placement)
+    db.commit()
+
+    return {"status": "ok"}
+
+@app.post("/api/add_room")
+def add_room(building_id: int, number: str):
+
+    db = Session()
+
+    room = Room(
+        building_id=building_id,
+        number=number
+    )
+
+    db.add(room)
+    db.commit()
+
+    return {"status": "ok"}

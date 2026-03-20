@@ -1,0 +1,178 @@
+
+let selectedVisitor = null
+let modal = document.getElementById("placementModal")
+let modal_content = document.getElementById("modal_content")
+let modal_buttons = document.getElementById("modal_buttons")
+let current_arrival = document.getElementById("currentArrival")
+
+// Отключаем меню правой кнопки
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+});
+
+async function loadData() {
+    let res = await fetch("/api/map")
+    let data = await res.json()
+
+    fillArrivals(data.arrivals)
+    renderVisitors(data.visitors)
+    renderMap(data)
+}
+async function loadVisitors(e)
+{
+    console.log(e)
+    let res = await fetch("/api/visitors")
+    let data = await res.json()
+    renderVisitors(data.visitors,e)
+}
+
+function calculate_age(birth_month, birth_day, birth_year) {
+    today_date = new Date();
+    today_year = today_date.getFullYear();
+    today_month = today_date.getMonth();
+    today_day = today_date.getDate();
+    age = today_year - birth_year;
+
+    if (today_month < (birth_month - 1)) {
+        age--;
+    }
+    if (((birth_month - 1) == today_month) && (today_day < birth_day)) {
+        age--;
+    }
+    return age;
+}
+function calculate_age_str(birthDateString) {  
+    // Обрабатываем аргумент birthDateString (yyyyMMdd)  
+    const year = parseInt(birthDateString.substring(0, 4), 10);  
+    const month = parseInt(birthDateString.substring(4, 6), 10) - 1; // Месяцы начинаются с 0  
+    const day = parseInt(birthDateString.substring(6, 8), 10);  
+    // Создаём объект Date для даты рождения  
+    const birthDate = new Date(year, month, day);  
+    // Получаем текущую дату  
+    const today = new Date();  
+    // Вычисляем возраст  
+    let age = today.getFullYear() - birthDate.getFullYear();  
+    // Проверяем, прошёл ли день рождения в текущем году  
+    const hasBirthdayPassed = today.getMonth() > month || (today.getMonth() === month && today.getDate() >= day);  
+    if (!hasBirthdayPassed) {  
+        age--; // Если дня рождения ещё не было в этом году, уменьшаем на 1  
+    }  
+    return age;  
+} 
+
+
+/*!!!!!!!!!!!!!!!!!!!!МОДАЛЬНОЕ ОКНО!!!!!!!!!!!!!!!!!!!!*/
+// Выбор размещения
+function modal_btns_new_bed() {
+    let btnBusy = document.createElement("button")
+    let btnReserved = document.createElement("button")
+    let btnCancel = document.createElement("button")
+    btnBusy.id = "btnBusy"
+    btnBusy.innerText = "Занять койку"
+    btnReserved.id = "btnReserved"
+    btnReserved.innerText = "Зарезервировать"
+    btnCancel.id = "btnCancel"
+    btnCancel.innerText = "Отмена"
+    modal_buttons.appendChild(btnBusy)
+    modal_buttons.appendChild(btnReserved)
+    modal_buttons.appendChild(btnCancel)
+}
+function modal_btns_reserch_bed() {
+    let btnBusy = document.createElement("button")
+    let btnReserved = document.createElement("button")
+    let btnCancel = document.createElement("button")
+    btnBusy.id = "btnBusy"
+    btnBusy.innerText = "Перезанять койку"
+    btnReserved.id = "btnReserved"
+    btnReserved.innerText = "перерезервировать койку"
+    btnCancel.id = "btnCancel"
+    btnCancel.innerText = "Отмена"
+    modal_buttons.appendChild(btnBusy)
+    modal_buttons.appendChild(btnReserved)
+    modal_buttons.appendChild(btnCancel)
+}
+function modal_btns_reserch_bed() {
+    let btnBusy = document.createElement("button")
+    let btnReserved = document.createElement("button")
+    let btnCancel = document.createElement("button")
+    btnBusy.id = "btnBusy"
+    btnBusy.innerText = "Перезанять койку"
+    btnReserved.id = "btnReserved"
+    btnReserved.innerText = "перерезервировать койку"
+    btnCancel.id = "btnCancel"
+    btnCancel.innerText = "Отмена"
+    modal_buttons.appendChild(btnBusy)
+    modal_buttons.appendChild(btnReserved)
+    modal_buttons.appendChild(btnCancel)
+}
+
+function choosePlacement(data, visitor_id, bed_id) {
+    // Узнаем какой текущий id заезда
+    let current_arrival_id = current_arrival.value
+    if (current_arrival_id == "") {
+        alert("Сначала выберите заезд")
+        return
+    }
+
+    let text = document.getElementById("modalText")
+    let visitor = data.visitors.find(v => v.id == visitor_id)
+    let bed = data.beds.find(b => b.id = bed_id)
+    let room = data.rooms.find(r => r.id = bed.room_id)
+    let build = data.buildings.find(b => b.id = room.building_id)
+
+
+    // Занята ли уже этим посетителем койка
+    let current_placements = data.placements.find(p => p.visitor_id == visitor.id)
+    // Занята ли выбранная койка
+    let placement = data.placements.find(p => p.bed_id == bed_id)
+
+
+
+    let position_bed_rus = ""
+    if (bed.position == "upper") position_bed_rus = "Верхняя койка"
+    else position_bed_rus = "Нижняя койка"
+
+    modal_btns_new_bed()
+    text.innerText = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name
+
+
+
+    modal.style.display = "flex"
+    document.getElementById("btnBusy").onclick = () => {
+        place(visitor_id, bed_id, "busy", current_arrival_id)
+        closeModal()
+    }
+
+    document.getElementById("btnReserved").onclick = () => {
+        place(visitor_id, bed_id, "reserved", current_arrival_id)
+        closeModal()
+    }
+
+    document.getElementById("btnCancel").onclick = () => {
+        closeModal()
+    }
+
+}
+function closeModal() {
+    while (modal_buttons.firstChild) {
+        modal_buttons.removeChild(modal_buttons.firstChild);
+    }
+    modal.style.display = "none"
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+loadData()
+
