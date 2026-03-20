@@ -10,6 +10,17 @@ h4{margin: 0px;}
 h5{margin: 0px;}
 h6{margin: 0px;}
 
+#tooltip{
+    position:absolute;
+    background-color: #fff;
+    color:#333;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    display: none;
+    pointer-events: none;
+    border:solid 1px #333;
+}
 
 .left-panel {
     width: 350px;
