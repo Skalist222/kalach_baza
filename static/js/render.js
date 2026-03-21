@@ -138,14 +138,14 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         sex.innerHTML = age
 
         bedDiv.appendChild(sex)
+
+        bedDiv.addEventListener("click", () => { open_modal("Освободить койку?",buttons_reset_bed(bed.id,current_arrival_id));})
     }
     else {
         add_chase_tooltip(bedDiv, position_rus + "Пусто")
     }
 
-    bedDiv.addEventListener("click", () => {
-        
-    })
+
 
     bedsContainer.appendChild(bedDiv)
 

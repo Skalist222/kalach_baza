@@ -102,7 +102,7 @@ function choosePlacement(data, visitor_id, bed_id) {
     if (bed.position == "upper") position_bed_rus = "Верхняя койка"
     else position_bed_rus = "Нижняя койка"
 
-    modal_set(
+    open_modal(
         text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
         buttons = buttons_set_bed(visitor_id,bed_id,current_arrival_id)
     )
