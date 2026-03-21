@@ -143,5 +143,8 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
     else {
         add_chase_tooltip(bedDiv,position_rus + "Пусто")
     }
+    bedDiv.addEventListener("click",(e)=>{
+        console.log(e)
+    })
     bedsContainer.appendChild(bedDiv)
 }
