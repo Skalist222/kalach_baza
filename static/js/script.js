@@ -12,13 +12,15 @@ async function loadData() {
     let data = await res.json()
 
     fillArrivals(data.arrivals)
-    renderVisitors(data.visitors)
     renderMap(data)
+    renderVisitors(data.visitors,data.placements)
 }
 async function loadVisitors(e) {
     let res = await fetch("/api/visitors")
-    let data = await res.json()
-    renderVisitors(data.visitors, e)
+    let visitors  = (await res.json()).visitors
+    res = await fetch("/api/placements")
+    let placements = (await res.json()).placements
+    renderVisitors(visitors,placements)
 }
 
 function calculate_age_str(birthDateString) {

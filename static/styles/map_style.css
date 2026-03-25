@@ -79,6 +79,15 @@
     top: 0; 
     left: 0;
 }
+.bed-overlay {
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+    position: 'absolute';
+    inset: '0';
+    background: 'rgba(255,0,0,0.3)';
+    background-color: rgb(255, 37, 37);
+}
 
 #visitorList{
     display: flex;
@@ -115,6 +124,10 @@
 
 .busy {
     background: rgb(143, 255, 143);
+}
+.busy-white
+{
+    background: rgb(205, 255, 205);
 }
 
 .reserved {

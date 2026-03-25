@@ -17,15 +17,37 @@ function add_chase_tooltip(el, inform_text, visual_element) {
     });
 }
 
-function renderVisitors(visitors) {
+function renderVisitors(visitors, placemants) {
+
 
     let sortElement = document.getElementById("sortVisitors")
     let sort = sortElement.value
 
     let list = document.getElementById("visitorList")
+    let cur_arrival = document.getElementById("currentArrival")
+    let current_arrival = cur_arrival.value
     list.innerHTML = ""
-    let tooltip = document.getElementById('tooltip')
+
+
+
+
+
     visitors.forEach(v => {
+        let placements = placemants.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival)
+        console.log(placements)
+        
+        let selBeds = [];
+        if (placements) {
+            let beds = document.querySelectorAll('.bed');
+            beds.forEach(bed => {
+                placements.forEach(p => {
+                    if (bed.dataset.id == p.bed_id) {
+                        selBeds.push(bed);
+                    }
+                });
+            });
+        }
+
         if (
             (sort != "" && (v.dr.includes(sort) || v.name.includes(sort) || v.phone.includes(sort)))
             ||
@@ -49,6 +71,19 @@ function renderVisitors(visitors) {
                 e.dataTransfer.setData("visitor_id", v.id)
             })
             list.appendChild(el)
+            el.addEventListener("mouseenter", () => {
+                selBeds.forEach(bed => {
+                    let overlay = document.createElement('div');
+                    overlay.className = 'bed-overlay';
+                    bed.appendChild(overlay);
+                });
+            })
+            el.addEventListener("mouseleave", () => {
+                document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
+            });
+            console.log(placemants.length)
+            if(placemants.length >0) el.classList.add("busy-white")
+            // el.addEventListener("click", () => { open_modal("Приветка?", buttons_reset_bed(0, 1)); })
         }
     })
 }
@@ -139,7 +174,7 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
 
         bedDiv.appendChild(sex)
 
-        bedDiv.addEventListener("click", () => { open_modal("Освободить койку?",buttons_reset_bed(bed.id,current_arrival_id));})
+        bedDiv.addEventListener("click", () => { open_modal("Освободить койку?", buttons_reset_bed(bed.id, current_arrival_id)); })
     }
     else {
         add_chase_tooltip(bedDiv, position_rus + "Пусто")

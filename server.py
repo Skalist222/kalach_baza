@@ -48,6 +48,13 @@ def get_map():
     return {
         "visitors": [v.__dict__ for v in visitors],
     }
+@app.get("/api/placements")
+def get_map():
+    db = Session()
+    visitors = db.query(Placement).all()
+    return {
+        "placements": [v.__dict__ for v in visitors],
+    }
 
 @app.post("/api/add_visitor")
 def add_visitor(name: str,dr:datetime.date,phone:str,sex:boolean):
