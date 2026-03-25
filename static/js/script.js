@@ -15,32 +15,34 @@ async function loadData() {
     renderVisitors(data.visitors)
     renderMap(data)
 }
-async function loadVisitors(e)
-{
+async function loadVisitors(e) {
     let res = await fetch("/api/visitors")
     let data = await res.json()
-    renderVisitors(data.visitors,e)
+    renderVisitors(data.visitors, e)
 }
 
-function calculate_age_str(birthDateString) {  
-
+function calculate_age_str(birthDateString) {
+    if (isNaN(Date.parse(birthDateString))) {
+        console.error("Ошибка обработчика даты!")
+        return -1
+    }
     // Обрабатываем аргумент birthDateString (yyyyMMdd)  
-    const year = parseInt(birthDateString.split("-")[0], 10);  
+    const year = parseInt(birthDateString.split("-")[0], 10);
     const month = parseInt(birthDateString.split("-")[1], 10) - 1; // Месяцы начинаются с 0  
-    const day = parseInt(birthDateString.split("-")[2], 10);  
+    const day = parseInt(birthDateString.split("-")[2], 10);
     // Создаём объект Date для даты рождения  
-    const birthDate = new Date(year, month, day);  
+    const birthDate = new Date(year, month, day);
     // Получаем текущую дату  
-    const today = new Date();  
+    const today = new Date();
     // Вычисляем возраст  
-    let age = today.getFullYear() - birthDate.getFullYear();  
+    let age = today.getFullYear() - birthDate.getFullYear();
     // Проверяем, прошёл ли день рождения в текущем году  
-    const hasBirthdayPassed = today.getMonth() > month || (today.getMonth() === month && today.getDate() >= day);  
-    if (!hasBirthdayPassed) {  
+    const hasBirthdayPassed = today.getMonth() > month || (today.getMonth() === month && today.getDate() >= day);
+    if (!hasBirthdayPassed) {
         age--; // Если дня рождения ещё не было в этом году, уменьшаем на 1  
-    }  
-    return age;  
-} 
+    }
+    return age;
+}
 
 
 /*!!!!!!!!!!!!!!!!!!!!МОДАЛЬНОЕ ОКНО!!!!!!!!!!!!!!!!!!!!*/
@@ -70,7 +72,7 @@ function choosePlacement(data, visitor_id, bed_id) {
         return
     }
 
-    
+
     let visitor = data.visitors.find(v => v.id == visitor_id)
     let bed = data.beds.find(b => b.id = bed_id)
     let room = data.rooms.find(r => r.id = bed.room_id)
@@ -90,7 +92,7 @@ function choosePlacement(data, visitor_id, bed_id) {
 
     open_modal(
         text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
-        buttons = buttons_set_bed(visitor_id,bed_id,current_arrival_id)
+        buttons = buttons_set_bed(visitor_id, bed_id, current_arrival_id)
     )
 }
 
