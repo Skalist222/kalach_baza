@@ -1,7 +1,7 @@
-function add_chase_tooltip(el, inform_text,visual_element) {
+function add_chase_tooltip(el, inform_text, visual_element) {
     let tooltip = document.getElementById('tooltip')
     let visualelement = document.getElementById('visual_element')
-    if(visual_element)visualelement.appendChild(visual_element)
+    if (visual_element) visualelement.appendChild(visual_element)
     el.addEventListener('mouseenter', (e) => {
         tooltip.innerText = inform_text;
         tooltip.style.display = 'block';
@@ -35,13 +35,12 @@ function renderVisitors(visitors) {
             let el = document.createElement("div")
             el.className = "visitor";
             el.innerText = v.name
-            console.log(v)
             let age = calculate_age_str(v.dr)
             let toolInfo = v.dr + "\n"
                 + v.phone + "\n"
                 + (v.sex === true ? "М" : "Ж") + "\n"
                 + "Возраст:" + age + "\n"
-            add_chase_tooltip(el,toolInfo)
+            add_chase_tooltip(el, toolInfo)
 
             el.draggable = true
             el.dataset.id = v.id
@@ -129,8 +128,8 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         if (visitor.dr != null) age = calculate_age_str(visitor.dr)
         let name = ""
         if (visitor) name = visitor.name
-        add_chase_tooltip(bedDiv,position_rus + status_rus + name)
-        
+        add_chase_tooltip(bedDiv, position_rus + status_rus + name)
+
         let sexColor = ""
         if (visitor && visitor.sex) sexColor = "boy"
         else sexColor = "girl"
@@ -139,9 +138,15 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         sex.innerHTML = age
 
         bedDiv.appendChild(sex)
+
+        bedDiv.addEventListener("click", () => { open_modal("Освободить койку?",buttons_reset_bed(bed.id,current_arrival_id));})
     }
     else {
-        add_chase_tooltip(bedDiv,position_rus + "Пусто")
+        add_chase_tooltip(bedDiv, position_rus + "Пусто")
     }
+
+
+
     bedsContainer.appendChild(bedDiv)
+
 }

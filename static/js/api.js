@@ -5,6 +5,14 @@ async function place(visitor_id, bed_id, status, arrival_id = 1) {
     })
     loadData()
 }
+// Разместить человека
+async function replace(bed_id,  arrival_id = 1) {
+    await fetch(`/api/replace?bed_id=${bed_id}&arrival_id=${arrival_id}`, {
+        method: "POST"
+    })
+    loadData()
+}
+
 // Добавить посетителя
 async function addVisitor() {
 

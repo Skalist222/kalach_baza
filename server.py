@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
+from sqlalchemy import and_
 from database import *
 
 app = FastAPI()
@@ -53,7 +53,7 @@ def get_map():
 def add_visitor(name: str,dr:datetime.date,phone:str,sex:boolean):
     db = Session()
     v = Visitor(name=name,dr=dr,phone=phone,sex=sex)
-    print(v)
+
     db.add(v)
     db.commit()
     return {"status": "ok"}
@@ -97,6 +97,13 @@ def place(visitor_id: int, bed_id: int,status:str, arrival_id: int):
     db.add(placement)
     db.commit()
 
+    return {"status": "ok"}
+
+@app.post("/api/replace")
+def place(bed_id: int,arrival_id: int):
+    db = Session()
+    db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id)).delete()
+    db.commit()
     return {"status": "ok"}
 
 @app.post("/api/add_room")

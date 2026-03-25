@@ -1,8 +1,5 @@
 
 let selectedVisitor = null
-let modal = document.getElementById("placementModal")
-let modal_content = document.getElementById("modal_content")
-let modal_buttons = document.getElementById("modal_buttons")
 let current_arrival = document.getElementById("currentArrival")
 
 // Отключаем меню правой кнопки
@@ -20,7 +17,6 @@ async function loadData() {
 }
 async function loadVisitors(e)
 {
-    console.log(e)
     let res = await fetch("/api/visitors")
     let data = await res.json()
     renderVisitors(data.visitors,e)
@@ -64,6 +60,7 @@ function calculate_age_str(birthDateString) {
 /*!!!!!!!!!!!!!!!!!!!!МОДАЛЬНОЕ ОКНО!!!!!!!!!!!!!!!!!!!!*/
 // Выбор размещения
 function modal_btns_new_bed() {
+    let modal_buttons = document.getElementById("modal_buttons")
     let btnBusy = document.createElement("button")
     let btnReserved = document.createElement("button")
     let btnCancel = document.createElement("button")
@@ -77,34 +74,7 @@ function modal_btns_new_bed() {
     modal_buttons.appendChild(btnReserved)
     modal_buttons.appendChild(btnCancel)
 }
-function modal_btns_reserch_bed() {
-    let btnBusy = document.createElement("button")
-    let btnReserved = document.createElement("button")
-    let btnCancel = document.createElement("button")
-    btnBusy.id = "btnBusy"
-    btnBusy.innerText = "Перезанять койку"
-    btnReserved.id = "btnReserved"
-    btnReserved.innerText = "перерезервировать койку"
-    btnCancel.id = "btnCancel"
-    btnCancel.innerText = "Отмена"
-    modal_buttons.appendChild(btnBusy)
-    modal_buttons.appendChild(btnReserved)
-    modal_buttons.appendChild(btnCancel)
-}
-function modal_btns_reserch_bed() {
-    let btnBusy = document.createElement("button")
-    let btnReserved = document.createElement("button")
-    let btnCancel = document.createElement("button")
-    btnBusy.id = "btnBusy"
-    btnBusy.innerText = "Перезанять койку"
-    btnReserved.id = "btnReserved"
-    btnReserved.innerText = "перерезервировать койку"
-    btnCancel.id = "btnCancel"
-    btnCancel.innerText = "Отмена"
-    modal_buttons.appendChild(btnBusy)
-    modal_buttons.appendChild(btnReserved)
-    modal_buttons.appendChild(btnCancel)
-}
+
 
 function choosePlacement(data, visitor_id, bed_id) {
     // Узнаем какой текущий id заезда
@@ -114,7 +84,7 @@ function choosePlacement(data, visitor_id, bed_id) {
         return
     }
 
-    let text = document.getElementById("modalText")
+    
     let visitor = data.visitors.find(v => v.id == visitor_id)
     let bed = data.beds.find(b => b.id = bed_id)
     let room = data.rooms.find(r => r.id = bed.room_id)
@@ -132,34 +102,12 @@ function choosePlacement(data, visitor_id, bed_id) {
     if (bed.position == "upper") position_bed_rus = "Верхняя койка"
     else position_bed_rus = "Нижняя койка"
 
-    modal_btns_new_bed()
-    text.innerText = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name
-
-
-
-    modal.style.display = "flex"
-    document.getElementById("btnBusy").onclick = () => {
-        place(visitor_id, bed_id, "busy", current_arrival_id)
-        closeModal()
-    }
-
-    document.getElementById("btnReserved").onclick = () => {
-        place(visitor_id, bed_id, "reserved", current_arrival_id)
-        closeModal()
-    }
-
-    document.getElementById("btnCancel").onclick = () => {
-        closeModal()
-    }
-
+    open_modal(
+        text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
+        buttons = buttons_set_bed(visitor_id,bed_id,current_arrival_id)
+    )
 }
-function closeModal() {
-    while (modal_buttons.firstChild) {
-        modal_buttons.removeChild(modal_buttons.firstChild);
-    }
-    modal.style.display = "none"
 
-}
 
 
 
