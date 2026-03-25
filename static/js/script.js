@@ -23,10 +23,11 @@ async function loadVisitors(e)
 }
 
 function calculate_age_str(birthDateString) {  
+
     // Обрабатываем аргумент birthDateString (yyyyMMdd)  
-    const year = parseInt(birthDateString.substring(0, 4), 10);  
-    const month = parseInt(birthDateString.substring(4, 6), 10) - 1; // Месяцы начинаются с 0  
-    const day = parseInt(birthDateString.substring(6, 8), 10);  
+    const year = parseInt(birthDateString.split("-")[0], 10);  
+    const month = parseInt(birthDateString.split("-")[1], 10) - 1; // Месяцы начинаются с 0  
+    const day = parseInt(birthDateString.split("-")[2], 10);  
     // Создаём объект Date для даты рождения  
     const birthDate = new Date(year, month, day);  
     // Получаем текущую дату  
