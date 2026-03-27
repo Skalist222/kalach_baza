@@ -18,8 +18,6 @@ function add_chase_tooltip(el, inform_text, visual_element) {
 }
 
 function renderVisitors(visitors, placemants) {
-
-
     let sortElement = document.getElementById("sortVisitors")
     let sort = sortElement.value
 
@@ -41,8 +39,6 @@ function renderVisitors(visitors, placemants) {
                 });
             });
         }
-
-
 
         if (
             (sort != "" && (v.dr.includes(sort) || v.name.includes(sort) || v.phone.includes(sort)))
@@ -88,10 +84,9 @@ function renderVisitors(visitors, placemants) {
         }
 
         const visitorsElements = document.getElementsByClassName("visitor")
-        if(visitorsElements.length >0) visitorsElements[0].classList.add("selected")
-            
+        if (visitorsElements.length > 0) visitorsElements[0].classList.add("selected")
     })
-    
+
 }
 
 
@@ -138,7 +133,6 @@ function renderRoom(buildingDiv, room, data, current_arrival_id) {
     buildingDiv.appendChild(roomDiv)
 }
 function renderBed(bedsContainer, bed, data, current_arrival_id) {
-
     let bedDiv = document.createElement("div")
     bedDiv.className = "bed free " + bed.position
     bedDiv.dataset.id = bed.id
@@ -184,6 +178,10 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
     }
     else {
         add_chase_tooltip(bedDiv, position_rus + "Пусто")
+        bedDiv.addEventListener("click", () => {
+            let visitor_id = document.querySelectorAll(`.visitor.selected`)[0].dataset.id
+            choosePlacement(data, visitor_id,  bedDiv.dataset.id)
+        })
     }
 
 
