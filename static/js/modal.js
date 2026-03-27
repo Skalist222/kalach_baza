@@ -43,6 +43,15 @@ function buttons_set_bed(visitor_id, bed_id, current_arrival_id) {
         { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
     ];
 }
+function buttons_update_bed(visitor_id, bed_id, current_arrival_id)
+{
+        return [
+        { type: "btn", id: "btnBusy", text: "Перезанять", action: () => update_place(visitor_id, bed_id, "busy", current_arrival_id) },
+        { type: "btn", id: "btnReserved", text: "Перерезервировать", action: () => update_place(visitor_id, bed_id, "reserved", current_arrival_id) },
+        { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+    ];
+}
+
 function buttons_reset_bed(bed_id,current_arrival_id)
 {
     return [

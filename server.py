@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import and_
+from sqlalchemy import and_,or_
 from database import *
 
 app = FastAPI()
@@ -106,8 +106,18 @@ def place(visitor_id: int, bed_id: int,status:str, arrival_id: int):
 
     return {"status": "ok"}
 
+@app.post("/api/update_place")
+def update_place(visitor_id: int, bed_id: int,status:str, arrival_id: int):
+    
+    db = Session()
+    placement:Placement = db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id)).first()
+    placement.visitor_id = visitor_id
+    db.commit()
+    return {"status": "ok"}
+
+
 @app.post("/api/replace")
-def place(bed_id: int,arrival_id: int):
+def replace(bed_id: int,arrival_id: int):
     db = Session()
     db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id)).delete()
     db.commit()

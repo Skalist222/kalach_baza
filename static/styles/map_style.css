@@ -101,6 +101,9 @@
     border: solid 1px black;
     border-radius: 2px;
 }
+.selected{
+    border: solid 2px rgb(37, 59, 1);
+}
 
 
 .formNewVisitor{

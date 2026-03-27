@@ -13,14 +13,14 @@ async function loadData() {
 
     fillArrivals(data.arrivals)
     renderMap(data)
-    renderVisitors(data.visitors,data.placements)
+    renderVisitors(data.visitors, data.placements)
 }
 async function loadVisitors(e) {
     let res = await fetch("/api/visitors")
-    let visitors  = (await res.json()).visitors
+    let visitors = (await res.json()).visitors
     res = await fetch("/api/placements")
     let placements = (await res.json()).placements
-    renderVisitors(visitors,placements)
+    renderVisitors(visitors, placements)
 }
 
 function calculate_age_str(birthDateString) {
@@ -82,20 +82,32 @@ function choosePlacement(data, visitor_id, bed_id) {
 
 
     // Занята ли уже этим посетителем койка
-    let current_placements = data.placements.find(p => p.visitor_id == visitor.id)
-    // Занята ли выбранная койка
-    let placement = data.placements.find(p => p.bed_id == bed_id)
+    let current_placements = data.placements.find(p => p.visitor_id == visitor.id && p.arrival_id == current_arrival_id)
+    // Занята ли выбранная койка кем либо
+    let placement = data.placements.find(p => p.bed_id == bed_id && p.arrival_id == current_arrival_id)
 
+    console.log("Койки занятые этим пользователем:", current_placements)
+    console.log("Кто занимает текущую койку:", placement)
 
 
     let position_bed_rus = ""
     if (bed.position == "upper") position_bed_rus = "Верхняя койка"
     else position_bed_rus = "Нижняя койка"
+    console.log(placement)
+    if (placement == undefined) {
+        open_modal(
+            text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
+            buttons = buttons_set_bed(visitor_id, bed_id, current_arrival_id)
+        )
+    }
+    else{
+        // перезанять койку
+            open_modal(
+            text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
+            buttons = buttons_update_bed(visitor_id, bed_id, current_arrival_id)
+        )
+    }
 
-    open_modal(
-        text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
-        buttons = buttons_set_bed(visitor_id, bed_id, current_arrival_id)
-    )
 }
 
 

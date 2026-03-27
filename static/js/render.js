@@ -28,14 +28,8 @@ function renderVisitors(visitors, placemants) {
     let current_arrival = cur_arrival.value
     list.innerHTML = ""
 
-
-
-
-
     visitors.forEach(v => {
         let placements = placemants.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival)
-        console.log(placements)
-        
         let selBeds = [];
         if (placements) {
             let beds = document.querySelectorAll('.bed');
@@ -47,6 +41,8 @@ function renderVisitors(visitors, placemants) {
                 });
             });
         }
+
+
 
         if (
             (sort != "" && (v.dr.includes(sort) || v.name.includes(sort) || v.phone.includes(sort)))
@@ -70,7 +66,7 @@ function renderVisitors(visitors, placemants) {
             el.addEventListener("dragstart", (e) => {
                 e.dataTransfer.setData("visitor_id", v.id)
             })
-            list.appendChild(el)
+
             el.addEventListener("mouseenter", () => {
                 selBeds.forEach(bed => {
                     let overlay = document.createElement('div');
@@ -81,11 +77,21 @@ function renderVisitors(visitors, placemants) {
             el.addEventListener("mouseleave", () => {
                 document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
             });
-            console.log(placemants.length)
-            if(placemants.length >0) el.classList.add("busy-white")
-            // el.addEventListener("click", () => { open_modal("Приветка?", buttons_reset_bed(0, 1)); })
+            if (selBeds.length > 0) el.classList.add("busy-white")
+            el.addEventListener("click", () => {
+                document.querySelectorAll(`.visitor.selected`).forEach(n => {
+                    n.classList.remove("selected");
+                });
+                el.classList.add("selected")
+            })
+            list.appendChild(el)
         }
+
+        const visitorsElements = document.getElementsByClassName("visitor")
+        if(visitorsElements.length >0) visitorsElements[0].classList.add("selected")
+            
     })
+    
 }
 
 
