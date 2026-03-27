@@ -1,9 +1,29 @@
 from database import *
 
+from faker import Faker
+from random import choice
+from sys import argv
+from datetime import datetime
 db = Session()
-a = Arrival(name="Тест",cost=2000)
-db.add(a)
-db.commit()
+
+if(len(argv) == 3):
+    if(argv[1] == "test"):
+        
+        fake = Faker('ru_RU')
+        a = Arrival(name="Тест",cost=2000)
+        count_visitors = int(argv[2])
+        
+        for v in range(count_visitors):
+            name = fake.name() 
+            dr = datetime.strptime(fake.date(),"%Y-%m-%d")
+            phone = fake.phone_number()
+            visitor = Visitor(name=name,dr = dr,phone=phone) 
+            db.add(visitor)
+        db.add(a)
+        db.commit()
+# a = Arrival(name="Тест",cost=2000)
+# db.add(a)
+# db.commit()
 
 def create_building(name):
     b = Building(name=name)

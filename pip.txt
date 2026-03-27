@@ -15,4 +15,5 @@ SQLAlchemy
 starlette
 typing_extensions
 typing-inspection
+faker
 uvicorn

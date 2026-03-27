@@ -74,7 +74,6 @@
 }
 .agepos
 {
-
     position: absolute; 
     top: 0; 
     left: 0;
@@ -86,7 +85,8 @@
     position: 'absolute';
     inset: '0';
     background: 'rgba(255,0,0,0.3)';
-    background-color: rgb(255, 37, 37);
+    background-image: radial-gradient(rgba(255, 37, 37, 1), rgba(255, 37, 37, 0));
+  
 }
 
 #visitorList{
