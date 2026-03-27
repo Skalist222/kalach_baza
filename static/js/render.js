@@ -27,6 +27,7 @@ function renderVisitors(visitors, placemants) {
     list.innerHTML = ""
 
     visitors.forEach(v => {
+        let age = calculate_age_str(v.dr)
         let placements = placemants.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival)
         let selBeds = [];
         if (placements) {
@@ -49,12 +50,41 @@ function renderVisitors(visitors, placemants) {
             let el = document.createElement("div")
             el.className = "visitor";
             el.innerText = v.name
-            let age = calculate_age_str(v.dr)
-            let toolInfo = v.dr + "\n"
+
+
+            let toolInfo =
+                v.name + "\n"
+                + v.dr + "\n"
                 + v.phone + "\n"
                 + (v.sex === true ? "М" : "Ж") + "\n"
                 + "Возраст:" + age + "\n"
-            add_chase_tooltip(el, toolInfo)
+
+            let allInfo = document.createElement('div')
+            let nameInfo = document.createElement('div')
+            let drInfo = document.createElement('div')
+            let ageInfo = document.createElement('div')
+            let phoneInfo = document.createElement('div')
+
+            nameInfo.classList.add("nameInfo")
+            nameInfo.innerText = v.name
+            allInfo.appendChild(nameInfo)
+
+            drInfo.classList.add("drInfo")
+            drInfo.innerText = v.dr
+            allInfo.appendChild(drInfo)
+
+            ageInfo.classList.add("ageInfo")
+            ageInfo.innerText = age
+            allInfo.appendChild(ageInfo)
+
+            phoneInfo.classList.add("phoneInfo")
+            phoneInfo.innerText = v.phone
+            allInfo.appendChild(phoneInfo)
+           
+
+
+
+            add_chase_tooltip(el, toolInfo,allInfo)
 
             el.draggable = true
             el.dataset.id = v.id
@@ -89,16 +119,15 @@ function renderVisitors(visitors, placemants) {
 
 }
 
-function renderArrivalInfo(data)
-{
+function renderArrivalInfo(data) {
     let arrival_Id = data.arrivals.find(a => a.id == current_arrival.value).id
     let arrival = data.arrivals.find(a => a.id == arrival_Id)
     let current_arrival_name = document.getElementById("current_arrival_name")
     let current_arrival_cost = document.getElementById("current_arrival_cost")
     const arrival_cost = arrival.cost
-    const cost_str = arrival_cost == "0" ? "бесплатно" : ""+arrival_cost
+    const cost_str = arrival_cost == "0" ? "бесплатно" : "" + arrival_cost
     current_arrival_name.innerText = arrival.name
-    current_arrival_cost.innerText = "Членский взнос:"+cost_str
+    current_arrival_cost.innerText = "Членский взнос:" + cost_str
 }
 function renderMap(data) {
     let current_arrival_el = data.arrivals.find(a => a.id == current_arrival.value)
@@ -190,7 +219,7 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         add_chase_tooltip(bedDiv, position_rus + "Пусто")
         bedDiv.addEventListener("click", () => {
             let visitor_id = document.querySelectorAll(`.visitor.selected`)[0].dataset.id
-            choosePlacement(data, visitor_id,  bedDiv.dataset.id)
+            choosePlacement(data, visitor_id, bedDiv.dataset.id)
         })
     }
 
