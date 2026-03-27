@@ -1,7 +1,7 @@
 from database import *
 
 db = Session()
-a = Arrival(name="Тест")
+a = Arrival(name="Тест",cost=2000)
 db.add(a)
 db.commit()
 

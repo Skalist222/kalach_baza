@@ -3,64 +3,90 @@ body {
     font-family: Arial;
 }
 
-h1{margin: 0px;}
-h2{margin: 0px;}
-h3{margin: 0px;}
-h4{margin: 0px;}
-h5{margin: 0px;}
-h6{margin: 0px;}
+h1 {
+    margin: 0px;
+}
 
-#tooltip{
-    position:absolute;
+h2 {
+    margin: 0px;
+}
+
+h3 {
+    margin: 0px;
+}
+
+h4 {
+    margin: 0px;
+}
+
+h5 {
+    margin: 0px;
+}
+
+h6 {
+    margin: 0px;
+}
+
+#tooltip {
+    position: absolute;
     background-color: #fff;
-    color:#333;
+    color: #333;
     padding: 3px 5px;
     border-radius: 3px;
     font-size: 12px;
     display: none;
     pointer-events: none;
-    border:solid 1px #333;
+    border: solid 1px #333;
     z-index: 1000;
 }
 
 .left-panel {
-    width: 350px;
+    flex-shrink: 0;
+    width: 300px;
     border-right: 1px solid #ccc;
     padding: 5px;
     margin-right: 5px;
 }
 
-.left-column{
+.left-column {
     align-content: flex-start;
 }
-.rigth-column{
+
+.rigth-column {
     align-content: flex-end;
 }
 
-.greed{
+.greed {
     display: flex;
-    gap:4px;
+    gap: 4px;
 }
-.column{
+.nongap{
+    gap: 0px;
+}
+
+.column {
     flex-direction: row;
     justify-content: space-between;
 }
-.row{
+
+.row {
     flex-direction: column;
 }
 
-.box{
+.box {
     padding: 3px;
     border: solid 1px #ccc;
     border-radius: 5px;
 
 }
-.adder{
+
+.adder {
     background-color: #d3d3d3;
     border-bottom: solid 3px #ccc;
     box-shadow: 1px 1px 2px 1px rgba(131, 131, 131, 0.2);
 }
-.full{
+
+.full {
     width: 100%;
 }
 
@@ -68,32 +94,55 @@ h6{margin: 0px;}
     align-items: center;
     justify-content: center;
 }
+
 #currentArrival {
     width: auto;
     max-width: 250px;
 }
+
 #visitorList {
     max-height: 600px;
     overflow-y: auto;
 }
-.w10p{
+
+.w10p {
     width: 10%;
 }
-.w20p{
+
+.w20p {
     width: 20%;
 }
-.w40p{
+
+.w40p {
     width: 40%;
 }
-.w60p{
+
+.w60p {
     width: 60%;
 }
-.w80p{
+
+.w80p {
     width: 80%;
 }
-.w90p{
+
+.w90p {
     width: 80%;
 }
-.w100p{
+
+.w100p {
     width: 100%;
+}
+
+#current_arrival_name {
+    font:
+        2rem "Fira Sans",
+        serif;
+    margin:0px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+#current_arrival_cost {
+    margin:0px;
+    margin-left: 5px;
 }

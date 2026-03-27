@@ -46,6 +46,7 @@ class Arrival(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    cost = Column(Integer)
 
 
 class Placement(Base):

@@ -13,6 +13,7 @@ async function loadData() {
 
     fillArrivals(data.arrivals)
     renderMap(data)
+    renderArrivalInfo(data)
     renderVisitors(data.visitors, data.placements)
 }
 async function loadVisitors(e) {

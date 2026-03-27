@@ -12,7 +12,7 @@ async function update_place(visitor_id, bed_id, status, arrival_id = 1) {
     loadData()
 }
 // Разместить человека
-async function replace(bed_id,  arrival_id = 1) {
+async function replace(bed_id, arrival_id = 1) {
     await fetch(`/api/replace?bed_id=${bed_id}&arrival_id=${arrival_id}`, {
         method: "POST"
     })
@@ -59,15 +59,23 @@ async function addVisitor() {
 }
 // Добавить заезд
 async function addArrival() {
+    
+    const NameEl = document.getElementById("arrivalName")
+    const costEl = document.getElementById("arrivalCost")
+    let name = NameEl.value
+    let cost = costEl.value
+    if (cost == "") cost = 0
+    if (name == "") {
+        alert_element(NameEl)
+        alert("Для начала введите название заезда!")
+    }
 
-    let name = document.getElementById("arrivalName").value
-
-    await fetch(`/api/add_arrival?name=${name}`, {
+    await fetch(`/api/add_arrival?name=${name}&cost=${cost}`, {
         method: "POST"
     })
-
+    NameEl.value = ""
+    costEl.value =""
     loadData()
-
 }
 
 

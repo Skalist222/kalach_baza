@@ -89,7 +89,17 @@ function renderVisitors(visitors, placemants) {
 
 }
 
-
+function renderArrivalInfo(data)
+{
+    let arrival_Id = data.arrivals.find(a => a.id == current_arrival.value).id
+    let arrival = data.arrivals.find(a => a.id == arrival_Id)
+    let current_arrival_name = document.getElementById("current_arrival_name")
+    let current_arrival_cost = document.getElementById("current_arrival_cost")
+    const arrival_cost = arrival.cost
+    const cost_str = arrival_cost == "0" ? "бесплатно" : ""+arrival_cost
+    current_arrival_name.innerText = arrival.name
+    current_arrival_cost.innerText = "Членский взнос:"+cost_str
+}
 function renderMap(data) {
     let current_arrival_el = data.arrivals.find(a => a.id == current_arrival.value)
     let current_arrival_id = current_arrival_el.id

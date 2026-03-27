@@ -38,6 +38,7 @@
                     </div>
                     <input id="arrivalName"
                         placeholder="Новый заезд">
+                    <input id="arrivalCost" type="number" placeholder="Взнос">
                     <button onclick="addArrival()">
                         Добавить
                     </button>
@@ -63,16 +64,28 @@
                             Добавить
                         </button>
                     </div>
-                    <div class="greed box">
-                        <input class ="full" id="sortVisitors" placeholder="Поиск">
+                    <div class="greed box row">
+                        <input  id="sortVisitors" placeholder="Сортировка">
+                        <div class="greed row">
+                            <div class="row">
+                                <div id="visitorList"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div id="visitorList"></div>
-                    </div>
+      
                 </div>
 
             </div>
-            <div class="greed rigth-panel" id="map"></div>
+            <div class="rigth-panel">
+                <div class="greed row">
+                    <div class=" greed row nongap">
+                        <div id="current_arrival_name"></div>
+                        <div id="current_arrival_cost"></div>
+                    </div>
+                    <div id="map"></div>
+                </div>
+                
+            </div>
         </div>
          <script src="/static/js/modal.js"></script>
         <script src="/static/js/help.js"></script>
