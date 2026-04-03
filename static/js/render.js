@@ -1,9 +1,16 @@
 function add_chase_tooltip(el, inform_text, visual_element) {
     let tooltip = document.getElementById('tooltip')
     let visualelement = document.getElementById('visual_element')
-    if (visual_element) visualelement.appendChild(visual_element)
+    
+
+    // if (visual_element) visualelement.appendChild(visual_element)
     el.addEventListener('mouseenter', (e) => {
-        tooltip.innerText = inform_text;
+        if(visual_element)
+        {
+            visualelement.innerHTML =""
+            visualelement.appendChild(visual_element)
+        }
+
         tooltip.style.display = 'block';
         tooltip.style.left = e.pageX + 10 + 'px';
         tooltip.style.top = e.pageY + 10 + 'px';
