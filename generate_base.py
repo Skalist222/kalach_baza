@@ -1,7 +1,7 @@
 from database import *
 
 from faker import Faker
-from random import choice
+from random import choice,randint
 from sys import argv
 from datetime import datetime
 db = Session()
@@ -14,10 +14,11 @@ if(len(argv) == 3):
         count_visitors = int(argv[2])
         
         for v in range(count_visitors):
-            name = fake.name() 
+            sex = randint(0,1)
+            name = fake.name_male() if sex == 1 else fake.name_female()
             dr = datetime.strptime(fake.date(),"%Y-%m-%d")
             phone = fake.phone_number()
-            visitor = Visitor(name=name,dr = dr,phone=phone) 
+            visitor = Visitor(name=name,dr = dr,phone=phone,sex=(sex==1)) 
             db.add(visitor)
         db.add(a)
         db.commit()
@@ -40,13 +41,17 @@ def create_room(building_id, number):
 
 
 
-def create_beds(room_id, upper=0, lower=0):
+def create_beds(room_id, upper=0, lower=0,bigger=0):
 
     for i in range(upper):
         db.add(Bed(room_id=room_id, position="upper"))
 
     for i in range(lower):
         db.add(Bed(room_id=room_id, position="lower"))
+    
+    for i in range(bigger):
+        db.add(Bed(room_id=room_id, position="bigger-left"))
+        db.add(Bed(room_id=room_id, position="bigger-rigth"))
 
     db.commit()
 
@@ -84,10 +89,15 @@ for r in rooms:
 b = create_building("Корпус 5 (Банный)")
 
 rooms = ["5.11","5.12"]
-
 for r in rooms:
     room = create_room(b.id, r)
-    create_beds(room.id, upper=2, lower=2)
+    create_beds(room.id, upper=1, lower=1,bigger=1)
+
+rooms = ["5.7","5.9"]
+for r in rooms:
+    room = create_room(b.id, r)
+    create_beds(room.id, bigger=1)
+    
 
 
 # ----------------------------
@@ -105,7 +115,7 @@ rooms = ["6.4","6.5","6.6","6.7"]
 
 for r in rooms:
     room = create_room(b.id, r)
-    create_beds(room.id, lower=4)
+    create_beds(room.id, lower=2,upper=2)
 
 
 # ----------------------------
@@ -120,7 +130,7 @@ for h in houses:
 
     room = create_room(b.id, h)
 
-    create_beds(room.id, lower=8)
+    create_beds(room.id, upper=4,lower=3,bigger=1)
 
 
 # ----------------------------
@@ -133,12 +143,18 @@ rooms = ["12.9","12.10"]
 
 for r in rooms:
     room = create_room(b.id, r)
-    create_beds(room.id, lower=4)
+    create_beds(room.id, lower=3,upper=2)
 
 
 # ----------------------------
 # МЕДПУНКТ
 # ----------------------------
+
+b = create_building("Корпус 13(персонал)")
+room = create_room(b.id, "31.1")
+create_beds(room.id, lower=8,upper=2)
+room = create_room(b.id, "31.2")
+create_beds(room.id, lower=8,upper=2)
 
 b = create_building("Медпункт")
 
@@ -147,6 +163,7 @@ create_beds(room.id, lower=2)
 
 room = create_room(b.id, "Бокс 2")
 create_beds(room.id, lower=2)
+
 
 
 print("База отдыха полностью создана")

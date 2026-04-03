@@ -1,7 +1,13 @@
 let sortVisitorElement = document.getElementById("sortVisitors")
-sortVisitorElement.addEventListener("input",(e)=>{
-    loadVisitors()
-})
+let debounceTimer;
+sortVisitorElement.addEventListener("input", (e) => {
+    loadVisitors();
+
+    // clearTimeout(debounceTimer);
+    // debounceTimer = setTimeout(() => {
+    //     loadVisitors();
+    // }, 100);
+});
 
 
 async function alert_element(e)
