@@ -86,8 +86,8 @@
     inset: '0';
     background: 'rgba(255,0,0,0.3)';
     background-image: radial-gradient(rgba(255, 37, 37, 1), rgba(255, 37, 37, 0));
-  
 }
+
 
 #visitorList{
     display: flex;
@@ -143,6 +143,20 @@
 .lower{
     border-bottom: solid 3px;
 }
+.bigger-rigth{
+   margin-left: 0px;
+   border-right: solid 3px;
+   border-bottom: solid 3px;
+   border-end-end-radius: 7px;
+}
+.bigger-left{
+    margin-left: 3px;
+    margin-right: 0px;
+    border-left: solid 3px;
+    border-bottom: solid 3px;
+    border-bottom-left-radius: 7px;
+}
+
 
 .free.upper{
     background: linear-gradient(rgb(255, 255, 255), rgb(255, 229, 234));

@@ -1,19 +1,14 @@
-function add_chase_tooltip(el, inform_text, visual_element) {
+function add_chase_tooltip(el, visual_element) {
     let tooltip = document.getElementById('tooltip')
     let visualelement = document.getElementById('visual_element')
     
 
-    // if (visual_element) visualelement.appendChild(visual_element)
     el.addEventListener('mouseenter', (e) => {
-        if(visual_element)
-        {
-            visualelement.innerHTML =""
-            visualelement.appendChild(visual_element)
-        }
-
+        visualelement.innerHTML = ""
         tooltip.style.display = 'block';
         tooltip.style.left = e.pageX + 10 + 'px';
         tooltip.style.top = e.pageY + 10 + 'px';
+        visualelement.appendChild(visual_element)
     });
     el.addEventListener('mousemove', (e) => {
         tooltip.style.left = e.pageX + 10 + 'px';
@@ -49,7 +44,7 @@ function renderVisitors(visitors, placemants) {
         }
 
         if (
-            (sort != "" && (v.dr.includes(sort) || v.name.includes(sort) || v.phone.includes(sort)))
+            (sort != "" && (v.dr.toLowerCase().includes(sort.toLowerCase()) || v.name.toLowerCase().includes(sort.toLowerCase()) || v.phone.toLowerCase().includes(sort.toLowerCase())))
             ||
             sort == ""
         ) {
@@ -57,14 +52,6 @@ function renderVisitors(visitors, placemants) {
             let el = document.createElement("div")
             el.className = "visitor";
             el.innerText = v.name
-
-
-            let toolInfo =
-                v.name + "\n"
-                + v.dr + "\n"
-                + v.phone + "\n"
-                + (v.sex === true ? "М" : "Ж") + "\n"
-                + "Возраст:" + age + "\n"
 
             let allInfo = document.createElement('div')
             let nameInfo = document.createElement('div')
@@ -91,7 +78,7 @@ function renderVisitors(visitors, placemants) {
 
 
 
-            add_chase_tooltip(el, toolInfo,allInfo)
+            add_chase_tooltip(el, allInfo)
 
             el.draggable = true
             el.dataset.id = v.id
@@ -195,8 +182,10 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
     let placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == current_arrival_id)
     let position_rus =
         bed.position === "upper" ? "Верхняя койка\n" :
-            bed.position === "lower" ? "Нижняя койка\n" : "";
-
+            bed.position === "lower" ? "Нижняя койка\n" : 
+            bed.position === "bigger-rigth" ? "Двуспалка(прав)\n" : 
+            bed.position === "bigger-left" ? "Двуспалка(лев)\n" : "";
+    
     if (placement) {
 
         let status_rus =
@@ -209,7 +198,11 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         if (visitor.dr != null) age = calculate_age_str(visitor.dr)
         let name = ""
         if (visitor) name = visitor.name
-        add_chase_tooltip(bedDiv, position_rus + status_rus + name)
+
+
+        let information = document.createElement("div")
+        information.innerText = position_rus + status_rus+ name
+        add_chase_tooltip(bedDiv, information )
 
         let sexColor = ""
         if (visitor && visitor.sex) sexColor = "boy"
@@ -221,14 +214,18 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         bedDiv.appendChild(sex)
 
         bedDiv.addEventListener("click", () => { open_modal("Освободить койку?", buttons_reset_bed(bed.id, current_arrival_id)); })
+        console.log(bed.position)
     }
     else {
-        add_chase_tooltip(bedDiv, position_rus + "Пусто")
+        let information = document.createElement("div")
+        information.innerText = position_rus + "Пусто"
+        add_chase_tooltip(bedDiv, information)
         bedDiv.addEventListener("click", () => {
             let visitor_id = document.querySelectorAll(`.visitor.selected`)[0].dataset.id
             choosePlacement(data, visitor_id, bedDiv.dataset.id)
         })
     }
+    
 
 
 
