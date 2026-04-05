@@ -44,12 +44,11 @@
 .beds {
     display: flex;
     flex-wrap: wrap;
-    gap: 1px;
 }
 
 .bed {
-    position:relative;
-    width: 20px;
+    position: relative;
+    width: 12px;
     height: 20px;
     cursor: pointer;
     border: 1px solid #666;
@@ -57,27 +56,32 @@
     padding: 3px;
     margin: 1px;
 }
-.bedsex{
-    position: absolute; 
-    bottom: 0; right: 0;
+
+.bedsex {
+    position: absolute;
+    bottom: 0;
+    right: 0;
     width: 15px;
     height: 13px;
     border-top-left-radius: 3px;
     font: 11px "Fira Sans", sans-serif;
-    text-align:center;
+    text-align: center;
 }
-.girl{
+
+.girl {
     background-color: #ff78b3;
 }
-.boy{
+
+.boy {
     background-color: #78acff;
 }
-.agepos
-{
-    position: absolute; 
-    top: 0; 
+
+.agepos {
+    position: absolute;
+    top: 0;
     left: 0;
 }
+
 .bed-overlay {
     border-radius: 3px;
     width: 100%;
@@ -89,35 +93,39 @@
 }
 
 
-#visitorList{
+#visitorList {
     display: flex;
     flex-direction: column;
-    gap:3px;
+    gap: 3px;
 }
+
 .visitor {
     flex-direction: column;
-    padding:2px;
+    padding: 2px;
     white-space: normal;
     border: solid 1px black;
     border-radius: 2px;
 }
-.selected{
+
+.selected {
     border: solid 2px rgb(37, 59, 1);
 }
 
 
-.formNewVisitor{
-    flex: 1;        /* ключевая строка */
+.formNewVisitor {
+    flex: 1;
+    /* ключевая строка */
     padding: 2px;
     width: 100%;
     white-space: normal;
     border: solid 1px #808080;
     border-radius: 3px;
 }
+
 /* состояния */
 
 
-.disable-bed-hover .bed{
+.disable-bed-hover .bed {
     pointer-events: none;
 }
 
@@ -128,8 +136,8 @@
 .busy {
     background: rgb(143, 255, 143);
 }
-.busy-white
-{
+
+.busy-white {
     background: rgb(205, 255, 205);
 }
 
@@ -137,30 +145,39 @@
     background: rgb(252, 169, 122);
 }
 
-.upper{
+.upper {
     border-top: solid 3px;
 }
-.lower{
+
+.lower {
     border-bottom: solid 3px;
 }
-.bigger-rigth{
-   margin-left: 0px;
-   border-right: solid 3px;
-   border-bottom: solid 3px;
-   border-end-end-radius: 7px;
+
+.bigger-rigth {
+    width: 8px;
+    margin-left: 0px;
+    border-right: solid 2px;
+    border-bottom: solid 3px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 0px;
 }
-.bigger-left{
-    margin-left: 3px;
+
+.bigger-left {
+    width: 8px;
     margin-right: 0px;
-    border-left: solid 3px;
+    border-left: solid 2px;
     border-bottom: solid 3px;
+    border-top-right-radius: 0px;
     border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 0px;
 }
 
 
-.free.upper{
+.free.upper {
     background: linear-gradient(rgb(255, 255, 255), rgb(255, 229, 234));
 }
-.free.lower{
-    background: linear-gradient(rgb(255, 229, 234),rgb(255, 255, 255));
+
+.free.lower {
+    background: linear-gradient(rgb(255, 229, 234), rgb(255, 255, 255));
 }

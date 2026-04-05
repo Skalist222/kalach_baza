@@ -6,6 +6,10 @@ Session = sessionmaker(bind=engine)
 
 Base = declarative_base()
 
+class Sity(Base):
+    __tablename__ = "sity"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
 
 class Visitor(Base):
     __tablename__ = "visitors"
@@ -15,6 +19,7 @@ class Visitor(Base):
     phone = Column(String)
     # 0-М, 1-Ж
     sex = Column(Boolean)
+    building_id = Column(Integer, ForeignKey("sity.id"))
 
 
 class Building(Base):

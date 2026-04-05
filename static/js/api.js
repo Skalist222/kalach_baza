@@ -32,7 +32,7 @@ async function addVisitor() {
     let dr = dateInp.value
     let phone = phoneInp.value
 
-    console.log(dr)
+  
     if (name == "") {
         alert_element(nameInp)
         alert("Для начала введите имя!")

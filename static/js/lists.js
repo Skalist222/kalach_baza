@@ -12,3 +12,6 @@ function fillArrivals(arrivals) {
     if (current_selection) select.value = current_selection
     else select.value = arrivals[0].id
 }
+function fillSities(sities) {
+
+}

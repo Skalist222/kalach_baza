@@ -49,6 +49,16 @@ def get_map():
     return {
         "visitors": [v.__dict__ for v in visitors],
     }
+
+@app.get("/api/sities")
+def get_map():
+    db = Session()
+    visitors = db.query(Sity).all()
+    db.close()
+    return {
+        "visitors": [v.__dict__ for v in visitors],
+    }
+
 @app.get("/api/placements")
 def get_map():
     db = Session()

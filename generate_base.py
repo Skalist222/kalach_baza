@@ -6,6 +6,13 @@ from sys import argv
 from datetime import datetime
 db = Session()
 
+sities = ["Москва","Волгоград","Саратов","Краснодар","Волгодонск","Волжский","Калач-на-Дону","Энгельс","Ростов-на-Дону","Шахты","Котельниково","Иловля","Камышин","Жирновск"]
+for s in sities:
+    st = Sity(name = s)
+    db.add(s)
+    db.commit()
+
+
 if(len(argv) == 3):
     if(argv[1] == "test"):
         
@@ -137,7 +144,7 @@ for h in houses:
 # ГОСТИНИЦА ДЛЯ ПЕРСОНАЛА
 # ----------------------------
 
-b = create_building("Гостиница №12 (персонал)")
+b = create_building("Гостиница №12")
 
 rooms = ["12.9","12.10"]
 
@@ -150,7 +157,7 @@ for r in rooms:
 # МЕДПУНКТ
 # ----------------------------
 
-b = create_building("Корпус 13(персонал)")
+b = create_building("Корпус 13")
 room = create_room(b.id, "31.1")
 create_beds(room.id, lower=8,upper=2)
 room = create_room(b.id, "31.2")

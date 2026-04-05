@@ -1,7 +1,7 @@
 function add_chase_tooltip(el, visual_element) {
     let tooltip = document.getElementById('tooltip')
     let visualelement = document.getElementById('visual_element')
-    
+
 
     el.addEventListener('mouseenter', (e) => {
         visualelement.innerHTML = ""
@@ -74,7 +74,7 @@ function renderVisitors(visitors, placemants) {
             phoneInfo.classList.add("phoneInfo")
             phoneInfo.innerText = v.phone
             allInfo.appendChild(phoneInfo)
-           
+
 
 
 
@@ -169,43 +169,53 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
     let bedDiv = document.createElement("div")
     bedDiv.className = "bed free " + bed.position
     bedDiv.dataset.id = bed.id
+
     bedDiv.addEventListener("dragover", (e) => { e.preventDefault() })
     bedDiv.addEventListener("drop", (e) => {
         e.preventDefault()
+        let event_type = e.dataTransfer.getData("event_type")
+        if (!event_type) event_type = null;
         let visitor_id = e.dataTransfer.getData("visitor_id")
         let bed_id = bedDiv.dataset.id
         // ОБЯЗАТЕЛЬНО ЗАМЕНИТЬ 1 на определенный автоматически заезд 
-        choosePlacement(data, visitor_id, bed_id)
+        choosePlacement(data, visitor_id, bed_id,event_type)
         // place(visitor_id, bed_id, 1)
     })
-
     let placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == current_arrival_id)
     let position_rus =
         bed.position === "upper" ? "Верхняя койка\n" :
-            bed.position === "lower" ? "Нижняя койка\n" : 
-            bed.position === "bigger-rigth" ? "Двуспалка(прав)\n" : 
-            bed.position === "bigger-left" ? "Двуспалка(лев)\n" : "";
-    
-    if (placement) {
+            bed.position === "lower" ? "Нижняя койка\n" :
+                bed.position === "bigger-rigth" ? "Двуспалка(прав)\n" :
+                    bed.position === "bigger-left" ? "Двуспалка(лев)\n" : "";
 
+    if (placement) {
         let status_rus =
             placement.status === "busy" ? "Занято:\n" :
                 placement.status === "reserved" ? "Зарезервированно:\n" : "";
 
         bedDiv.className = "bed " + placement.status + " " + bed.position
-        visitor = data.visitors.find(visitor => visitor.id === placement.visitor_id)
+        let v = data.visitors.find(visitor => visitor.id === placement.visitor_id)
         let age = 0
-        if (visitor.dr != null) age = calculate_age_str(visitor.dr)
+        if (v.dr != null) age = calculate_age_str(v.dr)
         let name = ""
-        if (visitor) name = visitor.name
+        if (v) name = v.name
 
+
+        
+        bedDiv.draggable = true
+        bedDiv.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("event_type", "rebusy")
+            e.dataTransfer.setData("visitor_id", v.id)
+        })
 
         let information = document.createElement("div")
-        information.innerText = position_rus + status_rus+ name
-        add_chase_tooltip(bedDiv, information )
+        information.innerText = position_rus + status_rus + name
+        add_chase_tooltip(bedDiv, information)
+
+
 
         let sexColor = ""
-        if (visitor && visitor.sex) sexColor = "boy"
+        if (v && v.sex) sexColor = "boy"
         else sexColor = "girl"
         let sex = document.createElement("div")
         sex.classList = "bedsex " + sexColor
@@ -214,7 +224,6 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         bedDiv.appendChild(sex)
 
         bedDiv.addEventListener("click", () => { open_modal("Освободить койку?", buttons_reset_bed(bed.id, current_arrival_id)); })
-        console.log(bed.position)
     }
     else {
         let information = document.createElement("div")
@@ -225,7 +234,7 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
             choosePlacement(data, visitor_id, bedDiv.dataset.id)
         })
     }
-    
+
 
 
 

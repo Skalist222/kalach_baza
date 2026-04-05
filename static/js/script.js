@@ -12,6 +12,7 @@ async function loadData() {
     let data = await res.json()
 
     fillArrivals(data.arrivals)
+    fillSities(data.sities)
     renderMap(data)
     renderArrivalInfo(data)
     renderVisitors(data.visitors, data.placements)
@@ -23,7 +24,11 @@ async function loadVisitors(e) {
     let placements = (await res.json()).placements
     renderVisitors(visitors, placements)
 }
-
+async function loadSityes(e){
+    let res = await fetch("/api/sityes")
+    let placements = (await res.json()).placements
+    renderVisitors(visitors, placements)
+}
 function calculate_age_str(birthDateString) {
     if (isNaN(Date.parse(birthDateString))) {
         console.error("Ошибка обработчика даты!")
@@ -66,8 +71,7 @@ function modal_btns_new_bed() {
     modal_buttons.appendChild(btnCancel)
 }
 
-
-function choosePlacement(data, visitor_id, bed_id) {
+function choosePlacement(data, visitor_id, bed_id, event_type = null) {
     // Узнаем какой текущий id заезда
     let current_arrival_id = current_arrival.value
     if (current_arrival_id == "") {
@@ -81,29 +85,32 @@ function choosePlacement(data, visitor_id, bed_id) {
     let room = data.rooms.find(r => r.id = bed.room_id)
     let build = data.buildings.find(b => b.id = room.building_id)
 
-
     // Занята ли уже этим посетителем койка
     let current_placements = data.placements.find(p => p.visitor_id == visitor.id && p.arrival_id == current_arrival_id)
     // Занята ли выбранная койка кем либо
     let placement = data.placements.find(p => p.bed_id == bed_id && p.arrival_id == current_arrival_id)
-
-    console.log("Койки занятые этим пользователем:", current_placements)
-    console.log("Кто занимает текущую койку:", placement)
-
-
     let position_bed_rus = ""
     if (bed.position == "upper") position_bed_rus = "Верхняя койка"
     else position_bed_rus = "Нижняя койка"
-    console.log(placement)
+    
+    if (event_type == "rebusy") {
+       open_modal(
+            text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
+            buttons = buttons_update_bed(visitor_id, bed_id, current_arrival_id)
+        )
+    }
+
+
+
     if (placement == undefined) {
         open_modal(
             text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
             buttons = buttons_set_bed(visitor_id, bed_id, current_arrival_id)
         )
     }
-    else{
+    else {
         // перезанять койку
-            open_modal(
+        open_modal(
             text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
             buttons = buttons_update_bed(visitor_id, bed_id, current_arrival_id)
         )
@@ -115,15 +122,4 @@ function choosePlacement(data, visitor_id, bed_id) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 loadData()
-
