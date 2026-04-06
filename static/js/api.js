@@ -25,6 +25,7 @@ async function addVisitor() {
     let nameInp = document.getElementById("visitorName")
     let dateInp = document.getElementById("visitorDate")
     let phoneInp = document.getElementById("visitorPhone")
+    let  = document.getElementById("visitorPhone")
 
     let sex = document.getElementById("sexMen").checked
 
