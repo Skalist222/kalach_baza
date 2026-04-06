@@ -1,4 +1,5 @@
 import datetime
+from re import S
 from xmlrpc.client import boolean
 
 from fastapi import FastAPI, Request
@@ -73,6 +74,16 @@ def add_visitor(name: str,dr:datetime.date,phone:str,sex:boolean):
     db = Session()
     v = Visitor(name=name,dr=dr,phone=phone,sex=sex)
     db.add(v)
+    db.commit()
+    db.close()
+    return {"status": "ok"}
+
+
+@app.post("/api/add_sity")
+def add_visitor(name: str):
+    db = Session()
+    s = Sity(name=name)
+    db.add(s)
     db.commit()
     db.close()
     return {"status": "ok"}
