@@ -3,6 +3,8 @@
 # Остановить выполнение при ошибке
 set -e
 
+cd ..
+
 echo "Создаём виртуальное окружение..."
 python3 -m venv .o
 
@@ -13,5 +15,6 @@ echo "Устанавливаем зависимости..."
 pip install --upgrade pip
 pip install -r pip.txt
 
-echo "Запускаем сервер..."
-uvicorn server:app --port 5555 --reload
+alembic init -t async alembic
+
+echo "Инициализация завершена"

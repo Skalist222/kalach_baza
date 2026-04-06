@@ -12,8 +12,10 @@ MarkupSafe
 pydantic
 pydantic_core
 SQLAlchemy
+sqlalchemy
 starlette
 typing_extensions
 typing-inspection
 faker
 uvicorn
+alembic

@@ -1,11 +1,12 @@
 @echo off
-chcp 1150
-
+chcp 65001 > nul
 setlocal
+cd %~dp0..
 
 set VENV_DIR=.o
 set PID_FILE=service.pid
-
+set PORT=5555
+set HOST=0.0.0.0
 
 echo Проверяем запущен ли сервис...
 if exist %PID_FILE% (
@@ -13,22 +14,17 @@ if exist %PID_FILE% (
     exit /b 1
 )
 
-echo Создаём виртуальное окружение...
-if not exist %VENV_DIR% (
-    python -m venv %VENV_DIR%
-)
+
 
 echo Активируем окружение и ставим зависимости...
 call %VENV_DIR%\Scripts\activate
 
-python -m pip install --upgrade pip
-pip install -r pip.txt
+
 
 echo Запускаем сервер в фоне...
-
 :: Запуск в фоне + получение PID через powershell
 for /f %%i in ('powershell -Command ^
-    "$p = Start-Process uvicorn -ArgumentList 'server:app --host 0.0.0.0 --port 5555 -RedirectStandardOutput out.log -RedirectStandardError err.log' -PassThru; $p.Id"') do set PID=%%i
+    "$p = Start-Process uvicorn -ArgumentList 'server:app --host %HOST% --port %PORT%' -WindowStyle Hidden -PassThru; $p.Id"') do set PID=%%i
 
 echo %PID% > %PID_FILE%
 

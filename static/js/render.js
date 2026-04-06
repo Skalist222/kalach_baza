@@ -19,7 +19,8 @@ function add_chase_tooltip(el, visual_element) {
     });
 }
 
-function renderVisitors(visitors, placemants) {
+function renderVisitors(visitors, placemants,sities) {
+    console.log(sities)
     let sortElement = document.getElementById("sortVisitors")
     let sort = sortElement.value
 
@@ -178,9 +179,10 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         let visitor_id = e.dataTransfer.getData("visitor_id")
         let bed_id = bedDiv.dataset.id
         // ОБЯЗАТЕЛЬНО ЗАМЕНИТЬ 1 на определенный автоматически заезд 
-        choosePlacement(data, visitor_id, bed_id,event_type)
+        choosePlacement(data, visitor_id, bed_id, event_type)
         // place(visitor_id, bed_id, 1)
     })
+
     let placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == current_arrival_id)
     let position_rus =
         bed.position === "upper" ? "Верхняя койка\n" :
@@ -189,6 +191,7 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
                     bed.position === "bigger-left" ? "Двуспалка(лев)\n" : "";
 
     if (placement) {
+        let payed = placement.pay ? "$" : ""
         let status_rus =
             placement.status === "busy" ? "Занято:\n" :
                 placement.status === "reserved" ? "Зарезервированно:\n" : "";
@@ -201,7 +204,7 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         if (v) name = v.name
 
 
-        
+
         bedDiv.draggable = true
         bedDiv.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("event_type", "rebusy")
@@ -221,8 +224,14 @@ function renderBed(bedsContainer, bed, data, current_arrival_id) {
         sex.classList = "bedsex " + sexColor
         sex.innerHTML = age
 
-        bedDiv.appendChild(sex)
 
+        let pay = document.createElement("div")
+        pay.classList = "payed"
+        pay.innerHTML = payed
+
+
+        bedDiv.appendChild(pay)
+        bedDiv.appendChild(sex)
         bedDiv.addEventListener("click", () => { open_modal("Освободить койку?", buttons_reset_bed(bed.id, current_arrival_id)); })
     }
     else {

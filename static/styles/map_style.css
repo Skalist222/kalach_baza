@@ -152,6 +152,16 @@
 .lower {
     border-bottom: solid 3px;
 }
+.payed{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15px;
+    height: 13px;
+    border-top-left-radius: 3px;
+    font: 11px "Fira Sans", sans-serif;
+    text-align: center;
+}
 
 .bigger-rigth {
     width: 8px;

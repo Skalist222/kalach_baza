@@ -12,22 +12,22 @@ async function loadData() {
     let data = await res.json()
 
     fillArrivals(data.arrivals)
-    fillSities(data.sities)
+    fillSities(await get_table("sities"))
     renderMap(data)
     renderArrivalInfo(data)
     renderVisitors(data.visitors, data.placements)
 }
+
+
 async function loadVisitors(e) {
-    let res = await fetch("/api/visitors")
-    let visitors = (await res.json()).visitors
-    res = await fetch("/api/placements")
-    let placements = (await res.json()).placements
-    renderVisitors(visitors, placements)
+    let visitors = await get_table("visitors")
+    let placements = await get_table("placements")
+    let sities = await get_table("sities")
+    renderVisitors(visitors, placements, sities)
 }
-async function loadSityes(e){
-    let res = await fetch("/api/sityes")
-    let placements = (await res.json()).placements
-    renderVisitors(visitors, placements)
+async function loadSityes(e) {
+    let sities = await get_table("sities")
+    renderVisitors(sities)
 }
 function calculate_age_str(birthDateString) {
     if (isNaN(Date.parse(birthDateString))) {
@@ -92,9 +92,9 @@ function choosePlacement(data, visitor_id, bed_id, event_type = null) {
     let position_bed_rus = ""
     if (bed.position == "upper") position_bed_rus = "Верхняя койка"
     else position_bed_rus = "Нижняя койка"
-    
+
     if (event_type == "rebusy") {
-       open_modal(
+        open_modal(
             text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
             buttons = buttons_update_bed(visitor_id, bed_id, current_arrival_id)
         )

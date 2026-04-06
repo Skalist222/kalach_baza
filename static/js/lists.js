@@ -14,4 +14,15 @@ function fillArrivals(arrivals) {
 }
 function fillSities(sities) {
 
+    let select = document.getElementById("visitorSity")
+    
+    sities.forEach((val, id) => {
+        let option = new Option(val.name, "value" + id);
+        select.add(option);
+        console.log(option)
+        option.addEventListener('click', (e) => {
+            console.log(e)
+            search.value = e.target.textContent;
+        })
+    });
 }

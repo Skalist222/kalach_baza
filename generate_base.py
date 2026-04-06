@@ -9,8 +9,10 @@ db = Session()
 sities = ["Москва","Волгоград","Саратов","Краснодар","Волгодонск","Волжский","Калач-на-Дону","Энгельс","Ростов-на-Дону","Шахты","Котельниково","Иловля","Камышин","Жирновск"]
 for s in sities:
     st = Sity(name = s)
-    db.add(s)
+    db.add(st)
     db.commit()
+    
+
 
 
 if(len(argv) == 3):
@@ -25,7 +27,7 @@ if(len(argv) == 3):
             name = fake.name_male() if sex == 1 else fake.name_female()
             dr = datetime.strptime(fake.date(),"%Y-%m-%d")
             phone = fake.phone_number()
-            visitor = Visitor(name=name,dr = dr,phone=phone,sex=(sex==1)) 
+            visitor = Visitor(name=name,dr = dr,phone=phone,sex=(sex==1),sity_id=randint(0,len(sities))) 
             db.add(visitor)
         db.add(a)
         db.commit()

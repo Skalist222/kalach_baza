@@ -1,4 +1,6 @@
 @echo off
+chcp 65001 > nul
+cd %~dp0..
 set PID_FILE=service.pid
 
 if not exist %PID_FILE% (

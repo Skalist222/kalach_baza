@@ -19,3 +19,9 @@ async function alert_element(e)
         e.removeEventListener("click",()=>{})
     })    
 }
+
+async function get_table(table_name) {
+    let res = await fetch("/api/" + table_name)
+    let result_table = (await res.json())[table_name]
+    return result_table
+}

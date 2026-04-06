@@ -19,7 +19,7 @@ class Visitor(Base):
     phone = Column(String)
     # 0-М, 1-Ж
     sex = Column(Boolean)
-    building_id = Column(Integer, ForeignKey("sity.id"))
+    sity_id = Column(Integer, ForeignKey("sity.id"))
 
 
 class Building(Base):
