@@ -11,30 +11,32 @@
         <link rel="stylesheet" href="/static/styles/modal.css" />
         <link rel="stylesheet" href="/static/styles/search.css" />
         <link rel="stylesheet" href="/static/styles/animation.css" />
+        <link rel="stylesheet" href="/static/styles/visitors.css" />
     </head>
 
     <body>
         <div id="tooltip">
             <div id="visual_element"></div>
         </div>
-        <div id="placementModal" class="modal">
-            <div id="modal_content">
-                <div id="modalText"></div>
-                <div id="modal_buttons"></div>
+        <template id="modal-template">
+            <div class="modal">
+                <div class="modal-content">
+                    <div class="modal-title"></div>
+                    <div class="modal-body"></div>
+                    <div class="modal-controls"></div>
+                </div>
             </div>
-        </div>
+        </template>
 
         <div class="greed column">
             <div class="greed row left-panel">
                 <div class="greed row box">
                     <div class="greed column">
-                        <div>
-                            <h3>Заезд</h3>
-                        </div>
+                        <div><h3 class="no_margin">Заезд</h3></div>
                         <button type="button" class="collapse" id="collapse_arrival_add" onclick="collapse(this, 'Создать')">▼</button>
                     </div>
 
-                    <div id="arrival_add" class="greed row box adder">
+                    <div id="arrival_add" class="greed row box adder collapseble">
                         <input id="arrivalName" placeholder="Новый заезд" />
                         <input id="arrivalCost" type="number" placeholder="Взнос" />
                         <button onclick="addArrival()">Добавить</button>
@@ -43,7 +45,7 @@
                 <div class="greed row box">
                     <div class="greed column">
                         <div>
-                            <h3>Посетители</h3>
+                            <h3 class="no_margin">Посетители</h3>
                         </div>
                         <div>
                             <button type="button" class="collapse" id="collapse_visitor_add" onclick="collapse(this)">▼</button>
@@ -86,11 +88,12 @@
                 </div>
             </div>
         </div>
-        <script src="/static/js/modal.js"></script>
+        <script src="/static/js/templates_cache.js"></script>
         <script src="/static/js/help.js"></script>
         <script src="/static/js/lists.js"></script>
         <script src="/static/js/api.js"></script>
         <script src="/static/js/render.js"></script>
         <script src="/static/js/script.js"></script>
+        <script src="/static/js/modal.js"></script>
     </body>
 </html>

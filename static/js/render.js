@@ -1,153 +1,121 @@
-function add_chase_tooltip(el, visual_element) {
-    let tooltip = document.getElementById('tooltip')
-    let visualelement = document.getElementById('visual_element')
+// ------------------------------
+// Tooltip
+// ------------------------------
+function add_chase_tooltip(el, text, visual_element) {
+    const tooltip = document.getElementById('tooltip')
+    if (visual_element) visual_element.appendChild(visual_element)
 
-
-    el.addEventListener('mouseenter', (e) => {
-        visualelement.innerHTML = ""
+    el.addEventListener('mouseenter', e => {
+        tooltip.innerText = text;
         tooltip.style.display = 'block';
         tooltip.style.left = e.pageX + 10 + 'px';
         tooltip.style.top = e.pageY + 10 + 'px';
-        visualelement.appendChild(visual_element)
     });
-    el.addEventListener('mousemove', (e) => {
+
+    el.addEventListener('mousemove', e => {
         tooltip.style.left = e.pageX + 10 + 'px';
         tooltip.style.top = e.pageY + 10 + 'px';
     });
-    el.addEventListener('mouseleave', (e) => {
+
+    el.addEventListener('mouseleave', () => {
         tooltip.style.display = 'none';
     });
 }
+function renderArrivalInfo(data) {
+    const currentArrivalEl = document.getElementById("currentArrival");
+    const arrivalInfoEl = document.getElementById("current_arrival_cost"); // судя по index.html
+    const currentArrivalId = currentArrivalEl.value;
 
-function renderVisitors(visitors, placemants, sities) {
-    // console.log(sities)
-    let sortElement = document.getElementById("sortVisitors")
-    let sort = sortElement.value
+    if (!currentArrivalId) return;
 
-    let list = document.getElementById("visitorList")
-    let cur_arrival = document.getElementById("currentArrival")
-    let current_arrival = cur_arrival.value
-    list.innerHTML = ""
+    const arrival = data.arrivals.find(a => a.id == currentArrivalId);
+    if (!arrival) return;
+
+    arrivalInfoEl.innerText = `Взнос: ${arrival.cost}`;
+}
+// ------------------------------
+// Render Visitors
+// ------------------------------
+function renderVisitors(visitors, placements) {
+    const sort = document.getElementById("sortVisitors").value;
+    const list = document.getElementById("visitorList");
+    const current_arrival = document.getElementById("currentArrival").value;
+    list.innerHTML = "";
 
     visitors.forEach(v => {
-        let age = calculate_age_str(v.dr)
-        let placements = placemants.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival)
-        let selBeds = [];
-        if (placements) {
-            let beds = document.querySelectorAll('.bed');
-            beds.forEach(bed => {
-                placements.forEach(p => {
-                    if (bed.dataset.id == p.bed_id) {
-                        selBeds.push(bed);
-                    }
-                });
-            });
-        }
+        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
+        const selBeds = [];
 
-        if (
-            (sort != "" && (v.dr.toLowerCase().includes(sort.toLowerCase()) || v.name.toLowerCase().includes(sort.toLowerCase()) || v.phone.toLowerCase().includes(sort.toLowerCase())))
-            ||
-            sort == ""
-        ) {
+        document.querySelectorAll('.bed').forEach(bed => {
+            vPlacements.forEach(p => { if (bed.dataset.id == p.bed_id) selBeds.push(bed); });
+        });
 
-            let el = document.createElement("div")
-            el.className = "visitor";
-            el.innerText = v.name
+        if (sort && ![v.name, v.dr, v.phone].some(s => s.includes(sort))) return;
 
-            let allInfo = document.createElement('div')
-            let nameInfo = document.createElement('div')
-            let drInfo = document.createElement('div')
-            let ageInfo = document.createElement('div')
-            let phoneInfo = document.createElement('div')
+        const el = document.createElement("div");
+        el.className = "visitor";
+        el.innerText = v.name;
+        const age = v.dr ? calculate_age_str(v.dr) : 0;
 
-            nameInfo.classList.add("nameInfo")
-            nameInfo.innerText = v.name
-            allInfo.appendChild(nameInfo)
+        add_chase_tooltip(el, `${v.dr}\n${v.phone}\n${v.sex ? "М" : "Ж"}\nВозраст: ${age}`);
 
-            drInfo.classList.add("drInfo")
-            drInfo.innerText = v.dr
-            allInfo.appendChild(drInfo)
+        el.draggable = true;
+        el.dataset.id = v.id;
+        el.addEventListener("dragstart", e => e.dataTransfer.setData("visitor_id", v.id));
 
-            ageInfo.classList.add("ageInfo")
-            ageInfo.innerText = age
-            allInfo.appendChild(ageInfo)
+        el.addEventListener("mouseenter", () => selBeds.forEach(b => {
+            const overlay = document.createElement('div');
+            overlay.className = 'bed-overlay';
+            b.appendChild(overlay);
+        }));
 
-            phoneInfo.classList.add("phoneInfo")
-            phoneInfo.innerText = v.phone
-            allInfo.appendChild(phoneInfo)
+        el.addEventListener("mouseleave", () => document.querySelectorAll('.bed-overlay').forEach(o => o.remove()));
 
+        if (selBeds.length > 0) el.classList.add("busy-white");
 
+        el.addEventListener("click", () => {
+            document.querySelectorAll(`.visitor.selected`).forEach(n => n.classList.remove("selected"));
+            el.classList.add("selected");
+        });
 
+        list.appendChild(el);
+    });
 
-            add_chase_tooltip(el, allInfo)
+    const visitorsElements = document.getElementsByClassName("visitor");
+    if (visitorsElements.length) visitorsElements[0].classList.add("selected");
+}
 
-            el.draggable = true
-            el.dataset.id = v.id
-
-            el.addEventListener("dragstart", (e) => {
-                e.dataTransfer.setData("visitor_id", v.id)
-            })
-
-            el.addEventListener("mouseenter", () => {
-                selBeds.forEach(bed => {
-                    let overlay = document.createElement('div');
-                    overlay.className = 'bed-overlay';
-                    bed.appendChild(overlay);
-                });
-            })
-            el.addEventListener("mouseleave", () => {
-                document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
-            });
-            if (selBeds.length > 0) el.classList.add("busy-white")
-            el.addEventListener("click", () => {
-                document.querySelectorAll(`.visitor.selected`).forEach(n => {
-                    n.classList.remove("selected");
-                });
-                el.classList.add("selected")
-            })
-            list.appendChild(el)
-        }
-
-        const visitorsElements = document.getElementsByClassName("visitor")
-        if (visitorsElements.length > 0) visitorsElements[0].classList.add("selected")
-    })
+// ------------------------------
+// Render Map
+// ------------------------------
+async function renderMap(data) {
+    const current_arrival_id = parseInt(document.getElementById("currentArrival").value);
+    const map = document.getElementById("map");
+    map.innerHTML = "";
+    const buildings = data.buildings
+    for (const building of buildings) {
+        await renderBuilding(map, building, data, current_arrival_id)
+    }
 
 }
 
-function renderArrivalInfo(data) {
-    let arrival_Id = data.arrivals.find(a => a.id == current_arrival.value).id
-    let arrival = data.arrivals.find(a => a.id == arrival_Id)
+async function renderBuilding(map, building, data, current_arrival_id) {
+    const buildingDiv = document.createElement("div");
+    buildingDiv.className = "building";
 
-    let current_arrival_cost = document.getElementById("current_arrival_cost")
-    const arrival_cost = arrival.cost
-    const cost_str = arrival_cost == "0" ? "бесплатно" : "" + arrival_cost
-    current_arrival_cost.innerText = "Членский взнос:" + cost_str
-}
-function renderMap(data) {
-    let current_arrival_el = data.arrivals.find(a => a.id == current_arrival.value)
-    let current_arrival_id = current_arrival_el.id
-    let map = document.getElementById("map")
-    map.innerHTML = ""
-    data.buildings.forEach(building => {
-        renderBuilding(map, building, data, current_arrival_id)
-    })
+    const title = document.createElement("div");
+    title.className = "building_title";
+    title.innerText = building.name;
+    buildingDiv.appendChild(title);
 
+    const rooms = data.rooms.filter(r => r.building_id == building.id);
+    for (const room of rooms) {
+        await renderRoom(buildingDiv, room, data, current_arrival_id)
+    }
+    map.appendChild(buildingDiv);
 }
-function renderBuilding(map, building, data, current_arrival_id) {
-    let buildingDiv = document.createElement("div")
-    buildingDiv.className = "building"
-    let title = document.createElement("div")
-    title.className = "building_title"
-    title.innerText = building.name
-    buildingDiv.appendChild(title)
-    /* комнаты корпуса */
-    let rooms = data.rooms.filter(r => r.building_id == building.id)
-    rooms.forEach(room => {
-        renderRoom(buildingDiv, room, data, current_arrival_id)
-    })
-    map.appendChild(buildingDiv)
-}
-function renderRoom(buildingDiv, room, data, current_arrival_id) {
+
+async function renderRoom(buildingDiv, room, data, current_arrival_id) {
     let roomDiv = document.createElement("div")
     roomDiv.className = "room"
 
@@ -157,95 +125,70 @@ function renderRoom(buildingDiv, room, data, current_arrival_id) {
     roomDiv.appendChild(roomTitle)
     let bedsContainer = document.createElement("div")
     bedsContainer.className = "beds"
-    /* койки комнаты */
+
     let beds = data.beds.filter(b => b.room_id == room.id)
-    beds.forEach(bed => { renderBed(bedsContainer, bed, data, current_arrival_id) })
+    for (const bed of beds) {
+        await renderBed(bedsContainer, bed, data, current_arrival_id)
+    }
 
     roomDiv.appendChild(bedsContainer)
-
     buildingDiv.appendChild(roomDiv)
 }
-function renderBed(bedsContainer, bed, data, current_arrival_id) {
-    let bedDiv = document.createElement("div")
-    bedDiv.className = "bed free " + bed.position
-    bedDiv.dataset.id = bed.id
 
-    bedDiv.addEventListener("dragover", (e) => { e.preventDefault() })
-    bedDiv.addEventListener("drop", (e) => {
-        e.preventDefault()
-        let event_type = e.dataTransfer.getData("event_type")
-        if (!event_type) event_type = null;
-        let visitor_id = e.dataTransfer.getData("visitor_id")
-        let bed_id = bedDiv.dataset.id
-        // ОБЯЗАТЕЛЬНО ЗАМЕНИТЬ 1 на определенный автоматически заезд 
-        choosePlacement(data, visitor_id, bed_id, event_type)
-        // place(visitor_id, bed_id, 1)
-    })
 
-    let placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == current_arrival_id)
-    let position_rus =
-        bed.position === "upper" ? "Верхняя койка\n" :
-            bed.position === "lower" ? "Нижняя койка\n" :
-                bed.position === "bigger-rigth" ? "Двуспалка(прав)\n" :
-                    bed.position === "bigger-left" ? "Двуспалка(лев)\n" : "";
 
+// ------------------------------
+// Render Bed using Template
+// ------------------------------
+async function renderBed(container, bed, data, current_arrival_id) {
+    // клонируем шаблон
+    const template = await TemplateCache.getTemplate("/templates/bed.html");
+    const placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == current_arrival_id);
+
+    let bedDiv = template.querySelector(".bed");
+    bedDiv.classList.add(bed.position);
+    bedDiv.dataset.id = bed.id;
+
+    bedDiv.addEventListener("dragover", e => e.preventDefault());
+    bedDiv.addEventListener("drop", e => {
+        e.preventDefault();
+        const visitor_id = e.dataTransfer.getData("visitor_id");
+        choosePlacement(data, visitor_id, bed.id);
+    });
+
+
+
+    const position_rus = bed.position === "upper" ? "Верхняя койка" : bed.position === "lower" ? "Нижняя койка" : "";
     if (placement) {
-        let payed = placement.pay ? "$" : ""
-        let status_rus =
-            placement.status === "busy" ? "Занято:\n" :
-                placement.status === "reserved" ? "Зарезервированно:\n" : "";
+        const visitor = data.visitors.find(v => v.id === placement.visitor_id);
+        const name = visitor ? visitor.name : "";
+        const age = visitor && visitor.dr ? calculate_age_str(visitor.dr) : 0;
+        const status_rus = placement.status === "busy" ? "Занято" : placement.status === "reserved" ? "Зарезервировано" : "";
 
-        bedDiv.className = "bed " + placement.status + " " + bed.position
-        let v = data.visitors.find(visitor => visitor.id === placement.visitor_id)
-        let age = 0
-        if (v.dr != null) age = calculate_age_str(v.dr)
-        let name = ""
-        if (v) name = v.name
+        add_chase_tooltip(bedDiv, `${position_rus}\n${status_rus}\n${name}`);
 
+        const sexColor = visitor && visitor.sex ? "boy" : "girl";
+        const sexEl = bedDiv.querySelector(".bedsex") || document.createElement("div");
+        sexEl.className = `bedsex ${sexColor}`;
+        sexEl.innerText = age;
+        if (!bedDiv.querySelector(".bedsex")) bedDiv.appendChild(sexEl);
 
-
-        bedDiv.draggable = true
-        bedDiv.addEventListener("dragstart", (e) => {
-            e.dataTransfer.setData("event_type", "rebusy")
-            e.dataTransfer.setData("visitor_id", v.id)
-        })
-
-        let information = document.createElement("div")
-        information.innerText = position_rus + status_rus + name
-        add_chase_tooltip(bedDiv, information)
-
-
-
-        let sexColor = ""
-        if (v && v.sex) sexColor = "boy"
-        else sexColor = "girl"
-        let sex = document.createElement("div")
-        sex.classList = "bedsex " + sexColor
-        sex.innerHTML = age
-
-
-        let pay = document.createElement("div")
-        pay.classList = "payed"
-        pay.innerHTML = payed
-
-
-        bedDiv.appendChild(pay)
-        bedDiv.appendChild(sex)
-        bedDiv.addEventListener("click", () => { open_modal("Освободить койку?", buttons_reset_bed(bed.id, current_arrival_id)); })
-    }
-    else {
-        let information = document.createElement("div")
-        information.innerText = position_rus + "Пусто"
-        add_chase_tooltip(bedDiv, information)
         bedDiv.addEventListener("click", () => {
-            let visitor_id = document.querySelectorAll(`.visitor.selected`)[0].dataset.id
-            choosePlacement(data, visitor_id, bedDiv.dataset.id)
-        })
+            openModal({
+                title: "Освободить койку?",
+                body: `${position_rus}\n${status_rus}\n${name}`,
+                controls: buttons_reset_bed(bed.id, current_arrival_id)
+            });
+        });
+        bedDiv.classList.add(placement.status);
+    } else {
+        add_chase_tooltip(bedDiv, `${position_rus}\nПусто`);
+        bedDiv.addEventListener("click", () => {
+            const visitor_id = document.querySelector(`.visitor.selected`)?.dataset.id;
+            if (visitor_id) choosePlacement(data, visitor_id, bed.id);
+        });
+        bedDiv.classList.add("free");
     }
 
-
-
-
-    bedsContainer.appendChild(bedDiv)
-
+    container.appendChild(bedDiv);
 }

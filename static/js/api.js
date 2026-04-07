@@ -5,12 +5,14 @@ async function place(visitor_id, bed_id, status, arrival_id = 1) {
     })
     loadData()
 }
+
 async function update_place(visitor_id, bed_id, status, arrival_id = 1) {
     await fetch(`/api/update_place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}`, {
         method: "POST"
     })
     loadData()
 }
+
 // Разместить человека
 async function replace(bed_id, arrival_id = 1) {
     await fetch(`/api/replace?bed_id=${bed_id}&arrival_id=${arrival_id}`, {
@@ -26,8 +28,11 @@ async function addVisitor() {
     let dateInp = document.getElementById("visitorDate")
     let phoneInp = document.getElementById("visitorPhone")
     let sityInp = document.getElementById("visitorSity")
+
     let sities = await get_table("sities")
+
     let namesity = String(sityInp.value).charAt(0).toUpperCase() + String(sityInp.value.toLowerCase()).slice(1);
+
     let selected_sity = sities.filter((sity) => sity.name.toLowerCase() == sityInp.value.toLowerCase())
     let selected_sity_id = selected_sity.length == 0 ? null : selected_sity[0].id
 
@@ -37,22 +42,39 @@ async function addVisitor() {
     let dr = dateInp.value
     let phone = phoneInp.value
 
-
     if (name == "") {
         alert_element(nameInp)
-        alert("Для начала введите имя!")
+
+        openModal({
+            title: "Ошибка",
+            body: "Для начала введите имя!",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
         return;
     }
+
     if (dr == "") {
         alert_element(dateInp)
-        alert("дата рождения не указана!")
+
+        openModal({
+            title: "Ошибка",
+            body: "Дата рождения не указана!",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
         return;
     }
+
     if (phone == "") {
         alert_element(phoneInp)
-        alert("Номер телефона не указан!")
+
+        openModal({
+            title: "Ошибка",
+            body: "Номер телефона не указан!",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
         return;
     }
+
     if (selected_sity_id) {
         await fetch(`/api/add_sity?name=${name}`, {
             method: "POST"
@@ -66,59 +88,112 @@ async function addVisitor() {
     nameInp.value = ""
     dateInp.value = ""
     phoneInp.value = ""
+
     loadData()
 }
+
 // Добавить заезд
 async function addArrival() {
 
     const NameEl = document.getElementById("arrivalName")
     const costEl = document.getElementById("arrivalCost")
+
     let name = NameEl.value
     let cost = costEl.value
+
     if (cost == "") cost = 0
+
     if (name == "") {
         alert_element(NameEl)
-        alert("Для начала введите название заезда!")
+
+        openModal({
+            title: "Ошибка",
+            body: "Для начала введите название заезда!",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+
+        return;
     }
 
     await fetch(`/api/add_arrival?name=${name}&cost=${cost}`, {
         method: "POST"
     })
+
     NameEl.value = ""
     costEl.value = ""
+
     loadData()
 }
 
 
-
-
+// Добавить корпус
 async function addBuilding(name = null) {
     if (name == null) name = document.getElementById("buildingName").value
-    if (name == "") return
+
+    if (name == "") {
+        openModal({
+            title: "Ошибка",
+            body: "Введите название корпуса",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+        return
+    }
+
     await fetch(`/api/add_building?name=${name}`, {
         method: "POST"
     })
+
     loadData()
 }
+
+// Добавить комнату
 async function addRoom(building = null, number = null) {
     if (building == null) building = document.getElementById("roomBuilding").value
     if (number == null) number = document.getElementById("roomNumber").value
-    if (building == null) return
-    if (number == null) return
+
+    if (building == null || building == "") {
+        openModal({
+            title: "Ошибка",
+            body: "Не выбран корпус",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+        return
+    }
+
+    if (number == null || number == "") {
+        openModal({
+            title: "Ошибка",
+            body: "Введите номер комнаты",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+        return
+    }
+
     await fetch(`/api/add_room?building_id=${building}&number=${number}`, {
         method: "POST"
     })
+
     loadData()
 }
+
+// Добавить кровать
 async function addBed() {
 
     let room = document.getElementById("bedRoom").value
     let position = document.getElementById("bedPosition").value
+
+    if (!room) {
+        openModal({
+            title: "Ошибка",
+            body: "Не выбрана комната",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+        return
+    }
 
     await fetch(`/api/add_bed?room_id=${room}&position=${position}`, {
         method: "POST"
     })
 
     loadData()
-
 }

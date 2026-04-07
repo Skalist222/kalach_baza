@@ -1,0 +1,17 @@
+.visitor {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: grab;
+    transition: 0.2s;
+}
+
+.visitor:hover {
+    background: var(--bg-soft);
+}
+
+.selected {
+    border: 2px solid var(--border-dark);
+    background: var(--accent);
+}

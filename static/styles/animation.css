@@ -1,6 +1,9 @@
 .collapseble {
-    transition: height 0.7s ease-out;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
 }
-.collapsed {
-    display: none;
+
+.collapseble:not(.collapsed) {
+    max-height: 500px; /* запас */
 }

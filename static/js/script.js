@@ -1,125 +1,93 @@
-
-let selectedVisitor = null
-let current_arrival = document.getElementById("currentArrival")
+// ------------------------------
+// Глобальные переменные
+// ------------------------------
+let selectedVisitor = null;
+const current_arrival = document.getElementById("currentArrival");
 
 // Отключаем меню правой кнопки
-document.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
-});
+document.addEventListener('contextmenu', e => e.preventDefault());
 
+// ------------------------------
+// Загрузка данных
+// ------------------------------
 async function loadData() {
-    let res = await fetch("/api/map")
-    let data = await res.json()
-    let sities = await get_table("sities")
-    fillArrivals(data.arrivals)
-    fillSities(sities)
-    renderMap(data)
-    renderArrivalInfo(data)
-    renderVisitors(data.visitors, data.placements, sities)
+    const res = await fetch("/api/map");
+    const data = await res.json();
+    const sities = await get_table("sities");
+
+    fillArrivals(data.arrivals);
+    fillSities(sities);
+
+    await renderMap(data);
+    renderArrivalInfo(data); // оставляем, если есть функция
+    renderVisitors(data.visitors, data.placements);
 }
 
+async function loadVisitors() {
+    const visitors = await get_table("visitors");
+    const placements = await get_table("placements");
+    renderVisitors(visitors, placements);
+}
 
-async function loadVisitors(e) {
-    let visitors = await get_table("visitors")
-    let placements = await get_table("placements")
-    let sities = await get_table("sities")
-    renderVisitors(visitors, placements, sities)
+async function loadSities() {
+    const sities = await get_table("sities");
+    renderVisitors(sities);
 }
-async function loadSityes(e) {
-    let sities = await get_table("sities")
-    renderVisitors(sities)
-}
+
+// ------------------------------
+// Вспомогательная функция для возраста
+// ------------------------------
 function calculate_age_str(birthDateString) {
     if (isNaN(Date.parse(birthDateString))) {
-        console.error("Ошибка обработчика даты!")
-        return -1
+        console.error("Ошибка обработчика даты!");
+        return -1;
     }
-    // Обрабатываем аргумент birthDateString (yyyyMMdd)  
-    const year = parseInt(birthDateString.split("-")[0], 10);
-    const month = parseInt(birthDateString.split("-")[1], 10) - 1; // Месяцы начинаются с 0  
-    const day = parseInt(birthDateString.split("-")[2], 10);
-    // Создаём объект Date для даты рождения  
-    const birthDate = new Date(year, month, day);
-    // Получаем текущую дату  
+
+    const [year, month, day] = birthDateString.split("-").map(Number);
+    const birthDate = new Date(year, month - 1, day);
     const today = new Date();
-    // Вычисляем возраст  
+
     let age = today.getFullYear() - birthDate.getFullYear();
-    // Проверяем, прошёл ли день рождения в текущем году  
-    const hasBirthdayPassed = today.getMonth() > month || (today.getMonth() === month && today.getDate() >= day);
-    if (!hasBirthdayPassed) {
-        age--; // Если дня рождения ещё не было в этом году, уменьшаем на 1  
-    }
+    const hasBirthdayPassed = today.getMonth() > birthDate.getMonth() ||
+        (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+
+    if (!hasBirthdayPassed) age--;
     return age;
 }
 
-
-/*!!!!!!!!!!!!!!!!!!!!МОДАЛЬНОЕ ОКНО!!!!!!!!!!!!!!!!!!!!*/
-// Выбор размещения
-function modal_btns_new_bed() {
-    let modal_buttons = document.getElementById("modal_buttons")
-    let btnBusy = document.createElement("button")
-    let btnReserved = document.createElement("button")
-    let btnCancel = document.createElement("button")
-    btnBusy.id = "btnBusy"
-    btnBusy.innerText = "Занять койку"
-    btnReserved.id = "btnReserved"
-    btnReserved.innerText = "Зарезервировать"
-    btnCancel.id = "btnCancel"
-    btnCancel.innerText = "Отмена"
-    modal_buttons.appendChild(btnBusy)
-    modal_buttons.appendChild(btnReserved)
-    modal_buttons.appendChild(btnCancel)
-}
-
+// ------------------------------
+// Размещение посетителя (универсальная модалка)
+// ------------------------------
 function choosePlacement(data, visitor_id, bed_id, event_type = null) {
-    // Узнаем какой текущий id заезда
-    let current_arrival_id = current_arrival.value
-    if (current_arrival_id == "") {
-        alert("Сначала выберите заезд")
-        return
+    const current_arrival_id = current_arrival.value;
+    if (!current_arrival_id) {
+        alert("Сначала выберите заезд");
+        return;
     }
 
+    const visitor = data.visitors.find(v => v.id == visitor_id);
+    const bed = data.beds.find(b => b.id == bed_id);
+    const room = data.rooms.find(r => r.id == bed.room_id);
+    const building = data.buildings.find(b => b.id == room.building_id);
 
-    let visitor = data.visitors.find(v => v.id == visitor_id)
-    let bed = data.beds.find(b => b.id = bed_id)
-    let room = data.rooms.find(r => r.id = bed.room_id)
-    let build = data.buildings.find(b => b.id = room.building_id)
+    const position_rus = bed.position === "upper" ? "Верхняя койка" : "Нижняя койка";
 
-    // Занята ли уже этим посетителем койка
-    let current_placements = data.placements.find(p => p.visitor_id == visitor.id && p.arrival_id == current_arrival_id)
-    // Занята ли выбранная койка кем либо
-    let placement = data.placements.find(p => p.bed_id == bed_id && p.arrival_id == current_arrival_id)
-    let position_bed_rus = ""
-    if (bed.position == "upper") position_bed_rus = "Верхняя койка"
-    else position_bed_rus = "Нижняя койка"
+    const placement = data.placements.find(p => p.bed_id == bed_id && p.arrival_id == current_arrival_id);
 
-    if (event_type == "rebusy") {
-        open_modal(
-            text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
-            buttons = buttons_update_bed(visitor_id, bed_id, current_arrival_id)
-        )
-    }
+    // Определяем, какие кнопки показывать
+    let controls;
+    if (event_type === "rebusy") controls = buttons_update_bed(visitor_id, bed_id, current_arrival_id);
+    else if (!placement) controls = buttons_set_bed(visitor_id, bed_id, current_arrival_id);
+    else controls = buttons_update_bed(visitor_id, bed_id, current_arrival_id);
 
-
-
-    if (placement == undefined) {
-        open_modal(
-            text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
-            buttons = buttons_set_bed(visitor_id, bed_id, current_arrival_id)
-        )
-    }
-    else {
-        // перезанять койку
-        open_modal(
-            text = build.name + "\nКомната:" + room.number + "\n" + position_bed_rus + "\n\n" + visitor.name,
-            buttons = buttons_update_bed(visitor_id, bed_id, current_arrival_id)
-        )
-    }
-
+    openModal({
+        title: `${building.name} — Комната ${room.number}`,
+        body: `${position_rus}\n${visitor.name}`,
+        controls
+    });
 }
 
-
-
-
-
-loadData()
+// ------------------------------
+// Автозапуск
+// ------------------------------
+loadData();
