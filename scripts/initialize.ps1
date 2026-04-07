@@ -1,5 +1,3 @@
-cd ..
-
 Write-Host "Создаём виртуальное окружение..."
 python -m venv .o
 

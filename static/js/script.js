@@ -10,12 +10,12 @@ document.addEventListener('contextmenu', function (e) {
 async function loadData() {
     let res = await fetch("/api/map")
     let data = await res.json()
-
+    let sities = await get_table("sities")
     fillArrivals(data.arrivals)
-    fillSities(await get_table("sities"))
+    fillSities(sities)
     renderMap(data)
     renderArrivalInfo(data)
-    renderVisitors(data.visitors, data.placements)
+    renderVisitors(data.visitors, data.placements, sities)
 }
 
 

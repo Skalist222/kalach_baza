@@ -64,7 +64,7 @@ function fillSities(sities) {
     }
 
     // Обработчик изменения input (выбор из datalist или ручной ввод)
-    input.addEventListener("change", function() {
+    input.addEventListener("change", function () {
         let value = this.value.trim();
         if (value !== "") {
             syncSelect(value);
@@ -72,7 +72,7 @@ function fillSities(sities) {
     });
 
     // Также можно синхронизировать при потере фокуса, если пользователь ввёл текст
-    input.addEventListener("blur", function() {
+    input.addEventListener("blur", function () {
         let value = this.value.trim();
         if (value !== "") {
             syncSelect(value);

@@ -60,7 +60,7 @@ h6 {
     display: flex;
     gap: 4px;
 }
-.nongap{
+.nongap {
     gap: 0px;
 }
 
@@ -77,7 +77,6 @@ h6 {
     padding: 3px;
     border: solid 1px #ccc;
     border-radius: 5px;
-
 }
 
 .adder {
@@ -137,12 +136,12 @@ h6 {
     font:
         2rem "Fira Sans",
         serif;
-    margin:0px;
+    margin: 0px;
     margin-top: 5px;
     margin-left: 5px;
 }
 
 #current_arrival_cost {
-    margin:0px;
+    margin: 0px;
     margin-left: 5px;
 }

@@ -20,7 +20,7 @@ function add_chase_tooltip(el, visual_element) {
 }
 
 function renderVisitors(visitors, placemants,sities) {
-    console.log(sities)
+    // console.log(sities)
     let sortElement = document.getElementById("sortVisitors")
     let sort = sortElement.value
 

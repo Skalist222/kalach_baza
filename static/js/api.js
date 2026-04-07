@@ -27,12 +27,10 @@ async function addVisitor() {
     let phoneInp = document.getElementById("visitorPhone")
     let sityInp = document.getElementById("visitorSity")
     let sities = await get_table("sities")
-    let namsity = String(sityInp.value).charAt(0).toUpperCase() + String(sityInp.value.toLowerCase()).slice(1);
+    let namesity = String(sityInp.value).charAt(0).toUpperCase() + String(sityInp.value.toLowerCase()).slice(1);
     let selected_sity = sities.filter((sity) => sity.name.toLowerCase() == sityInp.value.toLowerCase())
-    let selected_sity_id = selected_sity.length == 0 ? null : selected_sity[0].id 
+    let selected_sity_id = selected_sity.length == 0 ? null : selected_sity[0].id
 
-
-    
     let sex = document.getElementById("sexMen").checked
 
     let name = nameInp.value
@@ -55,10 +53,10 @@ async function addVisitor() {
         alert("Номер телефона не указан!")
         return;
     }
-    if(selected_sity_id){
+    if (selected_sity_id) {
         await fetch(`/api/add_sity?name=${name}`, {
-        method: "POST"
-    })
+            method: "POST"
+        })
     }
 
     await fetch(`/api/add_visitor?name=${name}&dr=${dr}&phone=${phone}&sex=${sex}`, {

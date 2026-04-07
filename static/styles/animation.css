@@ -1,0 +1,6 @@
+.collapseble {
+    transition: height 0.7s ease-out;
+}
+.collapsed {
+    display: none;
+}
