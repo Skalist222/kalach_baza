@@ -26,30 +26,27 @@
 
         <div class="greed column">
             <div class="greed row left-panel">
-                <div class="greed row box adder">
+                <div class="greed row box">
                     <div class="greed column">
-                        <div>Заезд:</div>
                         <div>
-                            <select id="currentArrival" onchange="loadData()"></select>
+                            <h3>Заезд</h3>
                         </div>
+                        <button type="button" class="collapse" id="collapse_arrival_add" onclick="collapse(this, 'Создать')">▼</button>
                     </div>
-                    <input id="arrivalName" placeholder="Новый заезд" />
-                    <input id="arrivalCost" type="number" placeholder="Взнос" />
-                    <button onclick="addArrival()">Добавить</button>
-                </div>
 
+                    <div id="arrival_add" class="greed row box adder">
+                        <input id="arrivalName" placeholder="Новый заезд" />
+                        <input id="arrivalCost" type="number" placeholder="Взнос" />
+                        <button onclick="addArrival()">Добавить</button>
+                    </div>
+                </div>
                 <div class="greed row box">
                     <div class="greed column">
                         <div>
                             <h3>Посетители</h3>
                         </div>
                         <div>
-                            <button type="button" class="collapse" id="collapse_visitor_add" onclick="collapse(this)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-down" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
-                                    <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
-                                </svg>
-                            </button>
+                            <button type="button" class="collapse" id="collapse_visitor_add" onclick="collapse(this)">▼</button>
                         </div>
                     </div>
                     <div id="visitor_add" class="greed row box adder collapseble">
@@ -81,7 +78,8 @@
             <div class="rigth-panel">
                 <div class="greed row">
                     <div class="greed row nongap">
-                        <div id="current_arrival_name"></div>
+                        <select id="currentArrival" onchange="loadData()"></select>
+
                         <div id="current_arrival_cost"></div>
                     </div>
                     <div id="map"></div>

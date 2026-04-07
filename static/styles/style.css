@@ -80,9 +80,9 @@ h6 {
 }
 
 .adder {
-    background-color: #d3d3d3;
+    background-color: rgba(142, 240, 104, 0.445);
     border-bottom: solid 3px #ccc;
-    box-shadow: 1px 1px 2px 1px rgba(131, 131, 131, 0.2);
+    box-shadow: 1px 1px 2px 1px rgba(87, 160, 58, 0.308);
 }
 
 .full {
@@ -94,10 +94,10 @@ h6 {
     justify-content: center;
 }
 
-#currentArrival {
+/* #currentArrival {
     width: auto;
     max-width: 250px;
-}
+} */
 
 #visitorList {
     max-height: 500px;
@@ -144,4 +144,10 @@ h6 {
 #current_arrival_cost {
     margin: 0px;
     margin-left: 5px;
+}
+
+#currentArrival {
+    margin: 5px;
+    width: 99%;
+    font-size: x-large;
 }
