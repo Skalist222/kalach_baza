@@ -23,7 +23,7 @@ function add_chase_tooltip(el, text, visual_element) {
 }
 function renderArrivalInfo(data) {
     const currentArrivalEl = document.getElementById("currentArrival");
-    const arrivalInfoEl = document.getElementById("current_arrival_cost"); // судя по index.html
+    const currentArrivalCostEl = document.getElementById("current_arrival_cost"); // судя по index.html
     const currentArrivalId = currentArrivalEl.value;
 
     if (!currentArrivalId) return;
@@ -31,13 +31,14 @@ function renderArrivalInfo(data) {
     const arrival = data.arrivals.find(a => a.id == currentArrivalId);
     if (!arrival) return;
 
-    arrivalInfoEl.innerText = `Взнос: ${arrival.cost}`;
+    currentArrivalCostEl.innerText = `Взнос: ${arrival.cost}`;
 }
 // ------------------------------
 // Render Visitors
 // ------------------------------
 function renderVisitors(visitors, placements) {
     const sort = document.getElementById("sortVisitors").value;
+    const search = sort.toLowerCase();
     const list = document.getElementById("visitorList");
     const current_arrival = document.getElementById("currentArrival").value;
     list.innerHTML = "";
@@ -50,7 +51,7 @@ function renderVisitors(visitors, placements) {
             vPlacements.forEach(p => { if (bed.dataset.id == p.bed_id) selBeds.push(bed); });
         });
 
-        if (sort && ![v.name, v.dr, v.phone].some(s => s.includes(sort))) return;
+        if (search && ![v.name, v.dr, v.phone].some(s => String(s).toLowerCase().includes(search))) return;
 
         const el = document.createElement("div");
         el.className = "visitor";
@@ -101,34 +102,48 @@ async function renderMap(data) {
 
 async function renderBuilding(map, building, data, current_arrival_id) {
     const buildingDiv = document.createElement("div");
-    buildingDiv.className = "building";
+    buildingDiv.className = "building greed row";
 
     const title = document.createElement("div");
     title.className = "building_title";
     title.innerText = building.name;
-    buildingDiv.appendChild(title);
+
+    const roomsContainer = document.createElement("div");
+    roomsContainer.classList = "row_container greed table"
+
+
 
     const rooms = data.rooms.filter(r => r.building_id == building.id);
     for (const room of rooms) {
-        await renderRoom(buildingDiv, room, data, current_arrival_id)
+        await renderRoom(roomsContainer, room, data, current_arrival_id)
     }
+    buildingDiv.appendChild(title);
+    buildingDiv.appendChild(roomsContainer)
     map.appendChild(buildingDiv);
 }
 
 async function renderRoom(buildingDiv, room, data, current_arrival_id) {
     let roomDiv = document.createElement("div")
-    roomDiv.className = "room"
+    roomDiv.classList = "room greed column"
 
     let roomTitle = document.createElement("div")
-    roomTitle.className = "room_title"
+    roomTitle.classList = "room_title"
     roomTitle.innerText = room.number
     roomDiv.appendChild(roomTitle)
     let bedsContainer = document.createElement("div")
-    bedsContainer.className = "beds"
+    bedsContainer.classList = "beds greed row no_gap"
+
+    let upBedsContainer = document.createElement("div")
+    upBedsContainer.classList = "upBeds greed column no_gap"
+    let downBedsContainer = document.createElement("div")
+    downBedsContainer.classList = "downBeds greed column no_gap"
+
+    bedsContainer.appendChild(upBedsContainer)
+    bedsContainer.appendChild(downBedsContainer)
 
     let beds = data.beds.filter(b => b.room_id == room.id)
     for (const bed of beds) {
-        await renderBed(bedsContainer, bed, data, current_arrival_id)
+        await renderBed(upBedsContainer, downBedsContainer, bed, data, current_arrival_id)
     }
 
     roomDiv.appendChild(bedsContainer)
@@ -140,7 +155,7 @@ async function renderRoom(buildingDiv, room, data, current_arrival_id) {
 // ------------------------------
 // Render Bed using Template
 // ------------------------------
-async function renderBed(container, bed, data, current_arrival_id) {
+async function renderBed(upContainer, downContainer, bed, data, current_arrival_id) {
     // клонируем шаблон
     const template = await TemplateCache.getTemplate("/templates/bed.html");
     const placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == current_arrival_id);
@@ -159,6 +174,9 @@ async function renderBed(container, bed, data, current_arrival_id) {
 
 
     const position_rus = bed.position === "upper" ? "Верхняя койка" : bed.position === "lower" ? "Нижняя койка" : "";
+
+
+
     if (placement) {
         const visitor = data.visitors.find(v => v.id === placement.visitor_id);
         const name = visitor ? visitor.name : "";
@@ -190,5 +208,6 @@ async function renderBed(container, bed, data, current_arrival_id) {
         bedDiv.classList.add("free");
     }
 
-    container.appendChild(bedDiv);
+    if (bed.position === "upper") { upContainer.appendChild(bedDiv); }
+    else { downContainer.appendChild(bedDiv); }
 }

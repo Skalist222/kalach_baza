@@ -15,3 +15,35 @@
     border: 2px solid var(--border-dark);
     background: var(--accent);
 }
+
+.greend-visitors-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0; /* 👈 САМОЕ ВАЖНОЕ */
+}
+
+.visitors-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* 👈 занимает остаток */
+    min-height: 0; /* 👈 КРИТИЧНО */
+}
+
+#visitorList {
+    flex: 1;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    min-height: 0; /* 👈 без этого не работает */
+}
+
+#sortVisitors {
+    margin-bottom: 3px;
+}
+.busy-white {
+    background: var(--accent-strong);
+}

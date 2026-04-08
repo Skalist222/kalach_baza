@@ -93,8 +93,8 @@ async function addVisitor() {
 }
 
 // Добавить заезд
-async function addArrival() {
-
+async function addArrival(id_button_close = null) {
+    const buttonClose = document.getElementById(id_button_close)
     const NameEl = document.getElementById("arrivalName")
     const costEl = document.getElementById("arrivalCost")
 
@@ -123,6 +123,7 @@ async function addArrival() {
     costEl.value = ""
 
     loadData()
+    if (buttonClose) buttonClose.click()
 }
 
 

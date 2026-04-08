@@ -2,7 +2,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    padding: 10px;
 }
 
 /* ===== корпус ===== */
@@ -12,12 +11,13 @@
     border-radius: var(--radius);
     border: 2px solid var(--border-dark);
     padding: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     box-shadow: var(--shadow-soft);
 }
 
 .building_title {
     font-weight: bold;
-    margin-bottom: 8px;
 }
 
 /* ===== комнаты ===== */
@@ -25,14 +25,14 @@
 .room {
     border-radius: 8px;
     border: 1px solid #ccc;
-    padding: 6px;
-    margin-bottom: 6px;
+    padding: 3px;
+    margin-bottom: 2px;
     background: #fafafa;
 }
 
 .room_title {
     font-size: 13px;
-    margin-bottom: 4px;
+    margin-bottom: 1px;
 }
 
 /* ===== койки ===== */

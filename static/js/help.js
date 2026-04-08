@@ -14,11 +14,6 @@ init();
 
 sortVisitorElement.addEventListener("input", (e) => {
     loadVisitors();
-
-    // clearTimeout(debounceTimer);
-    // debounceTimer = setTimeout(() => {
-    //     loadVisitors();
-    // }, 100);
 });
 
 
@@ -61,7 +56,8 @@ function collapse(button, text_button = "Добавить") {
     if (el.classList.contains("collapsed")) {
         // 🔽 ОТКРЫВАЕМ
         el.classList.remove("collapsed");
-
+        el.classList.remove("no_margin");
+        el.classList.remove("no_padding");
         el.style.maxHeight = "0px"; // старт
         el.offsetHeight; // форс рефлоу
 
@@ -81,6 +77,8 @@ function collapse(button, text_button = "Добавить") {
         // после завершения анимации
         el.addEventListener("transitionend", function handler() {
             el.classList.add("collapsed");
+            el.classList.add("no_margin");
+            el.classList.add("no_padding");
             el.removeEventListener("transitionend", handler);
         });
     }
