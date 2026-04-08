@@ -52,6 +52,8 @@ class Arrival(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     cost = Column(Integer)
+    start = Column(Date)
+    stop = Column(Date)
 
 
 class Placement(Base):

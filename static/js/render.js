@@ -21,17 +21,20 @@ function add_chase_tooltip(el, text, visual_element) {
         tooltip.style.display = 'none';
     });
 }
-function renderArrivalInfo(data) {
+async function renderArrivalInfo(data) {
     const currentArrivalEl = document.getElementById("currentArrival");
-    const currentArrivalCostEl = document.getElementById("current_arrival_cost"); // судя по index.html
+    const costEl = document.getElementById("current_arrival_cost"); // судя по index.html
+    const startEl = document.getElementById("current_arrival_start");
+    const stopEl = document.getElementById("current_arrival_stop");
+
     const currentArrivalId = currentArrivalEl.value;
-
     if (!currentArrivalId) return;
-
     const arrival = data.arrivals.find(a => a.id == currentArrivalId);
     if (!arrival) return;
 
-    currentArrivalCostEl.innerText = `Взнос: ${arrival.cost}`;
+    costEl.innerText = `Желательное пожертвование: ${arrival.cost}`;
+    startEl.innerHTML = `Начало:${arrival.start}`;
+    stopEl.innerHTML = `Конец: ${arrival.stop}`;
 }
 // ------------------------------
 // Render Visitors

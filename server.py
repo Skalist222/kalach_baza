@@ -90,9 +90,9 @@ def add_visitor(name: str):
     return {"status": "ok"}
 
 @app.post("/api/add_arrival")
-def add_arrival(name: str,cost:int):
+def add_arrival(name: str,cost:int,start:datetime.date,stop:datetime.date):
     db = Session()
-    a = Arrival(name=name,cost=cost)
+    a = Arrival(name=name,cost=cost,start=start,stop=stop)
     db.add(a)
     db.commit()
     db.close()

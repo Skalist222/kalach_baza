@@ -38,3 +38,7 @@
     border-color: #1f3a1f;
     box-shadow: 0 0 0 2px rgba(50, 100, 50, 0.2);
 }
+#currentArrival:focus {
+    border-color: #1f3a1f;
+    box-shadow: 0 0 0 2px rgba(50, 100, 50, 0.2);
+}

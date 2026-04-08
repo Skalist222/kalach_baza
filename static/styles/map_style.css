@@ -43,8 +43,8 @@
 }
 
 .bed {
-    width: 16px;
-    height: 22px;
+    width: 22px;
+    height: 30px;
     border-radius: 6px;
     border: 1px solid #777;
     margin: 2px;
@@ -80,6 +80,20 @@
     border-bottom: 3px solid var(--border-dark);
 }
 
+/* большая лево/право */
+.bigger-left {
+    border-bottom: 3px solid var(--border-dark);
+    border-left: 2px solid var(--border-dark);
+    border-bottom-right-radius: 0px;
+    margin-right: 0px;
+}
+.bigger-rigth {
+    border-bottom: 3px solid var(--border-dark);
+    border-right: 2px solid var(--border-dark);
+    border-bottom-left-radius: 0px;
+    margin-left: 0px;
+}
+
 /* пол */
 
 .bedsex {
@@ -106,6 +120,6 @@
 .bed-overlay {
     position: absolute;
     inset: 0;
-    border-radius: 6px;
-    background: rgba(255, 0, 0, 0.2);
+    border-radius: 20px;
+    background: rgba(255, 0, 0, 0.705);
 }

@@ -98,8 +98,15 @@ async function addArrival(id_button_close = null) {
     const NameEl = document.getElementById("arrivalName")
     const costEl = document.getElementById("arrivalCost")
 
+    const startEl = document.getElementById("start_arrival")
+    const stopEl = document.getElementById("stop_arrival")
+
+
     let name = NameEl.value
     let cost = costEl.value
+    let start = startEl.value
+    let stop = stopEl.value
+
 
     if (cost == "") cost = 0
 
@@ -114,8 +121,28 @@ async function addArrival(id_button_close = null) {
 
         return;
     }
+    if (start == "") {
+        alert_element(startEl)
+        openModal({
+            title: "Ошибка",
+            body: "Для начала введите дату начала заезда!",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
 
-    await fetch(`/api/add_arrival?name=${name}&cost=${cost}`, {
+        return;
+    }
+    if (stop == "") {
+        alert_element(stopEl)
+        openModal({
+            title: "Ошибка",
+            body: "Для начала введите дату завершения заезда!",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+
+        return;
+    }
+
+    await fetch(`/api/add_arrival?name=${name}&cost=${cost}&start=${start}&stop=${stop}`, {
         method: "POST"
     })
 
@@ -123,6 +150,7 @@ async function addArrival(id_button_close = null) {
     costEl.value = ""
 
     loadData()
+    // нажымаем на кнопку скрыть
     if (buttonClose) buttonClose.click()
 }
 

@@ -43,6 +43,11 @@ async function getTemplateFromFile(path) {
     return template.content.cloneNode(true);
 }
 
+function today_string() {
+    const today = new Date().toISOString().slice(0, 10);
+    return today
+}
+
 function collapse(button, text_button = "Добавить") {
     let button_id = button.id;
 

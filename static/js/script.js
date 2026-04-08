@@ -6,7 +6,10 @@ const current_arrival = document.getElementById("currentArrival");
 
 // Отключаем меню правой кнопки
 document.addEventListener('contextmenu', e => e.preventDefault());
-
+// Выставляю 
+document.getElementById("start_arrival").value = today_string()
+document.getElementById("stop_arrival").value = today_string()
+console.log(today_string())
 // ------------------------------
 // Загрузка данных
 // ------------------------------

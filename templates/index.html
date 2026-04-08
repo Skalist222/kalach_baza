@@ -43,16 +43,18 @@
                     <div id="arrival_add" class="greed row box adder collapseble">
                         <input id="arrivalName" placeholder="Новый заезд" />
                         <input id="arrivalCost" type="number" placeholder="Взнос" />
-                        <div class="greed column">
-                            <div class="greed row">
-                                <h5 class="no_margin">Начало</h5>
-                                <input type="date" name="" id="start_arrival" />
+
+                        <div class="greed row">
+                            <div class="greed column">
+                                <h5 class="no_margin f1">Начало</h5>
+                                <input class="f3" type="date" name="" id="start_arrival" />
                             </div>
-                            <div class="greed row">
-                                <h5 class="no_margin">Конец</h5>
-                                <input type="date" name="" id="stop_arrival" />
+                            <div class="greed column">
+                                <h5 class="no_margin f1">Конец</h5>
+                                <input class="f3" type="date" name="" id="stop_arrival" />
                             </div>
                         </div>
+
                         <button onclick="addArrival('collapse_arrival_add')">Добавить</button>
                     </div>
                 </div>
@@ -84,9 +86,19 @@
             </div>
             <div class="rigth-panel">
                 <div class="greed row">
-                    <div class="greed row no_gap">
-                        <div id="current_arrival_cost"></div>
-                        <select id="currentArrival" onchange="loadData()"></select>
+                    <div class="greed row box arrival_infos">
+                        <div class="custom-select" id="arrivalSelectWrapper">
+                            <div class="custom-select-trigger">Выберите заезд</div>
+                            <div class="custom-options"></div>
+
+                            <!-- Оригинальный select (скрытый) -->
+                            <select class="invisible" id="currentArrival" onchange="loadData()"></select>
+                        </div>
+                        <div class="greed column box no_padding">
+                            <div class="arrival_info" id="current_arrival_cost"></div>
+                            <div class="arrival_info" id="current_arrival_start"></div>
+                            <div class="arrival_info" id="current_arrival_stop"></div>
+                        </div>
                     </div>
                     <div id="map"></div>
                 </div>
