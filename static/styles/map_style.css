@@ -1,45 +1,41 @@
 #map {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    padding: 10px;
-    flex: 1;
+    gap: 12px;
 }
 
-/* корпус */
+/* ===== корпус ===== */
 
 .building {
-    border: 3px solid #444;
-    padding: 3px;
-
-    background: #f5f5f5;
+    background: white;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-dark);
+    padding: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    box-shadow: var(--shadow-soft);
 }
 
 .building_title {
     font-weight: bold;
-    margin-bottom: 3px;
 }
 
-/* комнаты */
+/* ===== комнаты ===== */
 
 .room {
-    border: 1px solid #aaa;
-    padding: 0px;
-    margin: 3px;
-    display: inline-block;
-    border: 1px solid #777;
-    border-radius: 3px;
-    padding: 2px;
-    margin-bottom: 1px;
-    background: white;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 3px;
+    margin-bottom: 2px;
+    background: #fafafa;
 }
 
 .room_title {
-    font-size: 14px;
-    margin-bottom: 5px;
+    font-size: 13px;
+    margin-bottom: 1px;
 }
 
-/* койки */
+/* ===== койки ===== */
 
 .beds {
     display: flex;
@@ -47,147 +43,83 @@
 }
 
 .bed {
+    width: 22px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid #777;
+    margin: 2px;
     position: relative;
-    width: 12px;
-    height: 20px;
-    cursor: pointer;
-    border: 1px solid #666;
-    border-radius: 3px;
-    padding: 3px;
-    margin: 1px;
+    transition: 0.2s;
 }
+
+.bed:hover {
+    transform: scale(1.1);
+}
+
+/* статусы */
+
+.free {
+    background: linear-gradient(#ffffff, #eaffea);
+}
+
+.busy {
+    background: #b8f5c8;
+}
+
+.reserved {
+    background: #ffd6b3;
+}
+
+/* верх/низ */
+
+.upper {
+    border-top: 3px solid var(--border-dark);
+}
+
+.lower {
+    border-bottom: 3px solid var(--border-dark);
+}
+
+/* большая лево/право */
+.bigger-left {
+    border-bottom: 3px solid var(--border-dark);
+    border-left: 2px solid var(--border-dark);
+    border-bottom-right-radius: 0px;
+    margin-right: 0px;
+}
+.bigger-rigth {
+    border-bottom: 3px solid var(--border-dark);
+    border-right: 2px solid var(--border-dark);
+    border-bottom-left-radius: 0px;
+    margin-left: 0px;
+}
+
+/* пол */
 
 .bedsex {
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 15px;
-    height: 13px;
-    border-top-left-radius: 3px;
-    font:
-        11px "Fira Sans",
-        sans-serif;
+    font-size: 10px;
+    width: 14px;
+    height: 12px;
     text-align: center;
-}
-
-.girl {
-    background-color: #ff78b3;
+    border-top-left-radius: 6px;
 }
 
 .boy {
-    background-color: #78acff;
+    background: #7db8ff;
 }
 
-.agepos {
-    position: absolute;
-    top: 0;
-    left: 0;
+.girl {
+    background: #ff9ec7;
 }
+
+/* overlay */
 
 .bed-overlay {
-    border-radius: 3px;
-    width: 100%;
-    height: 100%;
-    position: "absolute";
-    inset: "0";
-    background: "rgba(255,0,0,0.3)";
-    background-image: radial-gradient(rgba(255, 37, 37, 1), rgba(255, 37, 37, 0));
-}
-
-#visitorList {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.visitor {
-    flex-direction: column;
-    padding: 2px;
-    white-space: normal;
-    border: solid 1px black;
-    border-radius: 2px;
-}
-
-.selected {
-    border: solid 2px rgb(37, 59, 1);
-}
-
-.formNewVisitor {
-    flex: 1;
-    /* ключевая строка */
-    padding: 2px;
-    width: 100%;
-    white-space: normal;
-    border: solid 1px #808080;
-    border-radius: 3px;
-}
-
-/* состояния */
-
-.disable-bed-hover .bed {
-    pointer-events: none;
-}
-
-.free {
-    background: transparent;
-}
-
-.busy {
-    background: rgb(143, 255, 143);
-}
-
-.busy-white {
-    background: rgb(205, 255, 205);
-}
-
-.reserved {
-    background: rgb(252, 169, 122);
-}
-
-.upper {
-    border-top: solid 3px;
-}
-
-.lower {
-    border-bottom: solid 3px;
-}
-.payed {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 15px;
-    height: 13px;
-    border-top-left-radius: 3px;
-    font:
-        11px "Fira Sans",
-        sans-serif;
-    text-align: center;
-}
-
-.bigger-rigth {
-    width: 8px;
-    margin-left: 0px;
-    border-right: solid 2px;
-    border-bottom: solid 3px;
-    border-top-left-radius: 0px;
-    border-bottom-right-radius: 7px;
-    border-bottom-left-radius: 0px;
-}
-
-.bigger-left {
-    width: 8px;
-    margin-right: 0px;
-    border-left: solid 2px;
-    border-bottom: solid 3px;
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 0px;
-}
-
-.free.upper {
-    background: linear-gradient(rgb(255, 255, 255), rgb(255, 229, 234));
-}
-
-.free.lower {
-    background: linear-gradient(rgb(255, 229, 234), rgb(255, 255, 255));
+    inset: 0;
+    border-radius: 20px;
+    background: rgba(255, 0, 0, 0.705);
 }

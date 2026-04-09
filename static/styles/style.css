@@ -1,153 +1,149 @@
+:root {
+    --bg-main: #f4fff6;
+    --bg-soft: #e8fbe9;
+    --accent: #b7f5c3;
+    --accent-strong: radial-gradient(#9affc4, #e8fbe9);
+    --accent-strong-select: #8be0a1;
+
+    --border-dark: #2f4f3f;
+    --text-main: #1f2d26;
+
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+}
+
 body {
-    margin: 0px;
-    font-family: Arial;
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
 }
 
-h1 {
-    margin: 0px;
-}
-
-h2 {
-    margin: 0px;
-}
-
-h3 {
-    margin: 0px;
-}
-
-h4 {
-    margin: 0px;
-}
-
-h5 {
-    margin: 0px;
-}
-
-h6 {
-    margin: 0px;
-}
-
-#tooltip {
-    position: absolute;
-    background-color: #fff;
-    color: #333;
-    padding: 3px 5px;
-    border-radius: 3px;
-    font-size: 12px;
-    display: none;
-    pointer-events: none;
-    border: solid 1px #333;
-    z-index: 1000;
-}
-
-.left-panel {
-    flex-shrink: 0;
-    width: 300px;
-    border-right: 1px solid #ccc;
-    padding: 5px;
-    margin-right: 5px;
-}
-
-.left-column {
-    align-content: flex-start;
-}
-
-.rigth-column {
-    align-content: flex-end;
-}
+/* ================= LAYOUT ================= */
 
 .greed {
     display: flex;
     gap: 4px;
 }
-.nongap {
-    gap: 0px;
-}
 
 .column {
     flex-direction: row;
-    justify-content: space-between;
 }
 
 .row {
     flex-direction: column;
 }
+.table {
+    flex-flow: row wrap;
+}
+.f1 {
+    flex: 1;
+}
+.f2 {
+    flex: 2;
+}
+.f3 {
+    flex: 3;
+}
+
+.left-panel {
+    flex: 1;
+    padding: 5px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+
+    height: 99vh; /* 👈 обязательно */
+    overflow: hidden; /* 👈 важно */
+}
+
+.rigth-panel {
+    flex: 3;
+    padding: 10px;
+    padding-top: 0px;
+}
+
+/* ================= BOX ================= */
 
 .box {
-    padding: 3px;
-    border: solid 1px #ccc;
-    border-radius: 5px;
+    background: white;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-dark);
+    padding: 10px;
+    box-shadow: var(--shadow-soft);
 }
 
+/* зелёные блоки */
 .adder {
-    background-color: rgba(142, 240, 104, 0.445);
-    border-bottom: solid 3px #ccc;
-    box-shadow: 1px 1px 2px 1px rgba(87, 160, 58, 0.308);
+    background: var(--bg-soft);
+    border: 2px solid var(--accent-strong);
+    padding: 3px;
 }
 
-.full {
-    width: 100%;
+/* ================= INPUT ================= */
+
+input,
+select,
+button {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    font-size: 14px;
 }
 
-.center {
-    align-items: center;
-    justify-content: center;
+button {
+    background: var(--accent);
+    border: 1px solid var(--border-dark);
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-/* #currentArrival {
-    width: auto;
-    max-width: 250px;
-} */
+button:hover {
+    background: var(--accent-strong);
+}
 
-#visitorList {
+/* ================= COLLAPSE ================= */
+
+.collapseble {
+    overflow: hidden;
     max-height: 500px;
-    overflow-y: auto;
+    transition:
+        max-height 0.4s ease,
+        opacity 0.3s ease;
+    opacity: 1;
 }
 
-.w10p {
-    width: 10%;
-}
-
-.w20p {
-    width: 20%;
-}
-
-.w40p {
-    width: 40%;
-}
-
-.w60p {
-    width: 60%;
-}
-
-.w80p {
-    width: 80%;
-}
-
-.w90p {
-    width: 80%;
-}
-
-.w100p {
-    width: 100%;
-}
-
-#current_arrival_name {
-    font:
-        2rem "Fira Sans",
-        serif;
+.collapsed {
+    max-height: 0;
+    opacity: 0;
     margin: 0px;
-    margin-top: 5px;
-    margin-left: 5px;
+    padding: 0px;
+    border: 0px;
+    pointer-events: none;
 }
 
-#current_arrival_cost {
+/* ================= TOOLTIP ================= */
+
+#tooltip {
+    position: absolute;
+    background: white;
+    padding: 5px 7px;
+    border-radius: 6px;
+    border: 1px solid var(--border-dark);
+    font-size: 12px;
+    box-shadow: var(--shadow-soft);
+    z-index: 1000;
+}
+
+.no_margin {
     margin: 0px;
-    margin-left: 5px;
 }
-
-#currentArrival {
-    margin: 5px;
-    width: 99%;
-    font-size: x-large;
+.no_padding {
+    padding: 0px;
+}
+.no_gap {
+    gap: 0px;
+}
+.invisible {
+    display: none;
 }

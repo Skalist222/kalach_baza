@@ -14,10 +14,8 @@ for s in sities:
     
 
 
-
-if(len(argv) == 3):
+if(len(argv) >= 3):
     if(argv[1] == "test"):
-        
         fake = Faker('ru_RU')
         a = Arrival(name="Тест",cost=2000)
         count_visitors = int(argv[2])
@@ -31,6 +29,8 @@ if(len(argv) == 3):
             db.add(visitor)
         db.add(a)
         db.commit()
+
+    
 # a = Arrival(name="Тест",cost=2000)
 # db.add(a)
 # db.commit()
@@ -77,7 +77,7 @@ for r in rooms:
     room = create_room(b.id, r)
     create_beds(room.id, upper=4, lower=4)
 
-
+if "not_all" in argv: exit()
 # ----------------------------
 # КОРПУС 4
 # ----------------------------

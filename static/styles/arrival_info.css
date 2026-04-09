@@ -1,0 +1,71 @@
+.arrival_infos {
+    font:
+        1.2em "Philosopher",
+        sans-serif;
+    margin-top: 6px;
+}
+.arrival_info {
+    font:
+        1.2em "Philosopher",
+        sans-serif;
+    padding: 7px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background: var(--accent-strong);
+    border-radius: 10px;
+}
+.custom-select {
+    position: relative;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* Кнопка */
+.custom-select-trigger {
+    background: #e8f5e9;
+    border: 2px solid #2f4f2f;
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.custom-select-trigger:hover {
+    background: #dff0df;
+}
+
+/* Выпадающий список */
+.custom-options {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+
+    background: #f4fff4;
+    border: 2px solid #2f4f2f;
+    border-radius: 10px;
+
+    max-height: 200px;
+    overflow-y: auto;
+
+    display: none;
+    z-index: 1000;
+}
+
+/* Пункт */
+.custom-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.custom-option:hover {
+    background: #c8f7c8;
+}
+
+/* Активный */
+.custom-option.selected {
+    background: #a5e6a5;
+}

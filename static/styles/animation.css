@@ -1,6 +1,44 @@
 .collapseble {
-    transition: height 0.7s ease-out;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
 }
-.collapsed {
-    display: none;
+
+.collapseble:not(.collapsed) {
+    max-height: 500px; /* запас */
+}
+#currentArrival {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background: linear-gradient(145deg, #e8fbe8, #d2f5d2);
+    border: 2px solid #2f4f2f; /* болотный */
+    border-radius: 12px;
+
+    padding: 10px 35px 10px 12px;
+    font-size: 16px;
+
+    outline: none;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    transition: background 0.2s ease;
+}
+#currentArrival {
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%232f4f2f' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+#currentArrival:hover {
+    background: linear-gradient(145deg, #dff7df, #c8efc8);
+}
+
+#currentArrival:focus {
+    border-color: #1f3a1f;
+    box-shadow: 0 0 0 2px rgba(50, 100, 50, 0.2);
+}
+#currentArrival:focus {
+    border-color: #1f3a1f;
+    box-shadow: 0 0 0 2px rgba(50, 100, 50, 0.2);
 }
