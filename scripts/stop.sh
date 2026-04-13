@@ -19,7 +19,13 @@ fi
 echo "Останавливаем процесс с PID=$PID..."
 
 # Принудительное завершение (аналог taskkill /F)
-kill -9 "$PID" 2>/dev/null
+kill "$PID" 2>/dev/null || true
+sleep 2
+
+if ps -p "$PID" > /dev/null 2>&1; then
+    echo "Не остановился, убиваем принудительно..."
+    kill -9 "$PID" 2>/dev/null
+fi
 
 # Удаляем файл PID даже если процесса уже не было
 rm -f "$PID_FILE"

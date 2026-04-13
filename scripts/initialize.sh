@@ -1,20 +1,16 @@
 #!/bin/bash
-
-# Остановить выполнение при ошибке
 set -e
 
-cd ..
+cd "$(dirname "$0")/.." || exit 1
 
 echo "Создаём виртуальное окружение..."
 python3 -m venv .o
 
-echo "Активируем виртуальное окружение..."
-source .o/bin/activate
-
 echo "Устанавливаем зависимости..."
-pip install --upgrade pip
-pip install -r pip.txt
+.o/bin/python -m pip install --upgrade pip
+.o/bin/pip install -r pip.txt
 
-alembic init -t async alembic
+echo "Запускаем генерацию..."
+.o/bin/python generate_base.py test 1
 
 echo "Инициализация завершена"
