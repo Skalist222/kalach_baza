@@ -2,29 +2,32 @@
 // Глобальные переменные
 // ------------------------------
 let selectedVisitor = null;
-const current_arrival = document.getElementById("currentArrival");
 
 // Отключаем меню правой кнопки
 document.addEventListener('contextmenu', e => e.preventDefault());
 // Выставляю 
 document.getElementById("start_arrival").value = today_string()
 document.getElementById("stop_arrival").value = today_string()
-console.log(today_string())
+
+
+async function fillingComponentsData() {
+    const res = await fetch("/api/map");
+    const data = await res.json();
+    const sities = await get_table("sities")
+    fillArrivals(data.arrivals);
+    fillSities(sities);
+}
 // ------------------------------
 // Загрузка данных
 // ------------------------------
 async function loadData() {
     const res = await fetch("/api/map");
-    const data = await res.json();
-    const sities = await get_table("sities");
-
-    fillArrivals(data.arrivals);
-    fillSities(sities);
-
+    let data = await res.json();
     await renderMap(data);
-    renderArrivalInfo(data); // оставляем, если есть функция
+    await renderArrivalInfo(data);
     renderVisitors(data.visitors, data.placements);
 }
+
 
 async function loadVisitors() {
     const visitors = await get_table("visitors");
@@ -61,12 +64,16 @@ function calculate_age_str(birthDateString) {
 // ------------------------------
 // Размещение посетителя (универсальная модалка)
 // ------------------------------
-function choosePlacement(data, visitor_id, bed_id, event_type = null) {
-    const current_arrival_id = current_arrival.value;
-    if (!current_arrival_id) {
+async function choosePlacement(data, visitor_id, bed_id, event_type = null) {
+    const cur_ar_id = await current_arrival_id();
+    if (!cur_ar_id) {
         alert("Сначала выберите заезд");
         return;
     }
+    let arrival = data.arrivals.find(a => a.id == cur_ar_id)
+    console.log(arrival)
+
+    const arrival_cost = data.arrivals.find(a => a.id == cur_ar_id).cost
 
     const visitor = data.visitors.find(v => v.id == visitor_id);
     const bed = data.beds.find(b => b.id == bed_id);
@@ -75,13 +82,14 @@ function choosePlacement(data, visitor_id, bed_id, event_type = null) {
 
     const position_rus = bed.position === "upper" ? "Верхняя койка" : "Нижняя койка";
 
-    const placement = data.placements.find(p => p.bed_id == bed_id && p.arrival_id == current_arrival_id);
+    const placement = data.placements.find(p => p.bed_id == bed_id && p.arrival_id == cur_ar_id);
 
     // Определяем, какие кнопки показывать
+
     let controls;
-    if (event_type === "rebusy") controls = buttons_update_bed(visitor_id, bed_id, current_arrival_id);
-    else if (!placement) controls = buttons_set_bed(visitor_id, bed_id, current_arrival_id);
-    else controls = buttons_update_bed(visitor_id, bed_id, current_arrival_id);
+    if (event_type === "rebusy") controls = buttons_update_bed(visitor_id, bed_id, cur_ar_id);
+    else if (!placement) controls = buttons_set_bed(visitor_id, bed_id, cur_ar_id, arrival_cost);
+    else controls = buttons_update_bed(visitor_id, bed_id, cur_ar_id);
 
     openModal({
         title: `${building.name} — Комната ${room.number}`,
@@ -93,4 +101,5 @@ function choosePlacement(data, visitor_id, bed_id, event_type = null) {
 // ------------------------------
 // Автозапуск
 // ------------------------------
+fillingComponentsData();
 loadData();

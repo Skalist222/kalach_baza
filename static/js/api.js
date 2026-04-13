@@ -1,19 +1,20 @@
 // Разместить человека
-async function place(visitor_id, bed_id, status, arrival_id = 1) {
-    await fetch(`/api/place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}`, {
+async function place(visitor_id, bed_id, status, arrival_id, money) {
+    console.log("Внутри place", arrival_id)
+    await fetch(`/api/place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
         method: "POST"
     })
     loadData()
 }
 
-async function update_place(visitor_id, bed_id, status, arrival_id = 1) {
-    await fetch(`/api/update_place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}`, {
+async function update_place(visitor_id, bed_id, status, money, arrival_id) {
+    await fetch(`/api/update_place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
         method: "POST"
     })
     loadData()
 }
 
-// Разместить человека
+
 async function replace(bed_id, arrival_id = 1) {
     await fetch(`/api/replace?bed_id=${bed_id}&arrival_id=${arrival_id}`, {
         method: "POST"
@@ -146,10 +147,15 @@ async function addArrival(id_button_close = null) {
         method: "POST"
     })
 
+
+    await fillingComponentsData()
+
+    // const cur_ar_el = document.getElementById("currentArrival")
+    // cur_ar_el = NameEl.value
+
+
     NameEl.value = ""
     costEl.value = ""
-
-    loadData()
     // нажымаем на кнопку скрыть
     if (buttonClose) buttonClose.click()
 }

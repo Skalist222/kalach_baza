@@ -87,13 +87,18 @@
             <div class="rigth-panel">
                 <div class="greed row">
                     <div class="greed row box arrival_infos">
-                        <div class="custom-select" id="arrivalSelectWrapper">
-                            <div class="custom-select-trigger">Выберите заезд</div>
-                            <div class="custom-options"></div>
+                        <div class="greed column">
+                            <div class="custom-select f3" id="arrivalSelectWrapper">
+                                <div class="custom-select-trigger">Выберите заезд</div>
+                                <div class="custom-options invisible"></div>
 
-                            <!-- Оригинальный select (скрытый) -->
-                            <select class="invisible" id="currentArrival" onchange="loadData()"></select>
+                                <!-- Оригинальный select (скрытый) -->
+                                <select class="invisible" id="currentArrival" onchange="loadData()"></select>
+                            </div>
+
+                            <div class="box" id="currentDate"></div>
                         </div>
+
                         <div class="greed column box no_padding">
                             <div class="arrival_info" id="current_arrival_cost"></div>
                             <div class="arrival_info" id="current_arrival_start"></div>
@@ -109,7 +114,7 @@
         <script src="/static/js/lists.js"></script>
         <script src="/static/js/api.js"></script>
         <script src="/static/js/render.js"></script>
-        <script src="/static/js/script.js"></script>
         <script src="/static/js/modal.js"></script>
+        <script src="/static/js/app.js"></script>
     </body>
 </html>

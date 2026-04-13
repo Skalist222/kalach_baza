@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Date,Boolean,DateTime
+from sqlalchemy import Float, create_engine, Column, Integer, String, ForeignKey, Date,Boolean,DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 engine = create_engine("sqlite:///resort.db")
@@ -67,7 +67,9 @@ class Placement(Base):
     start = Column(DateTime)
     stop = Column(DateTime)
     # Оплатил или нет
+    money = Column(Float)
     buy = Column(Boolean)
+    
     
 
 

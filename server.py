@@ -34,14 +34,41 @@ def get_map():
     visitors = db.query(Visitor).all()
     arrivals = db.query(Arrival).all()
     db.close()
-    return {
-        "buildings": [b.__dict__ for b in buildings],
-        "rooms": [r.__dict__ for r in rooms],
-        "beds": [b.__dict__ for b in beds],
-        "placements": [p.__dict__ for p in placements],
-        "visitors": [v.__dict__ for v in visitors],
-        "arrivals": [a.__dict__ for a in arrivals],
+    info = {
+        "buildings": [{"id": b.id, "name": b.name} for b in buildings],
+        "rooms": [{"id": r.id, "building_id": r.building_id, "number": r.number} for r in rooms],
+        "beds": [{"id": b.id, "room_id": b.room_id, "position": b.position} for b in beds],
+        "placements": [
+            {
+                "visitor_id": p.visitor_id,
+                "bed_id": p.bed_id,
+                "arrival_id": p.arrival_id,
+                "status": p.status,
+            }
+            for p in placements
+        ],
+        "visitors": [
+            {
+                "id": v.id,
+                "name": v.name,
+                "dr": v.dr,
+                "phone": v.phone,
+                "sex": v.sex,
+            }
+            for v in visitors
+        ],
+        "arrivals": [
+            {
+                "id": a.id,
+                "name": a.name,
+                "cost": a.cost,
+                "start": a.start,
+                "stop": a.stop,
+            }
+            for a in arrivals
+        ],
     }
+    return info
     
 @app.get("/api/visitors")
 def get_map():
@@ -108,13 +135,15 @@ def add_building(name: str):
     return {"status": "ok"}
 
 @app.post("/api/place")
-def place(visitor_id: int, bed_id: int,status:str, arrival_id: int):
+def place(visitor_id: int, bed_id: int,status:str, arrival_id: int,money:float):
     db = Session()
     placement = Placement(
         visitor_id=visitor_id,
         bed_id=bed_id,
         arrival_id=arrival_id,
-        status=status
+        status=status,
+        money = money,
+        buy = money > 0
     )
     db.add(placement)
     db.commit()
@@ -122,10 +151,13 @@ def place(visitor_id: int, bed_id: int,status:str, arrival_id: int):
     return {"status": "ok"}
 
 @app.post("/api/update_place")
-def update_place(visitor_id: int, bed_id: int,status:str, arrival_id: int):
+def update_place(visitor_id: int, bed_id: int,status:str, arrival_id: int,money:float):
     db = Session()
     placement:Placement = db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id)).first()
     placement.visitor_id = visitor_id
+    placement.money = money
+    placement.status = status
+    if(placement.money>0):placement.buy = True
     db.commit()
     db.close()
     return {"status": "ok"}

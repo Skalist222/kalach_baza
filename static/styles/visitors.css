@@ -13,7 +13,6 @@
 
 .selected {
     border: 2px solid var(--border-dark);
-    background: var(--accent);
 }
 
 .greend-visitors-container {

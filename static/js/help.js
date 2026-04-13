@@ -2,12 +2,17 @@ let sortVisitorElement = document.getElementById("sortVisitors")
 let debounceTimer;
 let bedTemplate, modalTemplate;
 
+async function current_arrival_id() {
+    const current_arrival = document.getElementById("currentArrival");
+    const id = current_arrival.value;
+    if (id) return id;
+    else return 1;
+}
+
 async function init() {
     bedTemplate = await TemplateCache.getTemplate("/templates/bed.html");
     modalTemplate = await TemplateCache.getTemplate("/templates/modal.html");
 }
-
-init();
 
 
 
@@ -46,6 +51,10 @@ async function getTemplateFromFile(path) {
 function today_string() {
     const today = new Date().toISOString().slice(0, 10);
     return today
+}
+function set_today() {
+    let currentDate = document.getElementById("currentDate")
+    currentDate.innerHTML = today_string()
 }
 
 function collapse(button, text_button = "Добавить") {
@@ -88,5 +97,8 @@ function collapse(button, text_button = "Добавить") {
         });
     }
 }
+
 document.getElementById("collapse_visitor_add").click()
 document.getElementById("collapse_arrival_add").click()
+init();
+set_today();

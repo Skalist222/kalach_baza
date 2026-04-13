@@ -22,6 +22,9 @@
 
 /* Кнопка */
 .custom-select-trigger {
+    font:
+        1.2em "Philosopher",
+        sans-serif;
     background: #e8f5e9;
     border: 2px solid #2f4f2f;
     border-radius: 10px;
@@ -50,7 +53,6 @@
     max-height: 200px;
     overflow-y: auto;
 
-    display: none;
     z-index: 1000;
 }
 
@@ -68,4 +70,9 @@
 /* Активный */
 .custom-option.selected {
     background: #a5e6a5;
+}
+
+#currentDate {
+    font-weight: bold;
+    padding: 7px;
 }

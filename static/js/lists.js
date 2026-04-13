@@ -1,52 +1,52 @@
-function fillArrivals(arrivals) {
+let arrivalSelectInitialized = false;
+async function fillArrivals(arrivals) {
     const select = document.getElementById("currentArrival");
     const wrapper = document.getElementById("arrivalSelectWrapper");
     const trigger = wrapper.querySelector(".custom-select-trigger");
     const optionsContainer = wrapper.querySelector(".custom-options");
-
     let current_selection = select.value;
 
-    // очищаем
+    trigger.onclick = () => {
+        if (optionsContainer.classList.contains("invisible")) {
+            optionsContainer.classList.remove("invisible")
+        } else {
+            optionsContainer.classList.add("invisible")
+        }
+    }
+
     select.innerHTML = "";
+    trigger.innerHTML = ""
     optionsContainer.innerHTML = "";
 
+    if (current_selection == "") {
+        const selected = arrivals[0];
+    }
     arrivals.forEach(a => {
-        // --- обычный select (для логики)
+        // --- обычный select
         const opt = document.createElement("option");
         opt.value = a.id;
         opt.innerText = a.name;
         select.appendChild(opt);
-
         // --- кастомный option
         const customOpt = document.createElement("div");
         customOpt.className = "custom-option";
         customOpt.innerText = a.name;
         customOpt.dataset.value = a.id;
-
-        customOpt.addEventListener("click", () => {
+        customOpt.addEventListener("click", (e) => {
             select.value = a.id;
 
             trigger.innerText = a.name;
-
             optionsContainer.querySelectorAll(".custom-option")
                 .forEach(o => o.classList.remove("selected"));
-
             customOpt.classList.add("selected");
-
-            optionsContainer.style.display = "none";
-
-            // ВАЖНО: вызываем change вручную
-            select.dispatchEvent(new Event("change"));
+            optionsContainer.classList.add("invisible")
+            loadData()
         });
-
         optionsContainer.appendChild(customOpt);
     });
 
-    // восстановление выбранного
-    if (current_selection) select.value = current_selection;
-    else if (arrivals.length > 0) select.value = arrivals[0].id;
 
-    // обновляем текст
+
     const selected = arrivals.find(a => a.id == select.value);
     if (selected) {
         trigger.innerText = selected.name;
@@ -54,19 +54,6 @@ function fillArrivals(arrivals) {
         const selectedOption = optionsContainer.querySelector(`[data-value="${selected.id}"]`);
         if (selectedOption) selectedOption.classList.add("selected");
     }
-
-    // клик по триггеру
-    trigger.onclick = () => {
-        optionsContainer.style.display =
-            optionsContainer.style.display === "block" ? "none" : "block";
-    };
-
-    // клик вне — закрытие
-    document.addEventListener("click", (e) => {
-        if (!wrapper.contains(e.target)) {
-            optionsContainer.style.display = "none";
-        }
-    });
 }
 function fillSities(sities) {
     const select = document.getElementById("visitorSity");
