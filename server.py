@@ -1,4 +1,5 @@
 import datetime
+import json
 from re import S
 from xmlrpc.client import boolean
 
@@ -21,6 +22,24 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse(request,"index.html", {"request": request})
+
+
+@app.get("/visitor/{visitor_id}", response_class=HTMLResponse)
+def visitor(request: Request, visitor_id: int):
+    db = Session()
+
+    visitor_obj = db.query(Visitor).filter(Visitor.id == visitor_id).first()
+
+    db.close()
+
+    return templates.TemplateResponse(
+        "visitor.html",
+        {
+            "request": request,
+            "user": visitor_obj
+        }
+    )
+    
 
 @app.get("/api/map")
 def get_map():
