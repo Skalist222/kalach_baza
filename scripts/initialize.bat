@@ -13,5 +13,6 @@ echo "Устанавливаем зависимости..."
 python -m pip install --upgrade pip
 pip install -r "%~dp0/pip.txt"
 
+python generate_base.py test 1
 
 echo "Инициализация завершена"
