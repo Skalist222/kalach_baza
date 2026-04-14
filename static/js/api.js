@@ -143,17 +143,24 @@ async function addArrival(id_button_close = null) {
         return;
     }
 
+    const arrivals = await get_table("arrivals")
+    if (arrivals.filter(a => a.name.toLowerCase() == name.toLowerCase()).length > 0) {
+        alert_element(NameEl)
+        openModal({
+            title: "Такой заезд уже существует",
+            body: "Имя заезда уже используется для другого заезда! Может возникнуть путанница.",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+        return;
+    }
+
+
     await fetch(`/api/add_arrival?name=${name}&cost=${cost}&start=${start}&stop=${stop}`, {
         method: "POST"
     })
 
 
     await fillingComponentsData()
-
-    // const cur_ar_el = document.getElementById("currentArrival")
-    // cur_ar_el = NameEl.value
-
-
     NameEl.value = ""
     costEl.value = ""
     // нажымаем на кнопку скрыть

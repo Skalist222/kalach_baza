@@ -71,7 +71,7 @@ def get_map():
     return info
     
 @app.get("/api/visitors")
-def get_map():
+def get_visitors():
     db = Session()
     visitors = db.query(Visitor).all()
     db.close()
@@ -80,7 +80,7 @@ def get_map():
     }
 
 @app.get("/api/sities")
-def get_map():
+def get_sities():
     db = Session()
     visitors = db.query(Sity).all()
     db.close()
@@ -89,12 +89,20 @@ def get_map():
     }
 
 @app.get("/api/placements")
-def get_map():
+def get_placements():
     db = Session()
     visitors = db.query(Placement).all()
     db.close()
     return {
         "placements": [v.__dict__ for v in visitors],
+    }
+@app.get("/api/arrivals")
+def get_arrivals():
+    db = Session()
+    visitors = db.query(Arrival).all()
+    db.close()
+    return {
+        "arrivals": [v.__dict__ for v in visitors],
     }
 
 @app.post("/api/add_visitor")
