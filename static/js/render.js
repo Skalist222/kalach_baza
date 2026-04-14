@@ -3,14 +3,27 @@
 // ------------------------------
 function add_chase_tooltip(el, text, visual_element) {
     const tooltip = document.getElementById('tooltip')
-    if (visual_element) visual_element.appendChild(visual_element)
+    if (text != "") {
+        el.addEventListener('mouseenter', e => {
+            tooltip.innerText = text;
+            tooltip.style.display = 'block';
+            tooltip.style.left = e.pageX + 10 + 'px';
+            tooltip.style.top = e.pageY + 10 + 'px';
+        });
+    }
+    else {
 
-    el.addEventListener('mouseenter', e => {
-        tooltip.innerText = text;
-        tooltip.style.display = 'block';
-        tooltip.style.left = e.pageX + 10 + 'px';
-        tooltip.style.top = e.pageY + 10 + 'px';
-    });
+        el.addEventListener('mouseenter', e => {
+            tooltip.innerText = "";
+            tooltip.appendChild(visual_element);
+            tooltip.style.display = 'block';
+            tooltip.style.left = e.pageX + 10 + 'px';
+            tooltip.style.top = e.pageY + 10 + 'px';
+        });
+    }
+    // if (visual_element) visual_element.appendChild(visual_element)
+
+
 
     el.addEventListener('mousemove', e => {
         tooltip.style.left = e.pageX + 10 + 'px';
@@ -60,10 +73,48 @@ function renderVisitors(visitors, placements) {
 
         const el = document.createElement("div");
         el.className = "visitor";
-        el.innerText = v.name;
-        const age = v.dr ? calculate_age_str(v.dr) : 0;
+        el.innerHTML = (repl(v.name));
 
-        add_chase_tooltip(el, `${v.dr}\n${v.phone}\n${v.sex ? "М" : "Ж"}\nВозраст: ${age}`);
+        const age = v.dr ? calculate_age_str(v.dr) : 0;
+        function repl(str) {
+            const cleanStr = String(str);
+            const cleanSearch = String(search).trim();
+
+            if (!cleanSearch) return cleanStr;
+
+            const index = cleanStr.toLowerCase().indexOf(cleanSearch.toLowerCase());
+            console.log(cleanStr);
+            console.log(index);
+
+            if (index === -1) return cleanStr;
+
+            const regex = new RegExp(cleanSearch, "i");
+
+            return "<div>" + cleanStr.replace(regex, "<span class='search_select'>$&</span>") + "</div>";
+        }
+
+        let visual_element = document.createElement("div")
+
+        let birth_day_el = document.createElement("div")
+        let phone_el = document.createElement("div")
+        let sex_el = document.createElement("div")
+        let age_el = document.createElement("div")
+
+        birth_day_el.classList = "info_tooltip"
+        birth_day_el.innerHTML = repl(v.dr)
+        phone_el.classList = "info_tooltip"
+        phone_el.innerHTML = repl(v.phone)
+        sex_el.classList = "info_tooltip"
+        sex_el.innerHTML = repl(v.sex ? "М" : "Ж")
+        age_el.classList = "info_tooltip"
+        age_el.innerHTML = repl(age)
+
+        visual_element.appendChild(birth_day_el)
+        visual_element.appendChild(phone_el)
+        visual_element.appendChild(sex_el)
+        visual_element.appendChild(age_el)
+
+        add_chase_tooltip(el, "", visual_element);
 
         el.draggable = true;
         el.dataset.id = v.id;
