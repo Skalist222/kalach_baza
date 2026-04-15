@@ -205,6 +205,27 @@ def update_place(visitor_id: int, bed_id: int,status:str, arrival_id: int,money:
     db.close()
     return {"status": "ok"}
 
+@app.post("/api/update_visitor")
+def update_visitor(visitor_id: int, name: str, dr: str, phone: str):
+    db = Session()
+
+    visitor = db.query(Visitor).filter(Visitor.id == visitor_id).first()
+    if not visitor:
+        return {"status": "error", "error": "visitor not found"}
+
+    visitor.name = name.strip()
+    visitor.phone = phone.strip()
+
+    # 🔥 ВАЖНО
+    visitor.dr = datetime.date.fromisoformat(dr.strip())
+
+    db.commit()
+    db.close()
+
+    return {"status": "ok"}
+
+
+
 @app.post("/api/move_place")
 def move_place(visitor_id: int, old_bed_id: int,new_bed_id: int, arrival_id: int):
     db = Session()
@@ -221,6 +242,17 @@ def move_place(visitor_id: int, old_bed_id: int,new_bed_id: int, arrival_id: int
 def replace(bed_id: int,arrival_id: int):
     db = Session()
     db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id)).delete()
+    db.commit()
+    db.close()
+    return {"status": "ok"}
+
+@app.post("/api/delete_visitor")
+def delete_visitor(visitor_id: int):
+    db = Session()
+    visitor = db.query(Visitor).filter(Visitor.id == visitor_id).first()
+    if not visitor:
+        return {"status": "error", "error": "visitor not found"}
+    db.delete(visitor)
     db.commit()
     db.close()
     return {"status": "ok"}

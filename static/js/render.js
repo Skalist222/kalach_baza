@@ -54,28 +54,14 @@ async function renderArrivalInfo(data) {
 // ------------------------------
 // Render Visitors
 // ------------------------------
-function renderVisitors(visitors, placements) {
+async function renderVisitors(visitors, placements) {
     const sort = document.getElementById("sortVisitors").value;
     const search = sort.toLowerCase();
     const list = document.getElementById("visitorList");
-    const current_arrival = document.getElementById("currentArrival").value;
+    const current_arrival = await current_arrival_id();
     list.innerHTML = "";
 
     visitors.forEach(v => {
-        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
-        const selBeds = [];
-
-        document.querySelectorAll('.bed').forEach(bed => {
-            vPlacements.forEach(p => { if (bed.dataset.id == p.bed_id) selBeds.push(bed); });
-        });
-
-        if (search && ![v.name, v.dr, v.phone].some(s => String(s).toLowerCase().includes(search))) return;
-
-        const el = document.createElement("div");
-        el.className = "visitor";
-        el.innerHTML = (repl(v.name));
-
-        const age = v.dr ? calculate_age_str(v.dr) : 0;
         function repl(str) {
             const cleanStr = String(str);
             const cleanSearch = String(search).trim();
@@ -83,8 +69,6 @@ function renderVisitors(visitors, placements) {
             if (!cleanSearch) return cleanStr;
 
             const index = cleanStr.toLowerCase().indexOf(cleanSearch.toLowerCase());
-            console.log(cleanStr);
-            console.log(index);
 
             if (index === -1) return cleanStr;
 
@@ -92,6 +76,41 @@ function renderVisitors(visitors, placements) {
 
             return "<div>" + cleanStr.replace(regex, "<span class='search_select'>$&</span>") + "</div>";
         }
+
+        const el = document.createElement("div");
+        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
+        const selBeds = [];
+        document.querySelectorAll(`.bed`).forEach(
+            b => {
+                vPlacements.forEach(p => {
+                    if (p.bed_id == b.dataset.id && p.arrival_id == current_arrival) {
+
+                        selBeds.push(b);
+                    }
+                });
+            });
+
+
+
+        el.addEventListener("mouseenter", () => selBeds.forEach(b => {
+            const overlay = document.createElement('div');
+            overlay.className = 'bed-overlay';
+            b.appendChild(overlay);
+        }));
+        el.addEventListener("mouseleave", () => document.querySelectorAll('.bed-overlay').forEach(o => o.remove()));
+
+        if (search && ![v.name, v.dr, v.phone].some(s => String(s).toLowerCase().includes(search))) return;
+
+
+
+        el.className = "visitor";
+        el.innerHTML = (repl(v.name));
+        el.addEventListener('contextmenu', (e) => {
+            open_menu(e, visitor_menu(v));
+        });
+
+        const age = v.dr ? calculate_age_str(v.dr) : 0;
+
 
         let visual_element = document.createElement("div")
 
@@ -120,15 +139,11 @@ function renderVisitors(visitors, placements) {
         el.dataset.id = v.id;
         el.addEventListener("dragstart", e => e.dataTransfer.setData("visitor_id", v.id));
 
-        el.addEventListener("mouseenter", () => selBeds.forEach(b => {
-            const overlay = document.createElement('div');
-            overlay.className = 'bed-overlay';
-            b.appendChild(overlay);
-        }));
 
-        el.addEventListener("mouseleave", () => document.querySelectorAll('.bed-overlay').forEach(o => o.remove()));
 
-        if (selBeds.length > 0) el.classList.add("busy-white");
+
+
+        if (vPlacements.length > 0) el.classList.add("busy-white");
 
         el.addEventListener("click", () => {
             document.querySelectorAll(`.visitor.selected`).forEach(n => n.classList.remove("selected"));
@@ -194,7 +209,6 @@ async function create_age_room(data, room) {
             age += calculate_age_str(v.dr);
             count++;
         });
-        console.log(age, count)
         age_room.innerText = age != 0 ? `${Math.round(age / count)}` : "";
     }
     return age_room
@@ -273,7 +287,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
             // console.log("Отправлена койка ", setted_bed)
             // console.log("На койку ", bed.id)
             const cur_place = data.placements.find(p => p.bed_id == setted_bed && p.arrival_id == cur_ar_id);
-            openModal({
+            open_modal({
                 title: "Перенос посетителя.",
                 body: `Перенести посетителя на новую койку?`,
                 controls: buttons_move_bed(bed.id, cur_place)
@@ -297,7 +311,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
         add_chase_tooltip(bedDiv, `${position_rus}\n${status_rus}\n${name}`);
 
         bedDiv.draggable = true;
-        bedDiv.dataset.id = visitor.id;
+        bedDiv.dataset.id = bed.id;
         bedDiv.addEventListener("dragstart", e => {
             e.dataTransfer.setData("visitor_id", visitor.id)
             e.dataTransfer.setData("setted_bed", bed.id)
@@ -313,7 +327,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
         if (placement.status == "busy") {
 
             bedDiv.addEventListener("click", () => {
-                openModal({
+                open_modal({
                     title: "Освободить койку?",
                     body: `${position_rus}\n${status_rus}\n${name}`,
                     controls: buttons_reset_bed(bed.id, cur_ar_id)
@@ -322,7 +336,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
         }
         if (placement.status == "reserved") {
             bedDiv.addEventListener("click", () => {
-                openModal({
+                open_modal({
                     title: "Койка зарезервированна.",
                     body: `${position_rus}\n${status_rus}\n${name}`,
                     controls: buttons_pay_bed(visitor.id, bed.id, cur_ar_id, current_arrival_cost)
