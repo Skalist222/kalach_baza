@@ -179,6 +179,26 @@ async function renderBuilding(map, building, data) {
     map.appendChild(buildingDiv);
 }
 
+
+async function create_age_room(data, room) {
+    let age_room = document.createElement("div")
+    age_room.classList = "age_room"
+
+    const current_beds = data.beds.filter(b => b.room_id == room.id)
+    const current_placements = data.placements.filter(p => current_beds.some(b => b.id == p.bed_id))
+    const current_visitors = current_placements.map(p => data.visitors.find(v => v.id == p.visitor_id))
+    {
+        let count = 0
+        let age = 0
+        current_visitors.forEach(v => {
+            age += calculate_age_str(v.dr);
+            count++;
+        });
+        console.log(age, count)
+        age_room.innerText = age != 0 ? `${Math.round(age / count)}` : "";
+    }
+    return age_room
+}
 async function renderRoom(buildingDiv, room, data) {
 
     let roomDiv = document.createElement("div")
@@ -187,7 +207,13 @@ async function renderRoom(buildingDiv, room, data) {
     let roomTitle = document.createElement("div")
     roomTitle.classList = "room_title"
     roomTitle.innerText = room.number
-    roomDiv.appendChild(roomTitle)
+
+
+
+
+
+
+
     let bedsContainer = document.createElement("div")
     bedsContainer.classList = "beds greed row no_gap"
 
@@ -204,7 +230,16 @@ async function renderRoom(buildingDiv, room, data) {
         await renderBed(upBedsContainer, downBedsContainer, bed, data)
     }
 
+    roomDiv.appendChild(roomTitle)
     roomDiv.appendChild(bedsContainer)
+
+    // Выводить или нет средний возраст в комнате
+    if (document.getElementById("turn_on_age_room").checked) {
+        const age_room = await create_age_room(data, room)
+        roomDiv.appendChild(age_room)
+    }
+
+
     buildingDiv.appendChild(roomDiv)
 }
 
