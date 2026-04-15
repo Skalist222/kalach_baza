@@ -106,7 +106,8 @@ async function renderVisitors(visitors, placements) {
         el.className = "visitor";
         el.innerHTML = (repl(v.name));
         el.addEventListener('contextmenu', (e) => {
-            open_menu(e, visitor_menu(v));
+
+            open_menu(e, visitor_menu(v, vPlacements.length > 0));
         });
 
         const age = v.dr ? calculate_age_str(v.dr) : 0;
@@ -264,14 +265,18 @@ async function renderRoom(buildingDiv, room, data) {
 // ------------------------------
 async function renderBed(upContainer, downContainer, bed, data) {
 
+    const template = await TemplateCache.getTemplate("/templates/bed.html");
+    let bedDiv = template.querySelector(".bed");
+
+
     const cur_ar_id = await current_arrival_id();
     let arrival = data.arrivals.find(a => a.id == cur_ar_id)
 
-    const template = await TemplateCache.getTemplate("/templates/bed.html");
+
     const current_arrival_cost = arrival.cost
     const placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == cur_ar_id);
 
-    let bedDiv = template.querySelector(".bed");
+
     bedDiv.classList.add(bed.position);
     bedDiv.dataset.id = bed.id;
 
@@ -284,8 +289,6 @@ async function renderBed(upContainer, downContainer, bed, data) {
 
         if (!setted_bed) choosePlacement(data, visitor_id, bed.id);
         else {
-            // console.log("Отправлена койка ", setted_bed)
-            // console.log("На койку ", bed.id)
             const cur_place = data.placements.find(p => p.bed_id == setted_bed && p.arrival_id == cur_ar_id);
             open_modal({
                 title: "Перенос посетителя.",
@@ -308,7 +311,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
         const age = visitor && visitor.dr ? calculate_age_str(visitor.dr) : 0;
         const status_rus = placement.status === "busy" ? "Занято" : placement.status === "reserved" ? "Зарезервировано" : "";
 
-        add_chase_tooltip(bedDiv, `${position_rus}\n${status_rus}\n${name}`);
+        add_chase_tooltip(bedDiv, `${position_rus}\n${status_rus}\n${name}\nОплачено:${placement.money}`);
 
         bedDiv.draggable = true;
         bedDiv.dataset.id = bed.id;
@@ -323,6 +326,13 @@ async function renderBed(upContainer, downContainer, bed, data) {
         sexEl.className = `bedsex ${sexColor}`;
         sexEl.innerText = age;
         if (!bedDiv.querySelector(".bedsex")) bedDiv.appendChild(sexEl);
+
+
+        const payEl = bedDiv.querySelector(".pay") || document.createElement("div");
+        payEl.classList.add(placement.money > 0 ? "payed" : "unpayed");
+        payEl.innerText = placement.money > 0 ? "" : "$";
+
+        if (!bedDiv.querySelector(".pay")) bedDiv.appendChild(payEl);
 
         if (placement.status == "busy") {
 
@@ -343,7 +353,6 @@ async function renderBed(upContainer, downContainer, bed, data) {
                 });
             });
         }
-
         bedDiv.classList.add(placement.status);
     } else {
         add_chase_tooltip(bedDiv, `${position_rus}\nПусто`);

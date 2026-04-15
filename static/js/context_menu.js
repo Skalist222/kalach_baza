@@ -26,20 +26,22 @@ function open_menu(e, menuItems) {
 		menu.style.display = "none";
 	});
 }
-function visitor_menu(visitor) {
-	return [
+function visitor_menu(visitor, hasPlacements) {
+	console.log(hasPlacements)
+	menu = [
 		{
 			"text": "Редактировать", action: () => {
 				open_modal({ "title": "Редактор посетителя", "body": "", "controls": modal_redact_visitor(visitor), "in_lines": true });
 			}
-		},
-		// {
-		// 	"text": "Удалить", action: () => {
-
-		// 		open_modal({ "title": "Удаление посетителя", "body": "Вы уверены что хотите удалить посетителя " + visitor.name + "?", "controls": modal_delete_visitor(visitor) });
-		// 		console.log("нажата кнопка удалить")
-
-		// 	}
-		// }
+		}
 	]
+	if (!hasPlacements) menu.push({
+		"text": "Удалить", action: () => {
+
+			open_modal({ "title": "Удаление посетителя", "body": "Вы уверены что хотите удалить посетителя " + visitor.name + "?", "controls": modal_delete_visitor(visitor) });
+			console.log("нажата кнопка удалить")
+
+		}
+	})
+	return menu
 }
