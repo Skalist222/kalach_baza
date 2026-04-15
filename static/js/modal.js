@@ -133,12 +133,16 @@ function buttons_pay_bed(visitor_id, bed_id, current_arrival_id, money) {
 
 function buttons_move_bed(new_bed, placement) {
 
-    console.log(new_bed, placement)
-
     return [
         {
             type: "btn", id: "btnReBusy", text: "Переместить", action: () => {
                 move_place(placement.visitor_id, placement.bed_id, new_bed, placement.arrival_id);
+                closeModal();
+            }
+        },
+        {
+            type: "btn", id: "btnReBusy", text: "Дублировать", action: () => {
+                place(placement.visitor_id, new_bed, placement.status, placement.arrival_id, placement.money);
                 closeModal();
             }
         },
