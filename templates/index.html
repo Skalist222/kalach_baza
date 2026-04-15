@@ -36,6 +36,16 @@
             <div class="greed row left-panel">
                 <div class="greed row box">
                     <div class="greed column table">
+                        <div><h3 class="no_margin f1">Настройки</h3></div>
+                        <button type="button" class="collapse f2" id="collapse_settings" onclick="collapse(this, 'Развернуть')">▼</button>
+                    </div>
+                    <label id="settings" class="greed column box adder collapseble">
+                        <input type="checkbox" id="turn_on_age_room" onchange="loadData()" />
+                        <span>Показывать средний возраст в комнате</span>
+                    </label>
+                </div>
+                <div class="greed row box">
+                    <div class="greed column table">
                         <div><h3 class="no_margin f1">Заезд</h3></div>
                         <button type="button" class="collapse f2" id="collapse_arrival_add" onclick="collapse(this, 'Создать')">▼</button>
                     </div>
