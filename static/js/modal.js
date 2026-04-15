@@ -82,7 +82,6 @@ function openModal({ title = "", body = "", controls = [] }) {
 }
 
 function buttons_set_bed(visitor_id, bed_id, current_arrival_id, money) {
-    console.log("Проверка", current_arrival_id)
     return [
         { type: "number", id: "money", text: "Пожертвование", value: money },
         { type: "btn", id: "btnBusy", text: "Занять койку", action: () => place(visitor_id, bed_id, "busy", current_arrival_id, document.getElementById("money").value) },
@@ -110,6 +109,21 @@ function buttons_pay_bed(visitor_id, bed_id, current_arrival_id, money) {
         { type: "number", id: "money", text: "Пожертвование", value: money },
         { type: "btn", id: "btnReBusy", text: "Заселить", action: (el) => { update_place(visitor_id, bed_id, "busy", document.getElementById("money").value, current_arrival_id) } },
         { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(bed_id, current_arrival_id) } },
+        { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+    ]
+}
+
+function buttons_move_bed(new_bed, placement) {
+
+    console.log(new_bed, placement)
+
+    return [
+        {
+            type: "btn", id: "btnReBusy", text: "Переместить", action: () => {
+                move_place(placement.visitor_id, placement.bed_id, new_bed, placement.arrival_id);
+                closeModal();
+            }
+        },
         { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
     ]
 }

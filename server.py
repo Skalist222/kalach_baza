@@ -1,4 +1,5 @@
 import datetime
+from hmac import new
 from re import S
 from xmlrpc.client import boolean
 
@@ -38,15 +39,18 @@ def get_map():
         "buildings": [{"id": b.id, "name": b.name} for b in buildings],
         "rooms": [{"id": r.id, "building_id": r.building_id, "number": r.number} for r in rooms],
         "beds": [{"id": b.id, "room_id": b.room_id, "position": b.position} for b in beds],
-        "placements": [
-            {
-                "visitor_id": p.visitor_id,
-                "bed_id": p.bed_id,
-                "arrival_id": p.arrival_id,
-                "status": p.status,
-            }
-            for p in placements
-        ],
+         "placements": [{
+            "id"          :p.id,
+            "arrival_id"  :p.arrival_id,
+            "visitor_id"  :p.visitor_id,
+            "bed_id"      :p.bed_id,
+            "status"      :p.status,
+            "start"       :p.start,
+            "stop"        :p.stop,
+            "money"       :p.money,
+            "buy"         :p.buy
+        }
+        for p in placements],
         "visitors": [
             {
                 "id": v.id,
@@ -91,11 +95,23 @@ def get_sities():
 @app.get("/api/placements")
 def get_placements():
     db = Session()
-    visitors = db.query(Placement).all()
+    placements = db.query(Placement).all()
     db.close()
     return {
-        "placements": [v.__dict__ for v in visitors],
+        "placements": [{
+            "id"          :p.id,
+            "arrival_id"  :p.arrival_id,
+            "visitor_id"  :p.visitor_id,
+            "bed_id"      :p.bed_id,
+            "status"      :p.status,
+            "start"       :p.start,
+            "stop"        :p.stop,
+            "money"       :p.money,
+            "buy"         :p.buy
+        }
+        for p in placements],
     }
+    
 @app.get("/api/arrivals")
 def get_arrivals():
     db = Session()
@@ -160,11 +176,25 @@ def place(visitor_id: int, bed_id: int,status:str, arrival_id: int,money:float):
 
 @app.post("/api/update_place")
 def update_place(visitor_id: int, bed_id: int,status:str, arrival_id: int,money:float):
-    db = Session()
+    db = Session()   
     placement:Placement = db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id)).first()
+    if not placement: 
+        print("Плейсмент не найден")
+        return {"status": "error","error":"placements not found"}
     placement.visitor_id = visitor_id
     placement.money = money
     placement.status = status
+    if(placement.money>0):placement.buy = True
+    db.commit()
+    db.close()
+    return {"status": "ok"}
+
+@app.post("/api/move_place")
+def move_place(visitor_id: int, old_bed_id: int,new_bed_id: int, arrival_id: int):
+    db = Session()
+    placement:Placement = db.query(Placement).filter(and_(Placement.bed_id == old_bed_id,Placement.arrival_id == arrival_id)).first()
+    if not placement: return {"status": "error","error":"placements not found"}
+    placement.bed_id = new_bed_id
     if(placement.money>0):placement.buy = True
     db.commit()
     db.close()

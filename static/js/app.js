@@ -71,7 +71,6 @@ async function choosePlacement(data, visitor_id, bed_id, event_type = null) {
         return;
     }
     let arrival = data.arrivals.find(a => a.id == cur_ar_id)
-    console.log(arrival)
 
     const arrival_cost = data.arrivals.find(a => a.id == cur_ar_id).cost
 
