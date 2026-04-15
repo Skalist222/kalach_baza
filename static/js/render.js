@@ -230,7 +230,21 @@ async function renderBed(upContainer, downContainer, bed, data) {
     bedDiv.addEventListener("drop", e => {
         e.preventDefault();
         const visitor_id = e.dataTransfer.getData("visitor_id");
-        choosePlacement(data, visitor_id, bed.id);
+        const setted_bed = e.dataTransfer.getData("setted_bed");
+
+
+        if (!setted_bed) choosePlacement(data, visitor_id, bed.id);
+        else {
+            // console.log("Отправлена койка ", setted_bed)
+            // console.log("На койку ", bed.id)
+            const cur_place = data.placements.find(p => p.bed_id == setted_bed && p.arrival_id == cur_ar_id);
+            openModal({
+                title: "Перенос посетителя.",
+                body: `Перенести посетителя на новую койку?`,
+                controls: buttons_move_bed(bed.id, cur_place)
+            });
+
+        }
     });
 
 
@@ -239,12 +253,21 @@ async function renderBed(upContainer, downContainer, bed, data) {
 
 
     if (placement) {
+
         const visitor = data.visitors.find(v => v.id === placement.visitor_id);
         const name = visitor ? visitor.name : "";
         const age = visitor && visitor.dr ? calculate_age_str(visitor.dr) : 0;
         const status_rus = placement.status === "busy" ? "Занято" : placement.status === "reserved" ? "Зарезервировано" : "";
 
         add_chase_tooltip(bedDiv, `${position_rus}\n${status_rus}\n${name}`);
+
+        bedDiv.draggable = true;
+        bedDiv.dataset.id = visitor.id;
+        bedDiv.addEventListener("dragstart", e => {
+            e.dataTransfer.setData("visitor_id", visitor.id)
+            e.dataTransfer.setData("setted_bed", bed.id)
+            e.dataTransfer.setData("placement", placement)
+        });
 
         const sexColor = visitor && visitor.sex ? "boy" : "girl";
         const sexEl = bedDiv.querySelector(".bedsex") || document.createElement("div");
@@ -253,6 +276,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
         if (!bedDiv.querySelector(".bedsex")) bedDiv.appendChild(sexEl);
 
         if (placement.status == "busy") {
+
             bedDiv.addEventListener("click", () => {
                 openModal({
                     title: "Освободить койку?",

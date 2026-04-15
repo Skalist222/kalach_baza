@@ -1,6 +1,5 @@
 // Разместить человека
 async function place(visitor_id, bed_id, status, arrival_id, money) {
-    console.log("Внутри place", arrival_id)
     await fetch(`/api/place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
         method: "POST"
     })
@@ -8,7 +7,15 @@ async function place(visitor_id, bed_id, status, arrival_id, money) {
 }
 
 async function update_place(visitor_id, bed_id, status, money, arrival_id) {
+    console.log(visitor_id, bed_id, status, money, arrival_id)
     await fetch(`/api/update_place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
+        method: "POST"
+    })
+    loadData()
+}
+
+async function move_place(visitor_id, old_bed_id, new_bed_id, arrival_id) {
+    await fetch(`/api/move_place?visitor_id=${visitor_id}&old_bed_id=${old_bed_id}&new_bed_id=${new_bed_id}&arrival_id=${arrival_id}`, {
         method: "POST"
     })
     loadData()
