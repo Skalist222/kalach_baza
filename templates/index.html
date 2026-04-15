@@ -16,9 +16,11 @@
         <link rel="stylesheet" href="/static/styles/animation.css" />
         <link rel="stylesheet" href="/static/styles/visitors.css" />
         <link rel="stylesheet" href="/static/styles/arrival_info.css" />
+        <link rel="stylesheet" href="/static/styles/context_menu.css" />
     </head>
 
     <body>
+        <div id="contextMenu" class="context-menu"></div>
         <div id="tooltip" class="invisible">
             <div id="visual_element"></div>
         </div>
@@ -34,6 +36,16 @@
 
         <div class="greed column">
             <div class="greed row left-panel">
+                <div class="greed row box invisible">
+                    <div class="greed column table">
+                        <div><h3 class="no_margin f1">Настройки</h3></div>
+                        <button type="button" class="collapse f2" id="collapse_settings" onclick="collapse(this, 'Развернуть')">▼</button>
+                    </div>
+                    <label id="settings" class="greed column box adder collapseble">
+                        <input type="checkbox" id="turn_on_age_room" onchange="loadData()" />
+                        <span>Показывать средний возраст в комнате</span>
+                    </label>
+                </div>
                 <div class="greed row box">
                     <div class="greed column table">
                         <div><h3 class="no_margin f1">Заезд</h3></div>
@@ -42,7 +54,7 @@
 
                     <div id="arrival_add" class="greed row box adder collapseble">
                         <input id="arrivalName" placeholder="Новый заезд" />
-                        <input id="arrivalCost" type="number" placeholder="Взнос" />
+                        <input id="arrivalCost" type="number" placeholder="Взнос" step="500" />
 
                         <div class="greed row">
                             <div class="greed column">
@@ -111,6 +123,7 @@
         </div>
         <script src="/static/js/templates_cache.js"></script>
         <script src="/static/js/help.js"></script>
+        <script src="/static/js/context_menu.js"></script>
         <script src="/static/js/lists.js"></script>
         <script src="/static/js/api.js"></script>
         <script src="/static/js/render.js"></script>

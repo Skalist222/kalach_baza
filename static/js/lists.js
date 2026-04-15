@@ -18,9 +18,7 @@ async function fillArrivals(arrivals) {
     trigger.innerHTML = ""
     optionsContainer.innerHTML = "";
 
-    if (current_selection == "") {
-        const selected = arrivals[0];
-    }
+
     arrivals.forEach(a => {
         // --- обычный select
         const opt = document.createElement("option");

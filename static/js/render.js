@@ -54,28 +54,14 @@ async function renderArrivalInfo(data) {
 // ------------------------------
 // Render Visitors
 // ------------------------------
-function renderVisitors(visitors, placements) {
+async function renderVisitors(visitors, placements) {
     const sort = document.getElementById("sortVisitors").value;
     const search = sort.toLowerCase();
     const list = document.getElementById("visitorList");
-    const current_arrival = document.getElementById("currentArrival").value;
+    const current_arrival = await current_arrival_id();
     list.innerHTML = "";
 
     visitors.forEach(v => {
-        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
-        const selBeds = [];
-
-        document.querySelectorAll('.bed').forEach(bed => {
-            vPlacements.forEach(p => { if (bed.dataset.id == p.bed_id) selBeds.push(bed); });
-        });
-
-        if (search && ![v.name, v.dr, v.phone].some(s => String(s).toLowerCase().includes(search))) return;
-
-        const el = document.createElement("div");
-        el.className = "visitor";
-        el.innerHTML = (repl(v.name));
-
-        const age = v.dr ? calculate_age_str(v.dr) : 0;
         function repl(str) {
             const cleanStr = String(str);
             const cleanSearch = String(search).trim();
@@ -83,8 +69,6 @@ function renderVisitors(visitors, placements) {
             if (!cleanSearch) return cleanStr;
 
             const index = cleanStr.toLowerCase().indexOf(cleanSearch.toLowerCase());
-            console.log(cleanStr);
-            console.log(index);
 
             if (index === -1) return cleanStr;
 
@@ -92,6 +76,42 @@ function renderVisitors(visitors, placements) {
 
             return "<div>" + cleanStr.replace(regex, "<span class='search_select'>$&</span>") + "</div>";
         }
+
+        const el = document.createElement("div");
+        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
+        const selBeds = [];
+        document.querySelectorAll(`.bed`).forEach(
+            b => {
+                vPlacements.forEach(p => {
+                    if (p.bed_id == b.dataset.id && p.arrival_id == current_arrival) {
+
+                        selBeds.push(b);
+                    }
+                });
+            });
+
+
+
+        el.addEventListener("mouseenter", () => selBeds.forEach(b => {
+            const overlay = document.createElement('div');
+            overlay.className = 'bed-overlay';
+            b.appendChild(overlay);
+        }));
+        el.addEventListener("mouseleave", () => document.querySelectorAll('.bed-overlay').forEach(o => o.remove()));
+
+        if (search && ![v.name, v.dr, v.phone].some(s => String(s).toLowerCase().includes(search))) return;
+
+
+
+        el.className = "visitor";
+        el.innerHTML = (repl(v.name));
+        el.addEventListener('contextmenu', (e) => {
+
+            open_menu(e, visitor_menu(v, vPlacements.length > 0));
+        });
+
+        const age = v.dr ? calculate_age_str(v.dr) : 0;
+
 
         let visual_element = document.createElement("div")
 
@@ -120,15 +140,11 @@ function renderVisitors(visitors, placements) {
         el.dataset.id = v.id;
         el.addEventListener("dragstart", e => e.dataTransfer.setData("visitor_id", v.id));
 
-        el.addEventListener("mouseenter", () => selBeds.forEach(b => {
-            const overlay = document.createElement('div');
-            overlay.className = 'bed-overlay';
-            b.appendChild(overlay);
-        }));
 
-        el.addEventListener("mouseleave", () => document.querySelectorAll('.bed-overlay').forEach(o => o.remove()));
 
-        if (selBeds.length > 0) el.classList.add("busy-white");
+
+
+        if (vPlacements.length > 0) el.classList.add("busy-white");
 
         el.addEventListener("click", () => {
             document.querySelectorAll(`.visitor.selected`).forEach(n => n.classList.remove("selected"));
@@ -179,6 +195,25 @@ async function renderBuilding(map, building, data) {
     map.appendChild(buildingDiv);
 }
 
+
+async function create_age_room(data, room) {
+    let age_room = document.createElement("div")
+    age_room.classList = "age_room"
+
+    const current_beds = data.beds.filter(b => b.room_id == room.id)
+    const current_placements = data.placements.filter(p => current_beds.some(b => b.id == p.bed_id))
+    const current_visitors = current_placements.map(p => data.visitors.find(v => v.id == p.visitor_id))
+    {
+        let count = 0
+        let age = 0
+        current_visitors.forEach(v => {
+            age += calculate_age_str(v.dr);
+            count++;
+        });
+        age_room.innerText = age != 0 ? `${Math.round(age / count)}` : "";
+    }
+    return age_room
+}
 async function renderRoom(buildingDiv, room, data) {
 
     let roomDiv = document.createElement("div")
@@ -187,7 +222,13 @@ async function renderRoom(buildingDiv, room, data) {
     let roomTitle = document.createElement("div")
     roomTitle.classList = "room_title"
     roomTitle.innerText = room.number
-    roomDiv.appendChild(roomTitle)
+
+
+
+
+
+
+
     let bedsContainer = document.createElement("div")
     bedsContainer.classList = "beds greed row no_gap"
 
@@ -204,7 +245,16 @@ async function renderRoom(buildingDiv, room, data) {
         await renderBed(upBedsContainer, downBedsContainer, bed, data)
     }
 
+    roomDiv.appendChild(roomTitle)
     roomDiv.appendChild(bedsContainer)
+
+    // Выводить или нет средний возраст в комнате
+    if (document.getElementById("turn_on_age_room").checked) {
+        const age_room = await create_age_room(data, room)
+        roomDiv.appendChild(age_room)
+    }
+
+
     buildingDiv.appendChild(roomDiv)
 }
 
@@ -215,14 +265,18 @@ async function renderRoom(buildingDiv, room, data) {
 // ------------------------------
 async function renderBed(upContainer, downContainer, bed, data) {
 
+    const template = await TemplateCache.getTemplate("/templates/bed.html");
+    let bedDiv = template.querySelector(".bed");
+
+
     const cur_ar_id = await current_arrival_id();
     let arrival = data.arrivals.find(a => a.id == cur_ar_id)
 
-    const template = await TemplateCache.getTemplate("/templates/bed.html");
+
     const current_arrival_cost = arrival.cost
     const placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == cur_ar_id);
 
-    let bedDiv = template.querySelector(".bed");
+
     bedDiv.classList.add(bed.position);
     bedDiv.dataset.id = bed.id;
 
@@ -235,10 +289,8 @@ async function renderBed(upContainer, downContainer, bed, data) {
 
         if (!setted_bed) choosePlacement(data, visitor_id, bed.id);
         else {
-            // console.log("Отправлена койка ", setted_bed)
-            // console.log("На койку ", bed.id)
             const cur_place = data.placements.find(p => p.bed_id == setted_bed && p.arrival_id == cur_ar_id);
-            openModal({
+            open_modal({
                 title: "Перенос посетителя.",
                 body: `Перенести посетителя на новую койку?`,
                 controls: buttons_move_bed(bed.id, cur_place)
@@ -259,10 +311,10 @@ async function renderBed(upContainer, downContainer, bed, data) {
         const age = visitor && visitor.dr ? calculate_age_str(visitor.dr) : 0;
         const status_rus = placement.status === "busy" ? "Занято" : placement.status === "reserved" ? "Зарезервировано" : "";
 
-        add_chase_tooltip(bedDiv, `${position_rus}\n${status_rus}\n${name}`);
+        add_chase_tooltip(bedDiv, `${position_rus}\n${status_rus}\n${name}\nОплачено:${placement.money}`);
 
         bedDiv.draggable = true;
-        bedDiv.dataset.id = visitor.id;
+        bedDiv.dataset.id = bed.id;
         bedDiv.addEventListener("dragstart", e => {
             e.dataTransfer.setData("visitor_id", visitor.id)
             e.dataTransfer.setData("setted_bed", bed.id)
@@ -275,10 +327,17 @@ async function renderBed(upContainer, downContainer, bed, data) {
         sexEl.innerText = age;
         if (!bedDiv.querySelector(".bedsex")) bedDiv.appendChild(sexEl);
 
+
+        const payEl = bedDiv.querySelector(".pay") || document.createElement("div");
+        payEl.classList.add(placement.money > 0 ? "payed" : "unpayed");
+        payEl.innerText = placement.money > 0 ? "" : "$";
+
+        if (!bedDiv.querySelector(".pay")) bedDiv.appendChild(payEl);
+
         if (placement.status == "busy") {
 
             bedDiv.addEventListener("click", () => {
-                openModal({
+                open_modal({
                     title: "Освободить койку?",
                     body: `${position_rus}\n${status_rus}\n${name}`,
                     controls: buttons_reset_bed(bed.id, cur_ar_id)
@@ -287,14 +346,13 @@ async function renderBed(upContainer, downContainer, bed, data) {
         }
         if (placement.status == "reserved") {
             bedDiv.addEventListener("click", () => {
-                openModal({
+                open_modal({
                     title: "Койка зарезервированна.",
                     body: `${position_rus}\n${status_rus}\n${name}`,
                     controls: buttons_pay_bed(visitor.id, bed.id, cur_ar_id, current_arrival_cost)
                 });
             });
         }
-
         bedDiv.classList.add(placement.status);
     } else {
         add_chase_tooltip(bedDiv, `${position_rus}\nПусто`);
