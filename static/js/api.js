@@ -1,6 +1,5 @@
 // Разместить человека
 async function place(visitor_id, bed_id, status, arrival_id, money) {
-    console.log("Внутри place", arrival_id)
     await fetch(`/api/place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
         method: "POST"
     })
@@ -8,7 +7,15 @@ async function place(visitor_id, bed_id, status, arrival_id, money) {
 }
 
 async function update_place(visitor_id, bed_id, status, money, arrival_id) {
+    console.log(visitor_id, bed_id, status, money, arrival_id)
     await fetch(`/api/update_place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
+        method: "POST"
+    })
+    loadData()
+}
+
+async function move_place(visitor_id, old_bed_id, new_bed_id, arrival_id) {
+    await fetch(`/api/move_place?visitor_id=${visitor_id}&old_bed_id=${old_bed_id}&new_bed_id=${new_bed_id}&arrival_id=${arrival_id}`, {
         method: "POST"
     })
     loadData()
@@ -143,17 +150,24 @@ async function addArrival(id_button_close = null) {
         return;
     }
 
+    const arrivals = await get_table("arrivals")
+    if (arrivals.filter(a => a.name.toLowerCase() == name.toLowerCase()).length > 0) {
+        alert_element(NameEl)
+        openModal({
+            title: "Такой заезд уже существует",
+            body: "Имя заезда уже используется для другого заезда! Может возникнуть путанница.",
+            controls: [{ type: "btn", text: "ОК" }]
+        })
+        return;
+    }
+
+
     await fetch(`/api/add_arrival?name=${name}&cost=${cost}&start=${start}&stop=${stop}`, {
         method: "POST"
     })
 
 
     await fillingComponentsData()
-
-    // const cur_ar_el = document.getElementById("currentArrival")
-    // cur_ar_el = NameEl.value
-
-
     NameEl.value = ""
     costEl.value = ""
     // нажымаем на кнопку скрыть
