@@ -22,10 +22,11 @@ const modalElementRenderers = {
         return btn;
     },
 
-    input: ({ id, text }) => {
+    input: ({ id, text, value }) => {
         const input = document.createElement("input");
         if (id) input.id = id;
         input.placeholder = text || "";
+        if (value !== undefined) input.value = value;
         return input;
     },
     number: ({ id, text, value }) => {
@@ -35,16 +36,26 @@ const modalElementRenderers = {
         input.placeholder = text || "";
         input.value = value
         return input;
+    },
+    date: ({ id, text, value }) => {
+        const input = document.createElement("input");
+        if (id) input.id = id;
+        input.type = "date"
+        input.placeholder = text || "";
+        input.value = value
+        return input;
     }
 };
 let mouseDownInside = false;
-function openModal({ title = "", body = "", controls = [] }) {
+function open_modal({ title = "", body = "", controls = [], in_lines = false }) {
     const template = document.getElementById("modal-template").content.cloneNode(true);
 
     const modal = template.querySelector(".modal");
     const titleEl = template.querySelector(".modal-title");
     const bodyEl = template.querySelector(".modal-body");
     const controlsEl = template.querySelector(".modal-controls");
+    controlsEl.classList.remove("greed");
+    controlsEl.classList.remove("row");
 
     titleEl.innerText = title;
     bodyEl.innerHTML = body.replace(/\n/g, "<br>");
@@ -55,6 +66,10 @@ function openModal({ title = "", body = "", controls = [] }) {
 
         const el = renderer(control);
         controlsEl.appendChild(el);
+        if (in_lines) {
+            controlsEl.classList.add("greed");
+            controlsEl.classList.add("row");
+        }
     });
 
     const escHandler = (e) => {
@@ -127,3 +142,36 @@ function buttons_move_bed(new_bed, placement) {
         { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
     ]
 }
+
+function modal_redact_visitor(visitor) {
+    return [
+        { type: "input", id: "redact_name_visitor", text: "Имя", value: visitor.name },
+        { type: "date", id: "redact_dr", text: "Дата рождения (ДД.ММ.ГГГГ)", value: visitor.dr },
+        { type: "input", id: "redact_phone", text: "Телефон", value: visitor.phone },
+        {
+            type: "btn", id: "btnSave", text: "Сохранить", action: () => {
+                update_visitor(
+                    visitor.id,
+                    document.getElementById("redact_name_visitor").value,
+                    document.getElementById("redact_dr").value.replace(".", "-"),
+                    document.getElementById("redact_phone").value.replace("(", "").replace(")", "").replace("-", ""));
+                closeModal();
+            }
+        },
+        { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+    ];
+}
+
+function modal_delete_visitor(visitor) {
+    return [
+        {
+            type: "btn", id: "btnSave", text: "Удалить", action: () => {
+                delete_visitor(visitor.id);
+                closeModal();
+            }
+        },
+        { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+    ];
+}
+
+

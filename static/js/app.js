@@ -90,7 +90,7 @@ async function choosePlacement(data, visitor_id, bed_id, event_type = null) {
     else if (!placement) controls = buttons_set_bed(visitor_id, bed_id, cur_ar_id, arrival_cost);
     else controls = buttons_update_bed(visitor_id, bed_id, cur_ar_id);
 
-    openModal({
+    open_modal({
         title: `${building.name} — Комната ${room.number}`,
         body: `${position_rus}\n${visitor.name}`,
         controls

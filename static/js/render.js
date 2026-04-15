@@ -72,8 +72,12 @@ function renderVisitors(visitors, placements) {
         if (search && ![v.name, v.dr, v.phone].some(s => String(s).toLowerCase().includes(search))) return;
 
         const el = document.createElement("div");
+
         el.className = "visitor";
         el.innerHTML = (repl(v.name));
+        el.addEventListener('contextmenu', (e) => {
+            open_menu(e, visitor_menu(v));
+        });
 
         const age = v.dr ? calculate_age_str(v.dr) : 0;
         function repl(str) {
@@ -273,7 +277,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
             // console.log("Отправлена койка ", setted_bed)
             // console.log("На койку ", bed.id)
             const cur_place = data.placements.find(p => p.bed_id == setted_bed && p.arrival_id == cur_ar_id);
-            openModal({
+            open_modal({
                 title: "Перенос посетителя.",
                 body: `Перенести посетителя на новую койку?`,
                 controls: buttons_move_bed(bed.id, cur_place)
@@ -313,7 +317,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
         if (placement.status == "busy") {
 
             bedDiv.addEventListener("click", () => {
-                openModal({
+                open_modal({
                     title: "Освободить койку?",
                     body: `${position_rus}\n${status_rus}\n${name}`,
                     controls: buttons_reset_bed(bed.id, cur_ar_id)
@@ -322,7 +326,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
         }
         if (placement.status == "reserved") {
             bedDiv.addEventListener("click", () => {
-                openModal({
+                open_modal({
                     title: "Койка зарезервированна.",
                     body: `${position_rus}\n${status_rus}\n${name}`,
                     controls: buttons_pay_bed(visitor.id, bed.id, cur_ar_id, current_arrival_cost)

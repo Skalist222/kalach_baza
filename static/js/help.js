@@ -100,5 +100,6 @@ function collapse(button, text_button = "Добавить") {
 
 document.getElementById("collapse_visitor_add").click()
 document.getElementById("collapse_arrival_add").click()
+document.getElementById("collapse_settings").click()
 init();
 set_today();

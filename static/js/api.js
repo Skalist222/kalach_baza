@@ -14,6 +14,27 @@ async function update_place(visitor_id, bed_id, status, money, arrival_id) {
     loadData()
 }
 
+async function update_visitor(visitor_id, name, dr, phone) {
+    await fetch(`/api/update_visitor?visitor_id=${encodeURIComponent(String(visitor_id).trim())}
+    &name=${encodeURIComponent(String(name).trim())}
+    &dr=${encodeURIComponent(String(dr).trim())}
+    &phone=${encodeURIComponent(String(phone).trim())}`, {
+        method: "POST"
+    });
+    loadData();
+}
+
+async function delete_visitor(visitor_id) {
+    await fetch(`/api/delete_visitor?visitor_id=${encodeURIComponent(String(visitor_id).trim())}`, {
+        method: "POST"
+    });
+    loadData();
+}
+
+
+
+
+
 async function move_place(visitor_id, old_bed_id, new_bed_id, arrival_id) {
     await fetch(`/api/move_place?visitor_id=${visitor_id}&old_bed_id=${old_bed_id}&new_bed_id=${new_bed_id}&arrival_id=${arrival_id}`, {
         method: "POST"
@@ -53,7 +74,7 @@ async function addVisitor() {
     if (name == "") {
         alert_element(nameInp)
 
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Для начала введите имя!",
             controls: [{ type: "btn", text: "ОК" }]
@@ -64,7 +85,7 @@ async function addVisitor() {
     if (dr == "") {
         alert_element(dateInp)
 
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Дата рождения не указана!",
             controls: [{ type: "btn", text: "ОК" }]
@@ -75,7 +96,7 @@ async function addVisitor() {
     if (phone == "") {
         alert_element(phoneInp)
 
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Номер телефона не указан!",
             controls: [{ type: "btn", text: "ОК" }]
@@ -121,7 +142,7 @@ async function addArrival(id_button_close = null) {
     if (name == "") {
         alert_element(NameEl)
 
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Для начала введите название заезда!",
             controls: [{ type: "btn", text: "ОК" }]
@@ -131,7 +152,7 @@ async function addArrival(id_button_close = null) {
     }
     if (start == "") {
         alert_element(startEl)
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Для начала введите дату начала заезда!",
             controls: [{ type: "btn", text: "ОК" }]
@@ -141,7 +162,7 @@ async function addArrival(id_button_close = null) {
     }
     if (stop == "") {
         alert_element(stopEl)
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Для начала введите дату завершения заезда!",
             controls: [{ type: "btn", text: "ОК" }]
@@ -153,7 +174,7 @@ async function addArrival(id_button_close = null) {
     const arrivals = await get_table("arrivals")
     if (arrivals.filter(a => a.name.toLowerCase() == name.toLowerCase()).length > 0) {
         alert_element(NameEl)
-        openModal({
+        open_modal({
             title: "Такой заезд уже существует",
             body: "Имя заезда уже используется для другого заезда! Может возникнуть путанница.",
             controls: [{ type: "btn", text: "ОК" }]
@@ -180,7 +201,7 @@ async function addBuilding(name = null) {
     if (name == null) name = document.getElementById("buildingName").value
 
     if (name == "") {
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Введите название корпуса",
             controls: [{ type: "btn", text: "ОК" }]
@@ -201,7 +222,7 @@ async function addRoom(building = null, number = null) {
     if (number == null) number = document.getElementById("roomNumber").value
 
     if (building == null || building == "") {
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Не выбран корпус",
             controls: [{ type: "btn", text: "ОК" }]
@@ -210,7 +231,7 @@ async function addRoom(building = null, number = null) {
     }
 
     if (number == null || number == "") {
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Введите номер комнаты",
             controls: [{ type: "btn", text: "ОК" }]
@@ -232,7 +253,7 @@ async function addBed() {
     let position = document.getElementById("bedPosition").value
 
     if (!room) {
-        openModal({
+        open_modal({
             title: "Ошибка",
             body: "Не выбрана комната",
             controls: [{ type: "btn", text: "ОК" }]
