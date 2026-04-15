@@ -7,7 +7,6 @@ async function place(visitor_id, bed_id, status, arrival_id, money) {
 }
 
 async function update_place(visitor_id, bed_id, status, money, arrival_id) {
-    console.log(visitor_id, bed_id, status, money, arrival_id)
     await fetch(`/api/update_place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
         method: "POST"
     })

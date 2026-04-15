@@ -29,12 +29,14 @@ const modalElementRenderers = {
         if (value !== undefined) input.value = value;
         return input;
     },
-    number: ({ id, text, value }) => {
+    number: ({ id, text, value, step, width }) => {
         const input = document.createElement("input");
         if (id) input.id = id;
         input.type = "number"
         input.placeholder = text || "";
         input.value = value
+        input.step = step || "500"
+        input.style.width = width || "10%"
         return input;
     },
     date: ({ id, text, value }) => {
@@ -123,6 +125,7 @@ function buttons_pay_bed(visitor_id, bed_id, current_arrival_id, money) {
     return [
         { type: "number", id: "money", text: "Пожертвование", value: money },
         { type: "btn", id: "btnReBusy", text: "Заселить", action: (el) => { update_place(visitor_id, bed_id, "busy", document.getElementById("money").value, current_arrival_id) } },
+        { type: "btn", id: "btnReBusy", text: "Оплатить без заселения", action: (el) => { update_place(visitor_id, bed_id, "reserved", document.getElementById("money").value, current_arrival_id) } },
         { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(bed_id, current_arrival_id) } },
         { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
     ]
