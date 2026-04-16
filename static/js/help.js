@@ -98,6 +98,10 @@ function collapse(button, text_button = "Добавить") {
     }
 }
 
+function toggleMenu() {
+    document.querySelector(".left-panel").classList.toggle("open");
+}
+
 document.getElementById("collapse_visitor_add").click()
 document.getElementById("collapse_arrival_add").click()
 document.getElementById("collapse_settings").click()

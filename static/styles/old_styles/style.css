@@ -1,0 +1,174 @@
+:root {
+    --bg-main: #f4fff6;
+    --bg-soft: #e8fbe9;
+    --accent: #b7f5c3;
+    --main-border: #2f4f3f;
+    --main-bg: #f4fff6;
+    --accent-strong: radial-gradient(#9affc4, #e8fbe9);
+    --accent-strong-select: #8be0a1;
+
+    --border-dark: #2f4f3f;
+    --text-main: #1f2d26;
+
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+/* ================= LAYOUT ================= */
+@media (max-width: 768px) {
+    .left-panel {
+        position: absolute;
+        z-index: 1000;
+        background: white;
+        left: -100%;
+        transition: 0.3s;
+    }
+
+    .left-panel.open {
+        left: 0;
+    }
+}
+
+.greed {
+    display: flex;
+    gap: 4px;
+}
+
+.column {
+    flex-direction: row;
+}
+
+.row {
+    flex-direction: column;
+}
+.table {
+    flex-flow: row wrap;
+}
+.f1 {
+    flex: 1;
+}
+.f2 {
+    flex: 2;
+}
+.f3 {
+    flex: 3;
+}
+
+.left-panel {
+    flex: 1;
+    padding: 5px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+
+    height: 99vh; /* 👈 обязательно */
+    overflow: hidden; /* 👈 важно */
+}
+
+.rigth-panel {
+    flex: 3;
+    padding: 12px;
+    padding-top: 0px;
+}
+
+/* ================= BOX ================= */
+
+.box {
+    background: white;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-dark);
+    padding: 12px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* зелёные блоки */
+.adder {
+    background: var(--bg-soft);
+    border: 2px solid var(--accent-strong);
+    padding: 3px;
+}
+
+/* ================= INPUT ================= */
+
+input,
+select,
+button {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    font-size: 12px;
+}
+
+button {
+    background: var(--accent);
+    border: 1px solid var(--border-dark);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: var(--accent-strong);
+}
+
+/* ================= COLLAPSE ================= */
+
+.collapseble {
+    overflow: hidden;
+    max-height: 500px;
+    transition:
+        max-height 0.4s ease,
+        opacity 0.3s ease;
+    opacity: 1;
+}
+
+.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    pointer-events: none;
+}
+
+/* ================= TOOLTIP ================= */
+
+#tooltip {
+    position: absolute;
+    background: white;
+    padding: 5px 5px;
+    border-radius: 6px;
+    border: 1px solid var(--border-dark);
+    font-size: 12px;
+    box-shadow: var(--shadow-soft);
+    z-index: 1000;
+}
+
+.no_margin {
+    margin: 0px;
+}
+.no_padding {
+    padding: 0px;
+}
+.no_gap {
+    gap: 0px;
+}
+.invisible {
+    display: none;
+}
+
+.search_select {
+    display: inline;
+    color: red;
+}
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

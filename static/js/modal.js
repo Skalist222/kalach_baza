@@ -50,12 +50,12 @@ const modalElementRenderers = {
 };
 let mouseDownInside = false;
 function open_modal({ title = "", body = "", controls = [], in_lines = false }) {
-    const template = document.getElementById("modal-template").content.cloneNode(true);
+    const modalTemplate = document.getElementById("modal-template").content.cloneNode(true);
 
-    const modal = template.querySelector(".modal");
-    const titleEl = template.querySelector(".modal-title");
-    const bodyEl = template.querySelector(".modal-body");
-    const controlsEl = template.querySelector(".modal-controls");
+    const modal = modalTemplate.querySelector(".modal");
+    const titleEl = modalTemplate.querySelector(".modal-title");
+    const bodyEl = modalTemplate.querySelector(".modal-body");
+    const controlsEl = modalTemplate.querySelector(".modal-controls");
     controlsEl.classList.remove("greed");
     controlsEl.classList.remove("row");
 
@@ -95,7 +95,7 @@ function open_modal({ title = "", body = "", controls = [], in_lines = false }) 
         mouseDownInside = false; // сброс
     });
 
-    document.body.appendChild(template);
+    document.body.appendChild(modalTemplate);
 }
 
 function buttons_set_bed(visitor_id, bed_id, current_arrival_id, money) {

@@ -1,30 +1,33 @@
 function open_menu(e, menuItems) {
 	const menu = document.getElementById("contextMenu");
 
-	// Очищаем предыдущие элементы меню
 	menu.innerHTML = "";
-	// Добавляем новые элементы меню
+
 	menuItems.forEach(({ text, action }) => {
-		console.log(text);
 		const menuItem = document.createElement("div");
 		menuItem.classList.add("item");
 		menuItem.textContent = text;
-		menuItem.onclick = (ev) => { action(); };
+		menuItem.onclick = () => {
+			action();
+			menu.style.display = "none";
+		};
 		menu.appendChild(menuItem);
+
 		const menuLine = document.createElement("div");
 		menuLine.classList.add("line");
 		menu.appendChild(menuLine);
 	});
-	menu.removeChild(menu.lastElementChild);
+
+	if (menu.lastElementChild) menu.removeChild(menu.lastElementChild);
 
 	menu.style.display = "block";
-	menu.style.left = (e.pageX) + "px";
-	menu.style.top = (e.pageY) + "px";
+	menu.style.left = e.pageX + "px";
+	menu.style.top = e.pageY + "px";
 
-	// скрытие при клике
-	document.addEventListener("click", () => {
+	// 👇 ВАЖНО — один обработчик
+	document.onclick = () => {
 		menu.style.display = "none";
-	});
+	};
 }
 function visitor_menu(visitor, hasPlacements) {
 	console.log(hasPlacements)

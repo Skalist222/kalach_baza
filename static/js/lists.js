@@ -15,7 +15,7 @@ async function fillArrivals(arrivals) {
     }
 
     select.innerHTML = "";
-    trigger.innerHTML = ""
+    trigger.innerText = ""
     optionsContainer.innerHTML = "";
 
 

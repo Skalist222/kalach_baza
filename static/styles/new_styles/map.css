@@ -1,0 +1,46 @@
+#map {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.building {
+    background: white;
+    border-radius: var(--radius);
+    border: 2px solid var(--border-dark);
+    padding: 10px 10px 3px;
+    box-shadow: var(--shadow-soft);
+}
+
+.building_title {
+    font-weight: bold;
+}
+
+.room {
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    padding: 3px;
+    margin-bottom: 2px;
+    background: #fafafa;
+}
+
+.room_title {
+    font-size: 13px;
+    margin-bottom: 1px;
+}
+
+.beds {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.f1,
+.f2,
+.f3,
+.left-panel,
+.rigth-panel,
+.visitor,
+.room,
+.building {
+    min-width: 0;
+}

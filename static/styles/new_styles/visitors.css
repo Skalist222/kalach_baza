@@ -1,0 +1,47 @@
+.visitor {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+    background: white;
+    cursor: grab;
+    transition: 0.2s;
+}
+
+.visitor:hover {
+    background: var(--bg-soft);
+}
+
+.selected {
+    border: 2px solid var(--border-dark);
+}
+
+.greend-visitors-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.visitors-box {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+#visitorList {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 0;
+}
+
+#sortVisitors {
+    margin-bottom: 3px;
+}
+
+.busy-white {
+    background: var(--accent-strong-gradient);
+}

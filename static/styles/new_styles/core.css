@@ -1,25 +1,35 @@
 :root {
     --bg-main: #f4fff6;
     --bg-soft: #e8fbe9;
+
     --accent: #b7f5c3;
-    --accent-strong: radial-gradient(#9affc4, #e8fbe9);
-    --accent-strong-select: #8be0a1;
+    --accent-strong: #9affc4;
+    --accent-strong-gradient: radial-gradient(#9affc4, #e8fbe9);
 
     --border-dark: #2f4f3f;
+    --border-light: #ccc;
+
     --text-main: #1f2d26;
 
     --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+
     --radius: 12px;
+    --radius-small: 8px;
+
+    --font-main: "Segoe UI", Arial, sans-serif;
+    --font-accent: "Philosopher", sans-serif;
 }
+
+/* ===== BASE ===== */
 
 body {
     margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family: var(--font-main);
     background: var(--bg-main);
     color: var(--text-main);
 }
 
-/* ================= LAYOUT ================= */
+/* ===== LAYOUT (НЕ ТРОГАЕМ ЛОГИКУ) ===== */
 
 .greed {
     display: flex;
@@ -29,13 +39,13 @@ body {
 .column {
     flex-direction: row;
 }
-
 .row {
     flex-direction: column;
 }
 .table {
     flex-flow: row wrap;
 }
+
 .f1 {
     flex: 1;
 }
@@ -46,24 +56,27 @@ body {
     flex: 3;
 }
 
+/* ===== PANELS ===== */
+
 .left-panel {
     flex: 1;
     padding: 5px;
     width: 300px;
+
     display: flex;
     flex-direction: column;
 
-    height: 99vh; /* 👈 обязательно */
-    overflow: hidden; /* 👈 важно */
+    height: 99vh;
+    overflow: hidden;
 }
 
 .rigth-panel {
     flex: 3;
     padding: 12px;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
-/* ================= BOX ================= */
+/* ===== BOX ===== */
 
 .box {
     background: white;
@@ -72,21 +85,27 @@ body {
     padding: 12px;
     box-shadow: var(--shadow-soft);
 }
+.box_white {
+    background: white;
+    border-radius: var(--radius);
+    border: 2px solid var(--bg-soft);
+    padding: 3px;
+    box-shadow: var(--shadow-soft);
+}
 
-/* зелёные блоки */
 .adder {
     background: var(--bg-soft);
     border: 2px solid var(--accent-strong);
     padding: 3px;
 }
 
-/* ================= INPUT ================= */
+/* ===== INPUT ===== */
 
 input,
 select,
 button {
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--border-light);
     padding: 6px 8px;
     font-size: 12px;
 }
@@ -102,13 +121,13 @@ button:hover {
     background: var(--accent-strong);
 }
 
-/* ================= COLLAPSE ================= */
+/* ===== COLLAPSE (ОДИН ВАРИАНТ) ===== */
 
 .collapseble {
     overflow: hidden;
     max-height: 500px;
     transition:
-        max-height 0.4s ease,
+        max-height 0.3s ease,
         opacity 0.3s ease;
     opacity: 1;
 }
@@ -116,18 +135,18 @@ button:hover {
 .collapsed {
     max-height: 0;
     opacity: 0;
-    margin: 0px;
-    padding: 0px;
-    border: 0px;
+    margin: 0;
+    padding: 0;
+    border: 0;
     pointer-events: none;
 }
 
-/* ================= TOOLTIP ================= */
+/* ===== TOOLTIP ===== */
 
 #tooltip {
     position: absolute;
     background: white;
-    padding: 5px 5px;
+    padding: 5px;
     border-radius: 6px;
     border: 1px solid var(--border-dark);
     font-size: 12px;
@@ -135,14 +154,16 @@ button:hover {
     z-index: 1000;
 }
 
+/* ===== UTILS ===== */
+
 .no_margin {
-    margin: 0px;
+    margin: 0;
 }
 .no_padding {
-    padding: 0px;
+    padding: 0;
 }
 .no_gap {
-    gap: 0px;
+    gap: 0;
 }
 .invisible {
     display: none;
@@ -152,8 +173,26 @@ button:hover {
     display: inline;
     color: red;
 }
+
 .checkbox-row {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+/* ===== 📱 MOBILE (НЕ ЛОМАЕТ JS) ===== */
+
+@media (max-width: 768px) {
+    .left-panel {
+        position: absolute;
+        left: -100%;
+        top: 0;
+        background: var(--bg-main);
+        z-index: 1000;
+        transition: 0.3s;
+    }
+
+    .left-panel.open {
+        left: 0;
+    }
 }
