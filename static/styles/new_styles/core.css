@@ -5,7 +5,7 @@
     --accent: #b7f5c3;
     --accent-strong: #9affc4;
     --accent-strong-gradient: radial-gradient(#9affc4, #e8fbe9);
-
+    --accent-visitor-strong-gradient: radial-gradient(#9affc4, #f7cfcf);
     --border-dark: #2f4f3f;
     --border-light: #ccc;
 

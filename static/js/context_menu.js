@@ -30,8 +30,8 @@ function open_menu(e, menuItems) {
 		menu.style.display = "none";
 	};
 }
-function visitor_menu(visitor, hasPlacements) {
-	console.log(hasPlacements)
+function visitor_menu(visitor, hasPlacements,current_arrival) {
+
 	menu = [
 		{
 			"text": "Редактировать", action: () => {
@@ -39,14 +39,22 @@ function visitor_menu(visitor, hasPlacements) {
 			}
 		}
 	]
-	if (!hasPlacements) menu.push({
-		"text": "Удалить", action: () => {
+	if (!hasPlacements) {
+		menu.push({
+			"text": "Удалить", action: () => {
 
-			open_modal({ "title": "Удаление посетителя", "body": "Вы уверены что хотите удалить посетителя " + visitor.name + "?", "controls": modal_delete_visitor(visitor) });
-			console.log("нажата кнопка удалить")
+				open_modal({ "title": "Удаление посетителя", "body": "Вы уверены что хотите удалить посетителя " + visitor.name + "?", "controls": modal_delete_visitor(visitor) });
+				console.log("нажата кнопка удалить")
 
-		}
-	})
+			}
+		});
+		menu.push({
+			"text": "Без заселения", action: () => {
+				open_modal({ "title": "Удаление посетителя", "body": "Вы уверены что хотите удалить посетителя " + visitor.name + "?", "controls": buttons_pay_without_bed(visitor,current_arrival) });
+				console.log("нажата кнопка удалить")
+			}
+		});
+	}
 	return menu
 }
 function bed_menu(placement, arrival_cost) {

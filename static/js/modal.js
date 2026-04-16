@@ -204,4 +204,10 @@ function modal_delete_visitor(visitor) {
     ];
 }
 
+function buttons_pay_without_bed(visitor, current_arrival_id, money) {
+    return [
+        { type: "number", id: "money", text: "Пожертвование", value: money ,width : "20%"},
+        { type: "btn", id: "btnBusy", text: "Оплатить", action: () => place(visitor.id, -1, "busy", current_arrival_id, document.getElementById("money").value) },
+    ];
+}
 

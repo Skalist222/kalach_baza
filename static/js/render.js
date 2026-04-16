@@ -62,6 +62,12 @@ async function renderVisitors(visitors, placements) {
     list.innerHTML = "";
 
     visitors.forEach(v => {
+
+
+        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
+
+        if (document.getElementById("turn_on_selected_visitors").checked && vPlacements.length == 0) return;
+
         function repl(str) {
             const cleanStr = String(str);
             const cleanSearch = String(search).trim();
@@ -78,13 +84,15 @@ async function renderVisitors(visitors, placements) {
         }
 
         const el = document.createElement("div");
-        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
+        let non_placemant = false;
         const selBeds = [];
         document.querySelectorAll(`.bed`).forEach(
             b => {
                 vPlacements.forEach(p => {
+                    if (p.bed_id == -1) {
+                        non_placemant = true;
+                    }
                     if (p.bed_id == b.dataset.id && p.arrival_id == current_arrival) {
-
                         selBeds.push(b);
                     }
                 });
@@ -107,7 +115,7 @@ async function renderVisitors(visitors, placements) {
         el.innerHTML = (repl(v.name));
         el.addEventListener('contextmenu', (e) => {
             document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
-            open_menu(e, visitor_menu(v, vPlacements.length > 0));
+            open_menu(e, visitor_menu(v, vPlacements.length > 0, current_arrival));
         });
 
         const age = v.dr ? calculate_age_str(v.dr) : 0;
@@ -115,11 +123,14 @@ async function renderVisitors(visitors, placements) {
 
         let visual_element = document.createElement("div")
 
+        let non_plase_el = document.createElement("div")
         let birth_day_el = document.createElement("div")
         let phone_el = document.createElement("div")
         let sex_el = document.createElement("div")
         let age_el = document.createElement("div")
 
+        non_plase_el.classList = "info_tooltip"
+        non_plase_el.innerHtml = non_placemant ? "Оплатили без заселения" : ""
         birth_day_el.classList = "info_tooltip"
         birth_day_el.innerHTML = repl(v.dr)
         phone_el.classList = "info_tooltip"
@@ -129,10 +140,13 @@ async function renderVisitors(visitors, placements) {
         age_el.classList = "info_tooltip"
         age_el.innerHTML = repl(age)
 
+        console.log(non_plase_el)
+        visual_element.appendChild(non_plase_el)
         visual_element.appendChild(birth_day_el)
         visual_element.appendChild(phone_el)
         visual_element.appendChild(sex_el)
         visual_element.appendChild(age_el)
+        
 
         add_chase_tooltip(el, "", visual_element);
 
@@ -144,7 +158,14 @@ async function renderVisitors(visitors, placements) {
 
 
 
-        if (vPlacements.length > 0) el.classList.add("busy-white");
+        if (vPlacements.length > 0) {
+            if (non_placemant) {
+                el.classList.add("non_place_visitor");
+            }
+            else {
+                el.classList.add("busy-white");
+            }
+        }
 
         el.addEventListener("click", () => {
             document.querySelectorAll(`.visitor.selected`).forEach(n => n.classList.remove("selected"));

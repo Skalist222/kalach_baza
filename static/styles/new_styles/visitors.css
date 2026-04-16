@@ -45,3 +45,6 @@
 .busy-white {
     background: var(--accent-strong-gradient);
 }
+.non_place_visitor{
+    background: var(--accent-visitor-strong-gradient);;
+}

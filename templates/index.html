@@ -1,16 +1,17 @@
 <!doctype html>
 <html>
-    <head>
-        <!-- Иконочки -->
-        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+
+<head>
+    <!-- Иконочки -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
-        <!-- Шрифты  -->
-        <!-- Внутренние стили -->
-        <script rel="preconnect" src="/static/js/styles.js"></script>
-        <script>
-            new_styles();
-        </script>
-        <!-- <link rel="stylesheet" href="/static/styles/style.css" />
+    <!-- Шрифты  -->
+    <!-- Внутренние стили -->
+    <script rel="preconnect" src="/static/js/styles.js"></script>
+    <script>
+        new_styles();
+    </script>
+    <!-- <link rel="stylesheet" href="/static/styles/style.css" />
         <link rel="stylesheet" href="/static/styles/map_style.css" />
         <link rel="stylesheet" href="/static/styles/modal.css" />
         <link rel="stylesheet" href="/static/styles/search.css" />
@@ -18,118 +19,133 @@
         <link rel="stylesheet" href="/static/styles/visitors.css" />
         <link rel="stylesheet" href="/static/styles/arrival_info.css" />
         <link rel="stylesheet" href="/static/styles/context_menu.css" /> -->
-    </head>
+</head>
 
-    <body>
-        <div id="contextMenu" class="context-menu"></div>
-        <div id="tooltip" class="invisible">
-            <div id="visual_element"></div>
-        </div>
-        <template id="modal-template">
-            <div class="modal">
-                <div class="modal-content">
-                    <div class="modal-title"></div>
-                    <div class="modal-body"></div>
-                    <div class="modal-controls"></div>
-                </div>
+<body>
+    <div id="contextMenu" class="context-menu"></div>
+    <div id="tooltip" class="invisible">
+        <div id="visual_element"></div>
+    </div>
+    <template id="modal-template">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-title"></div>
+                <div class="modal-body"></div>
+                <div class="modal-controls"></div>
             </div>
-        </template>
+        </div>
+    </template>
 
-        <div class="greed column">
-            <div class="greed row left-panel">
-                <div class="greed row box invisible">
-                    <div class="greed column table">
-                        <div><h3 class="no_margin f1">Настройки</h3></div>
-                        <button type="button" class="collapse f2" id="collapse_settings" onclick="collapse(this, 'Развернуть')">▼</button>
+    <div class="greed column">
+        <div class="greed row left-panel">
+            <div class="greed row box invisible">
+                <div class="greed column table">
+                    <div>
+                        <h3 class="no_margin f1">Настройки</h3>
                     </div>
-                    <label id="settings" class="greed column box adder collapseble">
-                        <input type="checkbox" id="turn_on_age_room" onchange="loadData()" />
-                        <span>Показывать средний возраст в комнате</span>
-                    </label>
+                    <button type="button" class="collapse f2" id="collapse_settings"
+                        onclick="collapse(this, 'Развернуть')">▼</button>
                 </div>
-                <div class="greed row box">
-                    <div class="greed column table">
-                        <div><h3 class="no_margin f1">Заезд</h3></div>
-                        <button type="button" class="collapse f2" id="collapse_arrival_add" onclick="collapse(this, 'Создать')">▼</button>
+                <label id="settings" class="greed column box adder collapseble">
+                    <input type="checkbox" id="turn_on_age_room" onchange="loadData()" />
+                    <span>Показывать средний возраст в комнате</span>
+                </label>
+            </div>
+            <div class="greed row box">
+                <div class="greed column table">
+                    <div>
+                        <h3 class="no_margin f1">Заезд</h3>
                     </div>
-
-                    <div id="arrival_add" class="greed row box adder collapseble">
-                        <input id="arrivalName" placeholder="Новый заезд" />
-                        <input id="arrivalCost" type="number" placeholder="Взнос" step="500" />
-
-                        <div class="greed row">
-                            <div class="greed column">
-                                <h5 class="no_margin f1">Начало</h5>
-                                <input class="f3" type="date" name="" id="start_arrival" />
-                            </div>
-                            <div class="greed column">
-                                <h5 class="no_margin f1">Конец</h5>
-                                <input class="f3" type="date" name="" id="stop_arrival" />
-                            </div>
-                        </div>
-
-                        <button onclick="addArrival('collapse_arrival_add')">Добавить</button>
-                    </div>
+                    <button type="button" class="collapse f2" id="collapse_arrival_add"
+                        onclick="collapse(this, 'Создать')">▼</button>
                 </div>
-                <div class="greed row box visitors-box">
+
+                <div id="arrival_add" class="greed row box adder collapseble">
+                    <input id="arrivalName" placeholder="Новый заезд" />
+                    <input id="arrivalCost" type="number" placeholder="Взнос" step="500" />
+
                     <div class="greed row">
-                        <div class="greed column table">
-                            <div><h3 class="no_margin f1">Посетители</h3></div>
-                            <button type="button" class="collapse f2" id="collapse_visitor_add" onclick="collapse(this)">▼</button>
-                        </div>
-                    </div>
-                    <div id="visitor_add" class="greed row box adder collapseble">
-                        <h4 class="no_margin">Добавить посетителя</h4>
-                        <input id="visitorName" placeholder="ФИО" />
                         <div class="greed column">
-                            <div class="left-column w10p">д/р:</div>
-                            <input class="rigth-column w90p" id="visitorDate" type="date" />
+                            <h5 class="no_margin f1">Начало</h5>
+                            <input class="f3" type="date" name="" id="start_arrival" />
                         </div>
-                        <input id="visitorPhone" placeholder="Телефон" type="phone" />
+                        <div class="greed column">
+                            <h5 class="no_margin f1">Конец</h5>
+                            <input class="f3" type="date" name="" id="stop_arrival" />
+                        </div>
+                    </div>
 
-                        <select id="visitorSity" placeholder="Город" type="sity"></select>
-                        <div><input type="radio" name="sex" id="sexMen" checked />М <input type="radio" name="sex" id="sexWomen" />Ж</div>
-                        <button onclick="addVisitor()">Добавить</button>
-                    </div>
-                    <div class="greend-visitors-container">
-                        <input id="sortVisitors" placeholder="Сортировка" />
-                        <div id="visitorList"></div>
-                    </div>
+                    <button onclick="addArrival('collapse_arrival_add')">Добавить</button>
                 </div>
             </div>
-            <div class="rigth-panel">
+            <div class="greed row box visitors-box">
                 <div class="greed row">
-                    <div class="greed row arrival_infos">
-                        <div class="greed column">
-                            <div class="custom-select f3" id="arrivalSelectWrapper">
-                                <div class="custom-select-trigger">Выберите заезд</div>
-                                <div class="custom-options invisible"></div>
-
-                                <!-- Оригинальный select (скрытый) -->
-                                <select class="invisible" id="currentArrival" onchange="loadData()"></select>
-                            </div>
-
-                            <div id="currentDate"></div>
+                    <div class="greed column table">
+                        <div>
+                            <h3 class="no_margin f1">Посетители</h3>
                         </div>
-
-                        <div class="greed column box no_padding">
-                            <div class="arrival_info" id="current_arrival_cost"></div>
-                            <div class="arrival_info" id="current_arrival_start"></div>
-                            <div class="arrival_info" id="current_arrival_stop"></div>
-                        </div>
+                        <button type="button" class="collapse f2" id="collapse_visitor_add"
+                            onclick="collapse(this)">▼</button>
                     </div>
-                    <div id="map"></div>
+                </div>
+                <div id="visitor_add" class="greed row box adder collapseble">
+                    <h4 class="no_margin">Добавить посетителя</h4>
+                    <input id="visitorName" placeholder="ФИО" />
+                    <div class="greed column">
+                        <div class="left-column w10p">д/р:</div>
+                        <input class="rigth-column w90p" id="visitorDate" type="date" />
+                    </div>
+                    <input id="visitorPhone" placeholder="Телефон" type="phone" />
+
+                    <select id="visitorSity" placeholder="Город" type="sity"></select>
+                    <div><input type="radio" name="sex" id="sexMen" checked />М <input type="radio" name="sex"
+                            id="sexWomen" />Ж</div>
+                    <button onclick="addVisitor()">Добавить</button>
+                </div>
+                <div class="greend-visitors-container">
+                    <input id="sortVisitors" placeholder="Сортировка" />
+                    <label id="settings" class="greed column box adder collapseble">
+                        <input type="checkbox" id="turn_on_selected_visitors" onchange="loadData()" />
+                        <span>Заселённые</span>
+                    </label>
+                    <div id="visitorList"></div>
                 </div>
             </div>
         </div>
+        <div class="rigth-panel">
+            <div class="greed row">
+                <div class="greed row arrival_infos">
+                    <div class="greed column">
+                        <div class="custom-select f3" id="arrivalSelectWrapper">
+                            <div class="custom-select-trigger">Выберите заезд</div>
+                            <div class="custom-options invisible"></div>
 
-        <script src="/static/js/templates_cache.js"></script>
-        <script src="/static/js/help.js"></script>
-        <script src="/static/js/context_menu.js"></script>
-        <script src="/static/js/lists.js"></script>
-        <script src="/static/js/api.js"></script>
-        <script src="/static/js/render.js"></script>
-        <script src="/static/js/modal.js"></script>
-        <script src="/static/js/app.js"></script>
-    </body>
+                            <!-- Оригинальный select (скрытый) -->
+                            <select class="invisible" id="currentArrival" onchange="loadData()"></select>
+                        </div>
+
+                        <div id="currentDate"></div>
+                    </div>
+
+                    <div class="greed column box no_padding">
+                        <div class="arrival_info" id="current_arrival_cost"></div>
+                        <div class="arrival_info" id="current_arrival_start"></div>
+                        <div class="arrival_info" id="current_arrival_stop"></div>
+                    </div>
+                </div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/templates_cache.js"></script>
+    <script src="/static/js/help.js"></script>
+    <script src="/static/js/context_menu.js"></script>
+    <script src="/static/js/lists.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/render.js"></script>
+    <script src="/static/js/modal.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+
 </html>
