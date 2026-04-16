@@ -1,4 +1,5 @@
 function open_menu(e, menuItems) {
+	if (menuItems.length == 0) return;
 	const menu = document.getElementById("contextMenu");
 
 	menu.innerHTML = "";
@@ -46,5 +47,35 @@ function visitor_menu(visitor, hasPlacements) {
 
 		}
 	})
+	return menu
+}
+function bed_menu(placement, arrival_cost) {
+	let menu = []
+	console.log("ОТАКАЯ ШТУКА")
+	if (!placement) return []
+
+
+	if (placement.status == "busy") {
+
+
+	}
+	else if (placement.status == "reserved") {
+
+	}
+	if (placement.money == 0) {
+		menu = [
+			{
+				"text": "Оплатили", action: () => {
+					update_place(placement.visitor_id, placement.bed_id, placement.status, arrival_cost, placement.arrival_id)
+				}
+			}
+		]
+	}
+	menu.push(
+		{
+			"text": "Освободить", action: () => {
+				replace(placement.bed_id, placement.arrival_id)
+			}
+		})
 	return menu
 }

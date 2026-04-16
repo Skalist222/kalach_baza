@@ -106,7 +106,7 @@ async function renderVisitors(visitors, placements) {
         el.className = "visitor";
         el.innerHTML = (repl(v.name));
         el.addEventListener('contextmenu', (e) => {
-
+            document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
             open_menu(e, visitor_menu(v, vPlacements.length > 0));
         });
 
@@ -336,11 +336,13 @@ async function renderBed(upContainer, downContainer, bed, data) {
 
         if (placement.status == "busy") {
 
+
+
             bedDiv.addEventListener("click", () => {
                 open_modal({
                     title: "Освободить койку?",
                     body: `${position_rus}\n${status_rus}\n${name}`,
-                    controls: buttons_reset_bed(bed.id, cur_ar_id)
+                    controls: buttons_reset_bed(placement, current_arrival_cost)
                 });
             });
         }
@@ -349,7 +351,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
                 open_modal({
                     title: "Койка зарезервированна.",
                     body: `${position_rus}\n${status_rus}\n${name}`,
-                    controls: buttons_pay_bed(visitor.id, bed.id, cur_ar_id, current_arrival_cost)
+                    controls: buttons_pay_bed(placement, current_arrival_cost)
                 });
             });
         }
@@ -362,6 +364,14 @@ async function renderBed(upContainer, downContainer, bed, data) {
         });
         bedDiv.classList.add("free");
     }
+
+    bedDiv.addEventListener('contextmenu', (e) => {
+        document.querySelectorAll('.bed-overlay').forEach(o => {
+            console.log(o)
+            o.remove();
+        });
+        open_menu(e, bed_menu(placement, current_arrival_cost));
+    });
 
     if (bed.position === "upper") { upContainer.appendChild(bedDiv); }
     else { downContainer.appendChild(bedDiv); }

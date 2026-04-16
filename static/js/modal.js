@@ -114,21 +114,44 @@ function buttons_update_bed(visitor_id, bed_id, current_arrival_id) {
     ];
 }
 
-function buttons_reset_bed(bed_id, current_arrival_id) {
-    return [
-        { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(bed_id, current_arrival_id) } },
-        { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
-    ]
+function buttons_reset_bed(placement, ariival_cost) {
+    console.log(ariival_cost)
+    if (placement.money == 0) {
+        return [
+            { type: "number", id: "money", text: "Пожертвование", value: ariival_cost },
+            { type: "btn", id: "btnReBusy", text: "Оплатить", action: (el) => { update_place(placement.visitor_id, placement.bed_id, placement.status, document.getElementById("money").value, placement.arrival_id) } },
+            { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(placement.bed_id, placement.arrival_id) } },
+            { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+        ]
+    }
+    else {
+        return [
+            { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(placement.bed_id, placement.arrival_id) } },
+            { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+        ]
+    }
+
 }
 
-function buttons_pay_bed(visitor_id, bed_id, current_arrival_id, money) {
-    return [
-        { type: "number", id: "money", text: "Пожертвование", value: money },
-        { type: "btn", id: "btnReBusy", text: "Заселить", action: (el) => { update_place(visitor_id, bed_id, "busy", document.getElementById("money").value, current_arrival_id) } },
-        { type: "btn", id: "btnReBusy", text: "Оплатить без заселения", action: (el) => { update_place(visitor_id, bed_id, "reserved", document.getElementById("money").value, current_arrival_id) } },
-        { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(bed_id, current_arrival_id) } },
-        { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
-    ]
+function buttons_pay_bed(placement, money) {
+    console.log(money)
+    if (placement.money == 0) {
+        return [
+            { type: "number", id: "money", text: "Пожертвование", value: money },
+            { type: "btn", id: "btnReBusy", text: "Заселить", action: (el) => { update_place(placement.visitor_id, placement.bed_id, "busy", document.getElementById("money").value, placement.arrival_id) } },
+            { type: "btn", id: "btnReBusy", text: "Оплатить без заселения", action: (el) => { update_place(placement.visitor_id, placement.bed_id, "reserved", document.getElementById("money").value, placement.arrival_id) } },
+            { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(placement.bed_id, placement.arrival_id) } },
+            { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+        ]
+    }
+    else {
+        return [
+            { type: "btn", id: "btnReBusy", text: "Заселить", action: (el) => { update_place(placement.visitor_id, placement.bed_id, "busy", placement.money, placement.arrival_id) } },
+            { type: "btn", id: "btnReBusy", text: "Освободить", action: () => { replace(placement.bed_id, placement.arrival_id) } },
+            { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+        ]
+    }
+
 }
 
 function buttons_move_bed(new_bed, placement) {

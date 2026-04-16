@@ -1,5 +1,6 @@
 // Разместить человека
 async function place(visitor_id, bed_id, status, arrival_id, money) {
+    if (money == "") money = 0
     await fetch(`/api/place?visitor_id=${visitor_id}&bed_id=${bed_id}&arrival_id=${arrival_id}&status=${status}&money=${money}`, {
         method: "POST"
     })
