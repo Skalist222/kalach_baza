@@ -82,7 +82,7 @@ body {
     background: white;
     border-radius: var(--radius);
     border: 2px solid var(--border-dark);
-    padding: 12px;
+    padding: 7px;
     box-shadow: var(--shadow-soft);
 }
 .box_white {
