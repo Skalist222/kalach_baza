@@ -68,7 +68,7 @@ function fillSities(sities) {
     
     // Создаём input с автодополнением
     const input = document.createElement("input");
-    input.classList.add("f6");
+    input.classList.add("f7");
     input.type = "text";
     input.id = "visitorSityInput";
     input.placeholder = "Введите или выберите город";

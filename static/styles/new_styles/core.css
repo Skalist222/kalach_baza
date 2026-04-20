@@ -7,6 +7,7 @@
     --accent-strong-gradient: radial-gradient(#9affc4, #e8fbe9);
     --accent-visitor-strong-gradient: radial-gradient(#9affc4, #f7cfcf);
     --border-dark: #2f4f3f;
+    --alert-color: #c3cc47;
     --border-light: #ccc;
 
     --text-main: #1f2d26;
@@ -23,13 +24,21 @@
 /* ===== BASE ===== */
 
 body {
-    margin: 0;
+    margin:0px;
     font-family: var(--font-main);
     background: var(--bg-main);
     color: var(--text-main);
 }
+.ch_b{
+  
+    margin-left: 0;
+    margin-right: 0;
+    /* appearance: none; */
+    border-radius: 10px;
+    accent-color: var(--alert-color);
+}
 
-/* ===== LAYOUT (НЕ ТРОГАЕМ ЛОГИКУ) ===== */
+/* ===== LAYOUT  ===== */
 
 .greed {
     display: flex;

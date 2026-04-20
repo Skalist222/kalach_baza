@@ -92,16 +92,17 @@
                     <h4 class="no_margin">Добавить посетителя</h4>
                     <input id="visitorName" placeholder="ФИО" />
                     <div class="greed column">
-                        <div class="left-column w10p">д/р:</div>
-                        <input class="rigth-column w90p" id="visitorDate" type="date" />
+                        <div class="left-column f1">д/р:</div>
+                        <input class="rigth-column f6" id="visitorDate" type="date" />
+                        <input class="ch_b f1" type="checkbox" id="turn_on_birth" title="Обязательность даты рождения" checked onchange="loadData()" />
                     </div>
                     <div class="greed column">
                         <select class="f7" id="visitorSity" placeholder="Город" type="sity"></select> 
-                        <input class="f1" type="checkbox" id="turn_on_sity" onchange="loadData()" />
+                        <input class="ch_b f1" type="checkbox" id="turn_on_sity" title="Обязательность города" checked onchange="loadData()" />
                     </div>
                     <div class="greed column">
                         <input class="f7" id="visitorPhone" placeholder="Телефон" type="phone" />
-                        <input class="f1" type="checkbox" id="turn_on_phone" onchange="loadData()" />
+                        <input class="ch_b f1" type="checkbox" id="turn_on_phone" title="Обязательность телефона" checked onchange="loadData()" />
                     </div>
                     
 
