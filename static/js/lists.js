@@ -17,7 +17,7 @@ async function fillArrivals(arrivals) {
     select.innerHTML = "";
     trigger.innerText = ""
     optionsContainer.innerHTML = "";
-
+    
 
     arrivals.forEach(a => {
         // --- обычный select
@@ -65,9 +65,10 @@ function fillSities(sities) {
     if (existingInput) existingInput.remove();
     const existingDatalist = document.getElementById("cityDatalist");
     if (existingDatalist) existingDatalist.remove();
-
+    
     // Создаём input с автодополнением
     const input = document.createElement("input");
+    input.classList.add("f6");
     input.type = "text";
     input.id = "visitorSityInput";
     input.placeholder = "Введите или выберите город";

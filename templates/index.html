@@ -95,9 +95,17 @@
                         <div class="left-column w10p">д/р:</div>
                         <input class="rigth-column w90p" id="visitorDate" type="date" />
                     </div>
-                    <input id="visitorPhone" placeholder="Телефон" type="phone" />
+                    <div class="greed column">
+                        <select class="f7" id="visitorSity" placeholder="Город" type="sity"></select> 
+                        <input class="f1" type="checkbox" id="turn_on_sity" onchange="loadData()" />
+                    </div>
+                    <div class="greed column">
+                        <input class="f7" id="visitorPhone" placeholder="Телефон" type="phone" />
+                        <input class="f1" type="checkbox" id="turn_on_phone" onchange="loadData()" />
+                    </div>
+                    
 
-                    <select id="visitorSity" placeholder="Город" type="sity"></select>
+                    
                     <div><input type="radio" name="sex" id="sexMen" checked />М <input type="radio" name="sex"
                             id="sexWomen" />Ж</div>
                     <button onclick="addVisitor()">Добавить</button>
