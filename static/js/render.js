@@ -160,6 +160,10 @@ async function renderVisitors(visitors, placements) {
 
         if (vPlacements.length > 0) {
             if (non_placemant) {
+                const non_place_el = document.createElement("div");
+                non_place_el.classList = "non_place_info";
+                non_place_el.innerText = "Оплатили без заселения"
+                el.appendChild(non_place_el);
                 el.classList.add("non_place_visitor");
             }
             else {

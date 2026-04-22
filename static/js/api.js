@@ -92,10 +92,15 @@ async function addVisitor() {
         })
         return;
     }
-   if (selected_sity_id  && document.getElementById("turn_on_sity").checked) {
-        await fetch(`/api/add_sity?name=${name}`, {
-            method: "POST"
+    if (selected_sity_id == "" && document.getElementById("turn_on_sity").checked) {
+        alert_element(sityInp)
+
+        open_modal({
+            title: "Ошибка",
+            body: "Город не указан!",
+            controls: [{ type: "btn", text: "ОК" }]
         })
+        return;
     }
     if (phone == "" && document.getElementById("turn_on_phone").checked) {
         alert_element(phoneInp)
@@ -107,7 +112,9 @@ async function addVisitor() {
         })
         return;
     }
- 
+    // await fetch(`/api/add_sity?name=${name}`, {
+    //         method: "POST"
+    //     })
 
     await fetch(`/api/add_visitor?name=${name}&dr=${dr}&phone=${phone}&sex=${sex}`, {
         method: "POST"

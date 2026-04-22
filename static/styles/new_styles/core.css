@@ -4,15 +4,19 @@
 
     --accent: #b7f5c3;
     --accent-strong: #9affc4;
-    --accent-strong-gradient: radial-gradient(#9affc4, #e8fbe9);
-    --accent-visitor-strong-gradient: radial-gradient(#9affc4, #f7cfcf);
     --border-dark: #2f4f3f;
-    --alert-color: #c3cc47;
+    --alert-color-white: #f7cfcf;
+    --alert-color: #fd9caf;
+    --alert-color-hover: #ffbbc9;
     --border-light: #ccc;
+    --accent-strong-gradient: radial-gradient(#9affc4, #e8fbe9);
+    --accent-visitor-strong-gradient: radial-gradient(var(--alert-color-white),var( --alert-color));
+    --accent-visitor-strong-gradient-hover: radial-gradient(var(--alert-color-white),var( --alert-color-hover) );
 
     --text-main: #1f2d26;
 
     --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+
 
     --radius: 12px;
     --radius-small: 8px;
