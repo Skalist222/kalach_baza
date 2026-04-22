@@ -25,20 +25,19 @@ async function loadData() {
     let data = await res.json();
     await renderMap(data);
     await renderArrivalInfo(data);
-    renderVisitors(data.visitors, data.placements);
+    renderVisitors(data);
 }
 
 
 async function loadVisitors() {
-    const visitors = await get_table("visitors");
-    const placements = await get_table("placements");
-    renderVisitors(visitors, placements);
+    let data = {};
+    data.visitors = await get_table("visitors");
+    data.placements = await get_table("placements");
+    data.arrivals = await get_table("arrivals");
+    renderVisitors(data);
 }
 
-async function loadSities() {
-    const sities = await get_table("sities");
-    renderVisitors(sities);
-}
+
 
 // ------------------------------
 // Вспомогательная функция для возраста

@@ -115,7 +115,7 @@ function buttons_update_bed(visitor_id, bed_id, current_arrival_id) {
 }
 
 function buttons_reset_bed(placement, ariival_cost) {
-    console.log(ariival_cost)
+
     if (placement.money == 0) {
         return [
             { type: "number", id: "money", text: "Пожертвование", value: ariival_cost },
@@ -134,7 +134,7 @@ function buttons_reset_bed(placement, ariival_cost) {
 }
 
 function buttons_pay_bed(placement, money) {
-    console.log(money)
+
     if (placement.money == 0) {
         return [
             { type: "number", id: "money", text: "Пожертвование", value: money },

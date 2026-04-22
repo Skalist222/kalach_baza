@@ -54,11 +54,18 @@ async function renderArrivalInfo(data) {
 // ------------------------------
 // Render Visitors
 // ------------------------------
-async function renderVisitors(visitors, placements) {
+async function renderVisitors(data) {
+    const visitors = data.visitors
+    const arrivals = data.arrivals
+    const placements = data.placements
+
     const sort = document.getElementById("sortVisitors").value;
     const search = sort.toLowerCase();
     const list = document.getElementById("visitorList");
     const current_arrival = await current_arrival_id();
+    let arrival = arrivals.find(a => a.id == current_arrival)
+    const current_arrival_cost = arrival.cost
+
     list.innerHTML = "";
 
     visitors.forEach(v => {
@@ -115,7 +122,7 @@ async function renderVisitors(visitors, placements) {
         el.innerHTML = (repl(v.name));
         el.addEventListener('contextmenu', (e) => {
             document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
-            open_menu(e, visitor_menu(v, vPlacements.length > 0, current_arrival));
+            open_menu(e, visitor_menu(v, vPlacements.length > 0, current_arrival,current_arrival_cost));
         });
 
         const age = v.dr ? calculate_age_str(v.dr) : 0;
@@ -140,7 +147,7 @@ async function renderVisitors(visitors, placements) {
         age_el.classList = "info_tooltip"
         age_el.innerHTML = repl(age)
 
-        console.log(non_plase_el)
+
         visual_element.appendChild(non_plase_el)
         visual_element.appendChild(birth_day_el)
         visual_element.appendChild(phone_el)
@@ -296,8 +303,6 @@ async function renderBed(upContainer, downContainer, bed, data) {
 
     const cur_ar_id = await current_arrival_id();
     let arrival = data.arrivals.find(a => a.id == cur_ar_id)
-
-
     const current_arrival_cost = arrival.cost
     const placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == cur_ar_id);
 
@@ -392,7 +397,6 @@ async function renderBed(upContainer, downContainer, bed, data) {
 
     bedDiv.addEventListener('contextmenu', (e) => {
         document.querySelectorAll('.bed-overlay').forEach(o => {
-            console.log(o)
             o.remove();
         });
         open_menu(e, bed_menu(placement, current_arrival_cost));
