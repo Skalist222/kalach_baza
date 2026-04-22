@@ -45,15 +45,15 @@
 .busy-white {
     background: var(--accent-strong-gradient);
 }
-.non_place_visitor{
-    padding:8px;
+
+.non_place_visitor {
+    padding: 8px;
     position: relative;
-    background: var(--accent-strong-gradient);
-    border: 2px solid var(--alert-color-hover);
+    background: var(--accent-visitor-strong-gradient);
 }
 
 
-.non_place_info{
+.non_place_info {
     position: absolute;
     top: 0;
     right: 0;

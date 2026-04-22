@@ -10,8 +10,7 @@
     --alert-color-hover: #ffbbc9;
     --border-light: #ccc;
     --accent-strong-gradient: radial-gradient(#9affc4, #e8fbe9);
-    --accent-visitor-strong-gradient: radial-gradient(var(--alert-color-white),var( --alert-color));
-    --accent-visitor-strong-gradient-hover: radial-gradient(var(--alert-color-white),var( --alert-color-hover) );
+    --accent-visitor-strong-gradient: radial-gradient(#9affc4, #e8fbe9,var(--alert-color-white));
 
     --text-main: #1f2d26;
 
