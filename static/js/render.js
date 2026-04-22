@@ -124,38 +124,10 @@ async function renderVisitors(data) {
             document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
             open_menu(e, visitor_menu(v, vPlacements.length > 0, current_arrival,current_arrival_cost));
         });
-
         const age = v.dr ? calculate_age_str(v.dr) : 0;
-
-
-        let visual_element = document.createElement("div")
-
-        let non_plase_el = document.createElement("div")
-        let birth_day_el = document.createElement("div")
-        let phone_el = document.createElement("div")
-        let sex_el = document.createElement("div")
-        let age_el = document.createElement("div")
-
-        non_plase_el.classList = "info_tooltip"
-        non_plase_el.innerHtml = non_placemant ? "Оплатили без заселения" : ""
-        birth_day_el.classList = "info_tooltip"
-        birth_day_el.innerHTML = repl(v.dr)
-        phone_el.classList = "info_tooltip"
-        phone_el.innerHTML = repl(v.phone)
-        sex_el.classList = "info_tooltip"
-        sex_el.innerHTML = repl(v.sex ? "М" : "Ж")
-        age_el.classList = "info_tooltip"
-        age_el.innerHTML = repl(age)
-
-
-        visual_element.appendChild(non_plase_el)
-        visual_element.appendChild(birth_day_el)
-        visual_element.appendChild(phone_el)
-        visual_element.appendChild(sex_el)
-        visual_element.appendChild(age_el)
         
-
-        add_chase_tooltip(el, "", visual_element);
+        ve = tooltips_elements([non_placemant ? "Оплатил без заселения" : "", `Дата рождения: ${v.dr}`, `Телефон: ${v.phone}`, `Пол:`+repl(v.sex ? "М" : "Ж"), `Возраст: ${age}`])
+        add_chase_tooltip(el, "", ve);
 
         el.draggable = true;
         el.dataset.id = v.id;
@@ -169,7 +141,7 @@ async function renderVisitors(data) {
             if (non_placemant) {
                 const non_place_el = document.createElement("div");
                 non_place_el.classList = "non_place_info";
-                non_place_el.innerText = "Оплатили без заселения"
+                non_place_el.innerText = "Оплатил без заселения"
                 el.appendChild(non_place_el);
                 el.classList.add("non_place_visitor");
             }
