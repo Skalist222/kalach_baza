@@ -30,10 +30,8 @@ async function loadData() {
 
 
 async function loadVisitors() {
-    let data = {};
-    data.visitors = await get_table("visitors");
-    data.placements = await get_table("placements");
-    data.arrivals = await get_table("arrivals");
+    const res = await fetch("/api/map");
+    let data = await res.json();
     renderVisitors(data);
 }
 

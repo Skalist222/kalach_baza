@@ -50,6 +50,7 @@ def get_map():
     placements = db.query(Placement).all()
     visitors = db.query(Visitor).all()
     arrivals = db.query(Arrival).all()
+    sities = db.query(Sity).all()
     db.close()
     info = {
         "buildings": [{"id": b.id, "name": b.name} for b in buildings],
@@ -74,6 +75,7 @@ def get_map():
                 "dr": v.dr,
                 "phone": v.phone,
                 "sex": v.sex,
+                "sity": v.sity_id
             }
             for v in visitors
         ],
@@ -87,6 +89,13 @@ def get_map():
             }
             for a in arrivals
         ],
+        "sities":[
+            {
+                "id":s.id,
+                "name":s.name
+            }
+            for s in sities
+        ]
     }
     return info
     

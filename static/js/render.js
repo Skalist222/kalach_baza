@@ -55,24 +55,22 @@ async function renderArrivalInfo(data) {
 // Render Visitors
 // ------------------------------
 async function renderVisitors(data) {
-    const visitors = data.visitors
-    const arrivals = data.arrivals
-    const placements = data.placements
 
     const sort = document.getElementById("sortVisitors").value;
     const search = sort.toLowerCase();
     const list = document.getElementById("visitorList");
     const current_arrival = await current_arrival_id();
-    let arrival = arrivals.find(a => a.id == current_arrival)
+    let arrival = data.arrivals.find(a => a.id == current_arrival)
     const current_arrival_cost = arrival.cost
 
     list.innerHTML = "";
 
-    visitors.forEach(v => {
+    data.visitors.forEach(v => {
 
 
-        const vPlacements = placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
-
+        const vPlacements = data.placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
+        let sity = data.sities.find(s=>s.id ==v.sity)
+        if(!sity) sity = {name:""}
         if (document.getElementById("turn_on_selected_visitors").checked && vPlacements.length == 0) return;
 
         function repl(str) {
@@ -90,7 +88,15 @@ async function renderVisitors(data) {
             return "<div>" + cleanStr.replace(regex, "<span class='search_select'>$&</span>") + "</div>";
         }
 
-        const el = document.createElement("div");
+        const el = puzzle(
+            [
+                {text:repl(v.name),class:"visitor_name"},
+                {text:repl(sity.name),class:"visitor_sity"},
+            ]
+            ,"visitor greed column");
+        // el.className = "visitor";
+        // el.innerHTML = (repl(v.name));
+
         let non_placemant = false;
         const selBeds = [];
         document.querySelectorAll(`.bed`).forEach(
@@ -118,8 +124,6 @@ async function renderVisitors(data) {
 
 
 
-        el.className = "visitor";
-        el.innerHTML = (repl(v.name));
         el.addEventListener('contextmenu', (e) => {
             document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
             open_menu(e, visitor_menu(v, vPlacements.length > 0, current_arrival,current_arrival_cost));
