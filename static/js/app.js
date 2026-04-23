@@ -28,7 +28,8 @@ async function loadData() {
     await renderMap(data);
     await renderArrivalInfo(data);
     renderVisitors(data);
-    hide_loading();
+    await console.log("Загрузка данных завершена")
+    await hide_loading();
 }
 
 
