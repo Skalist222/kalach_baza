@@ -4,5 +4,5 @@ function show_loading() {
 }
 function hide_loading() {
     const loader = document.getElementById("global-loader");
-    loader.classList = "invisible"
+    loader.classList.add("invisible")
 }
