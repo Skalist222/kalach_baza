@@ -248,9 +248,9 @@ def move_place(visitor_id: int, old_bed_id: int,new_bed_id: int, arrival_id: int
 
 
 @app.post("/api/replace")
-def replace(bed_id: int,arrival_id: int):
+def replace(visitor_id:int,bed_id: int,arrival_id: int):
     db = Session()
-    db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id)).delete()
+    db.query(Placement).filter(and_(Placement.bed_id == bed_id,Placement.arrival_id == arrival_id,Placement.visitor_id == visitor_id)).delete()
     db.commit()
     db.close()
     return {"status": "ok"}

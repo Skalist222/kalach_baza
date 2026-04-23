@@ -42,9 +42,8 @@ async function move_place(visitor_id, old_bed_id, new_bed_id, arrival_id) {
     loadData()
 }
 
-
-async function replace(bed_id, arrival_id = 1) {
-    await fetch(`/api/replace?bed_id=${bed_id}&arrival_id=${arrival_id}`, {
+async function replace(visitor_id,bed_id, arrival_id = 1) {
+    await fetch(`/api/replace?bed_id=${bed_id}&arrival_id=${arrival_id}&visitor_id=${visitor_id}`, {
         method: "POST"
     })
     loadData()

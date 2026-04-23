@@ -11,17 +11,21 @@
     <script>
         new_styles();
     </script>
-    <!-- <link rel="stylesheet" href="/static/styles/style.css" />
-        <link rel="stylesheet" href="/static/styles/map_style.css" />
-        <link rel="stylesheet" href="/static/styles/modal.css" />
-        <link rel="stylesheet" href="/static/styles/search.css" />
-        <link rel="stylesheet" href="/static/styles/animation.css" />
-        <link rel="stylesheet" href="/static/styles/visitors.css" />
-        <link rel="stylesheet" href="/static/styles/arrival_info.css" />
-        <link rel="stylesheet" href="/static/styles/context_menu.css" /> -->
+    <link rel="stylesheet" href="/static/styles/new_styles/load.css" />
+
 </head>
 
 <body>
+    <div id="global-loader" class="global-loader invisible">
+        <div class="ichthys-loader">
+            <svg class="ichthys-svg" viewBox="0 0 240 120">
+                <path class="ichthys-path body-top" d="M30 60 Q105 20 180 60" />
+                <path class="ichthys-path body-bottom" d="M30 60 Q105 100 180 60" />
+                <path class="ichthys-path tail-top" d="M160 60 L200 35" />
+                <path class="ichthys-path tail-bottom" d="M160 60 L200 85" />
+            </svg>
+        </div>
+    </div>
     <div id="contextMenu" class="context-menu"></div>
     <div id="tooltip" class="invisible">
         <div id="visual_element"></div>
@@ -94,19 +98,22 @@
                     <div class="greed column">
                         <div class="left-column f1">д/р:</div>
                         <input class="rigth-column f6" id="visitorDate" type="date" />
-                        <input class="ch_b f1" type="checkbox" id="turn_on_birth" title="Обязательность даты рождения" checked onchange="loadData()" />
+                        <input class="ch_b f1" type="checkbox" id="turn_on_birth" title="Обязательность даты рождения"
+                            checked onchange="loadData()" />
                     </div>
                     <div class="greed column">
-                        <select class="f7" id="visitorSity" placeholder="Город" type="sity"></select> 
-                        <input class="ch_b f1" type="checkbox" id="turn_on_sity" title="Обязательность города" checked onchange="loadData()" />
+                        <select class="f7" id="visitorSity" placeholder="Город" type="sity"></select>
+                        <input class="ch_b f1" type="checkbox" id="turn_on_sity" title="Обязательность города" checked
+                            onchange="loadData()" />
                     </div>
                     <div class="greed column">
                         <input class="f7" id="visitorPhone" placeholder="Телефон" type="phone" />
-                        <input class="ch_b f1" type="checkbox" id="turn_on_phone" title="Обязательность телефона" checked onchange="loadData()" />
+                        <input class="ch_b f1" type="checkbox" id="turn_on_phone" title="Обязательность телефона"
+                            checked onchange="loadData()" />
                     </div>
-                    
 
-                    
+
+
                     <div><input type="radio" name="sex" id="sexMen" checked />М <input type="radio" name="sex"
                             id="sexWomen" />Ж</div>
                     <button onclick="addVisitor()">Добавить</button>
@@ -146,15 +153,16 @@
             </div>
         </div>
     </div>
-
+    <script src="/static/js/load.js"></script>
     <script src="/static/js/templates_cache.js"></script>
     <script src="/static/js/tooltip_visual_elements.js"></script>
+    <script src="/static/js/modal.js"></script>
     <script src="/static/js/help.js"></script>
     <script src="/static/js/context_menu.js"></script>
     <script src="/static/js/lists.js"></script>
     <script src="/static/js/api.js"></script>
     <script src="/static/js/render.js"></script>
-    <script src="/static/js/modal.js"></script>
+
     <script src="/static/js/app.js"></script>
 </body>
 

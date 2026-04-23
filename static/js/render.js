@@ -39,7 +39,7 @@ async function renderArrivalInfo(data) {
     const startEl = document.getElementById("current_arrival_start");
     const stopEl = document.getElementById("current_arrival_stop");
 
-    cur_ar_id = await current_arrival_id()
+    cur_ar_id = current_arrival_id()
 
     if (!cur_ar_id) {
         return;
@@ -59,7 +59,7 @@ async function renderVisitors(data) {
     const sort = document.getElementById("sortVisitors").value;
     const search = sort.toLowerCase();
     const list = document.getElementById("visitorList");
-    const current_arrival = await current_arrival_id();
+    const current_arrival = current_arrival_id();
     let arrival = data.arrivals.find(a => a.id == current_arrival)
     const current_arrival_cost = arrival.cost
 
@@ -126,7 +126,7 @@ async function renderVisitors(data) {
 
         el.addEventListener('contextmenu', (e) => {
             document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
-            open_menu(e, visitor_menu(v, vPlacements.length > 0, current_arrival,current_arrival_cost));
+            open_menu(e, visitor_menu(v, vPlacements, current_arrival,current_arrival_cost));
         });
         const age = v.dr ? calculate_age_str(v.dr) : 0;
         
@@ -277,7 +277,7 @@ async function renderBed(upContainer, downContainer, bed, data) {
     let bedDiv = template.querySelector(".bed");
 
 
-    const cur_ar_id = await current_arrival_id();
+    const cur_ar_id = current_arrival_id();
     let arrival = data.arrivals.find(a => a.id == cur_ar_id)
     const current_arrival_cost = arrival.cost
     const placement = data.placements.find(p => p.bed_id == bed.id && p.arrival_id == cur_ar_id);

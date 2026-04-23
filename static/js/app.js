@@ -11,21 +11,24 @@ document.getElementById("stop_arrival").value = today_string()
 
 
 async function fillingComponentsData() {
+
     const res = await fetch("/api/map");
     const data = await res.json();
     const sities = await get_table("sities")
-    fillArrivals(data.arrivals);
+    fillArrivals(data);
     fillSities(sities);
 }
 // ------------------------------
 // Загрузка данных
 // ------------------------------
 async function loadData() {
+    show_loading();
     const res = await fetch("/api/map");
     let data = await res.json();
     await renderMap(data);
     await renderArrivalInfo(data);
     renderVisitors(data);
+    hide_loading();
 }
 
 
@@ -62,7 +65,7 @@ function calculate_age_str(birthDateString) {
 // Размещение посетителя (универсальная модалка)
 // ------------------------------
 async function choosePlacement(data, visitor_id, bed_id, event_type = null) {
-    const cur_ar_id = await current_arrival_id();
+    const cur_ar_id = current_arrival_id();
     if (!cur_ar_id) {
         alert("Сначала выберите заезд");
         return;
@@ -97,5 +100,12 @@ async function choosePlacement(data, visitor_id, bed_id, event_type = null) {
 // ------------------------------
 // Автозапуск
 // ------------------------------
-fillingComponentsData();
-loadData();
+
+async function initApp()
+{
+    await fillingComponentsData();
+    await loadData();
+}
+document.addEventListener("DOMContentLoaded", async () => {
+    await initApp();
+});

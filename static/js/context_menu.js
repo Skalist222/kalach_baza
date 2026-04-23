@@ -30,8 +30,8 @@ function open_menu(e, menuItems) {
 		menu.style.display = "none";
 	};
 }
-function visitor_menu(visitor, hasPlacements,current_arrival,arrival_cost) {
-
+function visitor_menu(visitor, placements, current_arrival, arrival_cost) {
+	const hasPlacements = placements.length > 0
 	menu = [
 		{
 			"text": "Редактировать", action: () => {
@@ -50,10 +50,18 @@ function visitor_menu(visitor, hasPlacements,current_arrival,arrival_cost) {
 		});
 		menu.push({
 			"text": "Без заселения", action: () => {
-				open_modal({ "title": "Взнос без заселения", "body": "Точно посетитель " + visitor.name + " не будет заселяться?", "controls": buttons_pay_without_bed(visitor,current_arrival,arrival_cost) });
+				open_modal({ "title": "Взнос без заселения", "body": "Точно посетитель " + visitor.name + " не будет заселяться?", "controls": buttons_pay_without_bed(visitor, current_arrival, arrival_cost) });
 				console.log("нажата кнопка удалить")
 			}
 		});
+	}
+	else {
+		if (placements.find(el => el.arrival_id == current_arrival && el.bed_id == -1)) {
+			menu.push({
+				"text": "Вернуть оплату", action: () => { replace(placements[0].visitor_id,-1,current_arrival) }
+			});
+		}
+		console.log(placements)
 	}
 	return menu
 }
@@ -81,8 +89,23 @@ function bed_menu(placement, arrival_cost) {
 	menu.push(
 		{
 			"text": "Освободить", action: () => {
-				replace(placement.bed_id, placement.arrival_id)
+				replace(placement.visitor_id,placement.bed_id, placement.arrival_id)
 			}
 		})
 	return menu
+}
+
+function arrival_menu(current_arrival, placements) {
+	menu = []
+
+	const current_placements = placements.filter(el => el.arrival_id == current_arrival)
+	if (current_placements.length == 0) {
+		menu.push({
+			"text": "Удалить", action: () => {
+				console.log("Нажата кнопка удаления заезда")
+			}
+		})
+	}
+	return menu
+
 }

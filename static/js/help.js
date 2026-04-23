@@ -2,7 +2,7 @@ let sortVisitorElement = document.getElementById("sortVisitors")
 let debounceTimer;
 let bedTemplate, modalTemplate;
 
-async function current_arrival_id() {
+function current_arrival_id() {
     const current_arrival = document.getElementById("currentArrival");
     const id = current_arrival.value;
     if (id) return id;

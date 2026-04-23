@@ -1,10 +1,17 @@
 let arrivalSelectInitialized = false;
-async function fillArrivals(arrivals) {
+async function fillArrivals(data) {
     const select = document.getElementById("currentArrival");
     const wrapper = document.getElementById("arrivalSelectWrapper");
     const trigger = wrapper.querySelector(".custom-select-trigger");
     const optionsContainer = wrapper.querySelector(".custom-options");
-    let current_selection = select.value;
+
+
+
+
+
+    select.innerHTML = "";
+    trigger.innerText = ""
+    optionsContainer.innerHTML = "";
 
     trigger.onclick = () => {
         if (optionsContainer.classList.contains("invisible")) {
@@ -14,12 +21,7 @@ async function fillArrivals(arrivals) {
         }
     }
 
-    select.innerHTML = "";
-    trigger.innerText = ""
-    optionsContainer.innerHTML = "";
-    
-
-    arrivals.forEach(a => {
+    data.arrivals.forEach(a => {
         // --- обычный select
         const opt = document.createElement("option");
         opt.value = a.id;
@@ -45,13 +47,17 @@ async function fillArrivals(arrivals) {
 
 
 
-    const selected = arrivals.find(a => a.id == select.value);
+    const selected = data.arrivals.find(a => a.id == select.value);
     if (selected) {
         trigger.innerText = selected.name;
 
         const selectedOption = optionsContainer.querySelector(`[data-value="${selected.id}"]`);
         if (selectedOption) selectedOption.classList.add("selected");
     }
+    trigger.addEventListener('contextmenu', (e) => {
+        const cur_arr_id = current_arrival_id();
+        open_menu(e, arrival_menu(cur_arr_id,data.placements));
+    });
 }
 function fillSities(sities) {
     const select = document.getElementById("visitorSity");
@@ -65,7 +71,7 @@ function fillSities(sities) {
     if (existingInput) existingInput.remove();
     const existingDatalist = document.getElementById("cityDatalist");
     if (existingDatalist) existingDatalist.remove();
-    
+
     // Создаём input с автодополнением
     const input = document.createElement("input");
     input.classList.add("f7");

@@ -1,4 +1,5 @@
 // templates_cache.js
+
 const TemplateCache = (() => {
 	const cache = {};
 
