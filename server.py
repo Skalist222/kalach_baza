@@ -266,6 +266,17 @@ def delete_visitor(visitor_id: int):
     db.close()
     return {"status": "ok"}
 
+@app.post("/api/delete_arrival")
+def delete_arrival(arrival_id: int):
+    db = Session()
+    visitor = db.query(Arrival).filter(Arrival.id == arrival_id).first()
+    if not visitor:
+        return {"status": "error", "error": "visitor not found"}
+    db.delete(visitor)
+    db.commit()
+    db.close()
+    return {"status": "ok"}
+
 @app.post("/api/add_room")
 def add_room(building_id: int, number: str):
     db = Session()

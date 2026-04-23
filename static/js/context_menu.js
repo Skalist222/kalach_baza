@@ -95,14 +95,15 @@ function bed_menu(placement, arrival_cost) {
 	return menu
 }
 
-function arrival_menu(current_arrival, placements) {
+function arrival_menu(arrival, placements) {
 	menu = []
+	const current_placements = placements.filter(el => el.arrival_id == arrival.id)
+	console.log(current_placements)
 
-	const current_placements = placements.filter(el => el.arrival_id == current_arrival)
 	if (current_placements.length == 0) {
 		menu.push({
 			"text": "Удалить", action: () => {
-				console.log("Нажата кнопка удаления заезда")
+				open_modal({ "title": "Удаление заезда", "body": "Вы уверены, что хотите удалить заезд (" + arrival.name + ")?", "controls": modal_delete_arrival(arrival) });
 			}
 		})
 	}

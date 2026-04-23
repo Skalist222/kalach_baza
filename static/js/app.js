@@ -21,6 +21,10 @@ async function fillingComponentsData() {
 // ------------------------------
 // Загрузка данных
 // ------------------------------
+
+function reload_site(){
+    location.replace(location.href);
+}
 async function loadData() {
     show_loading();
     const res = await fetch("/api/map");

@@ -56,7 +56,8 @@ async function fillArrivals(data) {
     }
     trigger.addEventListener('contextmenu', (e) => {
         const cur_arr_id = current_arrival_id();
-        open_menu(e, arrival_menu(cur_arr_id,data.placements));
+        const arrival = data.arrivals.find(a=>a.id == cur_arr_id);
+        open_menu(e, arrival_menu(arrival,data.placements));
     });
 }
 function fillSities(sities) {

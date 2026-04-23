@@ -30,6 +30,12 @@ async function delete_visitor(visitor_id) {
     });
     loadData();
 }
+async function delete_arrival(arrival_id) {
+    await fetch(`/api/delete_arrival?arrival_id=${encodeURIComponent(String(arrival_id).trim())}`, {
+        method: "POST"
+    });
+}
+
 
 
 

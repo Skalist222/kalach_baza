@@ -204,6 +204,18 @@ function modal_delete_visitor(visitor) {
         { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
     ];
 }
+function modal_delete_arrival(arrival) {
+    return [
+        {
+            type: "btn", id: "btnSave", text: "Удалить", action: () => {
+                delete_arrival(arrival.id);
+                reload_site();
+            }
+        },
+        { type: "btn", id: "btnCancel", text: "Отмена", action: () => { } }
+    ];
+}
+
 
 function buttons_pay_without_bed(visitor, current_arrival_id, money) {
     return [
