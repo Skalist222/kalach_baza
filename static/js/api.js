@@ -48,7 +48,7 @@ async function move_place(visitor_id, old_bed_id, new_bed_id, arrival_id) {
     loadData()
 }
 
-async function replace(visitor_id,bed_id, arrival_id = 1) {
+async function replace(visitor_id, bed_id, arrival_id = 1) {
     await fetch(`/api/replace?bed_id=${bed_id}&arrival_id=${arrival_id}&visitor_id=${visitor_id}`, {
         method: "POST"
     })
@@ -72,9 +72,9 @@ async function addVisitor() {
 
     let sex = document.getElementById("sexMen").checked
 
-    let name = nameInp.value
-    let dr = dateInp.value
-    let phone = phoneInp.value
+    let name = nameInp.value == "" ? "Null" : nameInp.value
+    let dr = dateInp.value == "" ? "Null" : dateInp.value
+    let phone = phoneInp.value == "" ? "Null" : phoneInp.value
 
     if (name == "") {
         alert_element(nameInp)
