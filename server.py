@@ -156,6 +156,17 @@ def add_visitor(name: str,dr:datetime.date,phone:str,sex:boolean):
     return {"status": "ok"}
 
 
+
+@app.post("/api/add_sity")
+def add_sity(name: str):
+    db = Session()
+    v = Sity(name=name)
+    db.add(v)
+    db.commit()
+    db.close()
+    return {"status": "ok"}
+
+
 @app.post("/api/add_sity")
 def add_visitor(name: str):
     db = Session()

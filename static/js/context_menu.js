@@ -30,12 +30,12 @@ function open_menu(e, menuItems) {
 		menu.style.display = "none";
 	};
 }
-function visitor_menu(visitor, placements, current_arrival, arrival_cost) {
+function visitor_menu(visitor, placements, current_arrival, arrival_cost,sities) {
 	const hasPlacements = placements.length > 0
 	menu = [
 		{
 			"text": "Редактировать", action: () => {
-				open_modal({ "title": "Редактор посетителя", "body": "", "controls": modal_redact_visitor(visitor), "in_lines": true });
+				open_modal({ "title": "Редактор посетителя", "body": "", "controls": modal_redact_visitor(visitor,sities), "in_lines": true });
 			}
 		}
 	]
@@ -61,7 +61,6 @@ function visitor_menu(visitor, placements, current_arrival, arrival_cost) {
 				"text": "Вернуть оплату", action: () => { replace(placements[0].visitor_id,-1,current_arrival) }
 			});
 		}
-		console.log(placements)
 	}
 	return menu
 }
@@ -98,7 +97,6 @@ function bed_menu(placement, arrival_cost) {
 function arrival_menu(arrival, placements) {
 	menu = []
 	const current_placements = placements.filter(el => el.arrival_id == arrival.id)
-	console.log(current_placements)
 
 	if (current_placements.length == 0) {
 		menu.push({

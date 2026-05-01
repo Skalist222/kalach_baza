@@ -71,7 +71,11 @@ async function renderVisitors(data) {
         const vPlacements = data.placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
         let sity = data.sities.find(s=>s.id ==v.sity)
         if(!sity) sity = {name:""}
-        if (document.getElementById("turn_on_selected_visitors").checked && vPlacements.length == 0) return;
+        const sel = document.getElementById("visitors_types");
+        if(sel.value == 2 && vPlacements.length == 0)  return;
+        if(sel.value == 3 && vPlacements.length > 0) return;
+
+        // if (document.getElementById("turn_on_selected_visitors").checked && vPlacements.length == 0) return;
 
         function repl(str) {
             const cleanStr = String(str);
@@ -126,7 +130,7 @@ async function renderVisitors(data) {
 
         el.addEventListener('contextmenu', (e) => {
             document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
-            open_menu(e, visitor_menu(v, vPlacements, current_arrival,current_arrival_cost));
+            open_menu(e, visitor_menu(v, vPlacements, current_arrival,current_arrival_cost,data.sities));
         });
         const age = v.dr ? calculate_age_str(v.dr) : 0;
         

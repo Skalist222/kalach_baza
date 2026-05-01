@@ -120,10 +120,11 @@
                 </div>
                 <div class="greend-visitors-container">
                     <input id="sortVisitors" placeholder="Сортировка" />
-                    <label id="settings" class="greed column box adder collapseble">
-                        <input type="checkbox" id="turn_on_selected_visitors" onchange="loadData()" />
-                        <span>Заселённые</span>
-                    </label>
+                    <select class="custom-select-trigger" name="visitors_types" id="visitors_types" onchange="loadVisitors()">
+                        <option value="1">Все</option>
+                        <option value="2">Занятые</option>
+                        <option value="3">Не занятые</option>
+                    </select>
                     <div id="visitorList"></div>
                 </div>
             </div>

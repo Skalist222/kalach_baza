@@ -46,6 +46,16 @@ const modalElementRenderers = {
         input.placeholder = text || "";
         input.value = value
         return input;
+    },
+    sity:({id,text,value,array})=>{
+        const input = document.createElement("select");
+        array.forEach(el=>{
+            const opt = document.createElement("option")
+            opt.value = el.id
+            opt.innerText = el.name 
+            input.appendChild(opt)
+        })
+        return input;
     }
 };
 let mouseDownInside = false;
@@ -174,11 +184,12 @@ function buttons_move_bed(new_bed, placement) {
     ]
 }
 
-function modal_redact_visitor(visitor) {
+function modal_redact_visitor(visitor,sities) {
     return [
         { type: "input", id: "redact_name_visitor", text: "Имя", value: visitor.name },
         { type: "date", id: "redact_dr", text: "Дата рождения (ДД.ММ.ГГГГ)", value: visitor.dr },
         { type: "input", id: "redact_phone", text: "Телефон", value: visitor.phone },
+        { type: "sity", id: "redact_sity", text: "Город", value: visitor.sity,array:sities},
         {
             type: "btn", id: "btnSave", text: "Сохранить", action: () => {
                 update_visitor(

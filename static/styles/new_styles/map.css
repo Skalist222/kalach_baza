@@ -1,14 +1,14 @@
 #map {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 3px;
 }
 
 .building {
     background: white;
     border-radius: var(--radius);
     border: 2px solid var(--border-dark);
-    padding: 10px 10px 3px;
+    padding: 3px 10px;
     box-shadow: var(--shadow-soft);
 }
 

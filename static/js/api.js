@@ -69,6 +69,13 @@ async function addVisitor() {
 
     let selected_sity = sities.filter((sity) => sity.name.toLowerCase() == sityInp.value.toLowerCase())
     let selected_sity_id = selected_sity.length == 0 ? null : selected_sity[0].id
+    if(selected_sity_id == null)  
+    {
+        await addSity(namesity)
+    }
+    selected_sity_id = await get_sity_by_name(namesity).id
+
+
 
     let sex = document.getElementById("sexMen").checked
 
@@ -128,7 +135,8 @@ async function addVisitor() {
     nameInp.value = ""
     dateInp.value = ""
     phoneInp.value = ""
-
+    sityInp.value = ""
+    fillSities(await get_table("sities"))
     loadData()
 }
 
@@ -277,4 +285,15 @@ async function addBed() {
     })
 
     loadData()
+}
+
+async function addSity(sity_name){
+    console.log("Добавляем новый город",sity_name)
+    await fetch(`/api/add_sity?name=${sity_name}`, {
+        method: "POST"
+    })
+}
+async function get_sity_by_name(sity_name){
+    const sities = await get_table("sities")
+    return sities.find(el=>el.name == sity_name)
 }
