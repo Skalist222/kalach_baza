@@ -1,4 +1,7 @@
 let arrivalSelectInitialized = false;
+let free_buildings = [];
+let free_rooms = [];
+let free_beds = [];
 async function fillArrivals(data) {
     const select = document.getElementById("currentArrival");
     const wrapper = document.getElementById("arrivalSelectWrapper");
@@ -56,8 +59,8 @@ async function fillArrivals(data) {
     }
     trigger.addEventListener('contextmenu', (e) => {
         const cur_arr_id = current_arrival_id();
-        const arrival = data.arrivals.find(a=>a.id == cur_arr_id);
-        open_menu(e, arrival_menu(arrival,data.placements));
+        const arrival = data.arrivals.find(a => a.id == cur_arr_id);
+        open_menu(e, arrival_menu(arrival, data.placements));
     });
 }
 function fillSities(sities) {
@@ -133,3 +136,72 @@ function fillSities(sities) {
         input.value = select.options[select.selectedIndex]?.text || "";
     }
 }
+async function fillPrePlace_info(data) {
+
+    const cur_arr_id = await current_arrival_id();
+    const cur_placements = data.placements.filter(p => p.arrival_id == cur_arr_id);
+
+    free_rooms = []
+    free_buildings = []
+    free_beds = data.beds.filter(bed =>
+        !cur_placements.find(p => p.bed_id == bed.id)
+    )
+
+
+    free_beds.forEach(b => {
+        const room = data.rooms.find(r => r.id == b.room_id)
+        const building = data.buildings.find(bu => bu.id == room.building_id)
+
+        if (free_rooms.find(r => r.id == room.id) == null) free_rooms.push(room);
+        if (free_buildings.find(b => b.id == building.id) == null) free_buildings.push(building);
+    })
+
+    fill_prePlace_Buildings();
+    
+    
+}
+
+function fill_prePlace_Buildings() {
+    const build_new_visitor = document.getElementById("build_new_visitor");
+    free_buildings.forEach(b => {
+        const opt = document.createElement("option")
+        opt.value = b.id
+        opt.innerText = b.name
+        build_new_visitor.appendChild(opt)
+    })
+    fill_prePlace_rooms();
+}
+function fill_prePlace_rooms() {
+    const build_new_visitor = document.getElementById("build_new_visitor");
+    const room_new_visitor = document.getElementById("room_new_visitor");
+    room_new_visitor.innerHTML = "";
+    free_rooms.forEach(room => {
+
+        if (room.building_id == build_new_visitor.value) {
+            const opt = document.createElement("option")
+            opt.value = room.id
+            opt.innerText = room.number
+            room_new_visitor.appendChild(opt)
+        }
+    });
+    fill_prePlace_beds();
+}
+function fill_prePlace_beds() {
+    const room_new_visitor = document.getElementById("room_new_visitor");
+    const bed_new_visitor = document.getElementById("bed_new_visitor");
+    bed_new_visitor.innerHTML = "";
+    free_beds.forEach(bed => {
+
+        if (bed.room_id == room_new_visitor.value) {
+            const opt = document.createElement("option")
+            opt.value = bed.id
+            opt.innerText = bed.id + " (" +
+                (bed.position == "lower" ? "Нижняя" :
+                    (bed.position == "upper" ? "Верхняя" : (
+                        bed.position == "bigger-left" ? "Двойная-лев" :"Двойная-прав"
+                )))+")";
+            bed_new_visitor.appendChild(opt)
+        }
+    });
+}
+

@@ -99,32 +99,74 @@
                         <div class="left-column f1">д/р:</div>
                         <input class="rigth-column f6" id="visitorDate" type="date" />
                         <input class="ch_b f1" type="checkbox" id="turn_on_birth" title="Обязательность даты рождения"
-                            checked onchange="loadData()" />
+                            checked onchange="" />
                     </div>
                     <div class="greed column">
                         <select class="f7" id="visitorSity" placeholder="Город" type="sity"></select>
                         <input class="ch_b f1" type="checkbox" id="turn_on_sity" title="Обязательность города" checked
-                            onchange="loadData()" />
+                            onchange="" />
                     </div>
                     <div class="greed column">
                         <input class="f7" id="visitorPhone" placeholder="Телефон" type="phone" />
                         <input class="ch_b f1" type="checkbox" id="turn_on_phone" title="Обязательность телефона"
-                            checked onchange="loadData()" />
+                            checked onchange="" />
+                    </div>
+                    <div class="greed column">
+                        <div class="f1 box adder">
+                            <input type="radio" name="sex" id="sexMen" checked />М
+                            <input type="radio" name="sex" id="sexWomen" />Ж
+                        </div>
+
+
+
+                    </div>
+                    <div class="greed colum">
+                        <div class="f7">Заселить</div>
+                        <input class="ch_b f1" type="checkbox" id="on_off_preplace" title="Включить предзаселение"
+                            checked onchange="preplace_on_off()" />
+                    </div>
+                    <div id="preplace" class="box adder">
+
+
+                        <div class="greed column">
+                            Корпус
+                            <select name="build_new_visitor" id="build_new_visitor" class="f1"
+                                onchange="fill_prePlace_rooms()"></select>
+                        </div>
+                        <div class="greed column">
+                            Комната
+                            <select name="room_new_visitor" id="room_new_visitor" class="f1"
+                                onchange="fill_prePlace_beds()"></select>
+                        </div>
+                        <div class="greed column">
+                            Койка
+                            <select name="bed_new_visitor" id="bed_new_visitor" class="f1"></select>
+                        </div>
+                        <div class="greed column">
+                            Пожертвование
+                            <input type="number" name="money_new_visitor" id="money_new_visitor" class="f1"
+                                step="500"></select>
+                        </div>
+
+
+                        <!-- bed_new_visitor -->
+
                     </div>
 
 
-
-                    <div><input type="radio" name="sex" id="sexMen" checked />М <input type="radio" name="sex"
-                            id="sexWomen" />Ж</div>
                     <button onclick="addVisitor()">Добавить</button>
                 </div>
                 <div class="greend-visitors-container">
-                    <input id="sortVisitors" placeholder="Сортировка" />
-                    <select class="custom-select-trigger" name="visitors_types" id="visitors_types" onchange="loadVisitors()">
-                        <option value="1">Все</option>
-                        <option value="2">Занятые</option>
-                        <option value="3">Не занятые</option>
-                    </select>
+                    <div class="config_search_visitors greed row no_gap">
+                        <input id="sortVisitors" placeholder="Сортировка" />
+                        <select class="custom-select-trigger" name="visitors_types" id="visitors_types"
+                            onchange="loadVisitors()">
+                            <option value="1">Все</option>
+                            <option value="2">Занятые</option>
+                            <option value="3">Не занятые</option>
+                        </select>
+                    </div>
+
                     <div id="visitorList"></div>
                 </div>
             </div>
@@ -148,6 +190,10 @@
                         <div class="arrival_info" id="current_arrival_cost"></div>
                         <div class="arrival_info" id="current_arrival_start"></div>
                         <div class="arrival_info" id="current_arrival_stop"></div>
+                        <div class="arrival_info_beds" id="current_busy"></div>
+                        <div class="arrival_info_beds" id="current_not_busy"></div>
+
+
                     </div>
                 </div>
                 <div id="map"></div>

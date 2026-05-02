@@ -154,7 +154,9 @@ button:hover {
         opacity 0.3s ease;
     opacity: 1;
 }
-
+.ofh{
+    overflow: hidden;
+}
 .collapsed {
     max-height: 0;
     opacity: 0;
@@ -223,3 +225,12 @@ button:hover {
 .w100{
     width:100;
 }
+#preplace{
+    max-height: 350px;
+}
+.preplace_off{
+    color:#ccc;
+}
+/* .preplace_on{
+
+}  */

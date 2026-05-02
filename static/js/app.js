@@ -31,6 +31,7 @@ async function loadData() {
     let data = await res.json();
     await renderMap(data);
     await renderArrivalInfo(data);
+    await fillPrePlace_info(data);
     renderVisitors(data);
     hide_loading();
 }

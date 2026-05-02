@@ -14,11 +14,12 @@ async function update_place(visitor_id, bed_id, status, money, arrival_id) {
     loadData()
 }
 
-async function update_visitor(visitor_id, name, dr, phone) {
+async function update_visitor(visitor_id, name, dr, phone, sity_id) {
     await fetch(`/api/update_visitor?visitor_id=${encodeURIComponent(String(visitor_id).trim())}
     &name=${encodeURIComponent(String(name).trim())}
     &dr=${encodeURIComponent(String(dr).trim())}
-    &phone=${encodeURIComponent(String(phone).trim())}`, {
+    &phone=${encodeURIComponent(String(phone).trim())}
+    &sity_id=${encodeURIComponent(String(sity_id).trim())}`, {
         method: "POST"
     });
     loadData();
@@ -62,75 +63,85 @@ async function addVisitor() {
     let dateInp = document.getElementById("visitorDate")
     let phoneInp = document.getElementById("visitorPhone")
     let sityInp = document.getElementById("visitorSity")
-
+    let sityTextInp = document.getElementById("visitorSityInput")
+    const on_preplase = document.getElementById("on_off_preplace").checked
     let sities = await get_table("sities")
+    const arrival_id = await current_arrival_id()
 
-    let namesity = String(sityInp.value).charAt(0).toUpperCase() + String(sityInp.value.toLowerCase()).slice(1);
+    let sex = document.getElementById("sexMen").checked
+    let name = nameInp.value == "" ? null : nameInp.value.split(" ").map(n => String(n).charAt(0).toUpperCase() + String(n.toLowerCase()).slice(1)).join(" ")
+    let dr = dateInp.value == "" ? "1900-01-01" : dateInp.value
+    let phone = phoneInp.value == "" ? null : phoneInp.value
+    let sity = sityInp.value == "" ? null : String(sityInp.value).charAt(0).toUpperCase() + String(sityInp.value.toLowerCase()).slice(1)
+
+    const on_dr = document.getElementById("turn_on_birth").checked
+    const on_phone = document.getElementById("turn_on_phone").checked
+    const on_sity = document.getElementById("turn_on_sity").checked
 
     let selected_sity = sities.filter((sity) => sity.name.toLowerCase() == sityInp.value.toLowerCase())
     let selected_sity_id = selected_sity.length == 0 ? null : selected_sity[0].id
-    if(selected_sity_id == null)  
-    {
-        await addSity(namesity)
+    if (selected_sity_id == null) {
+        await addSity(sity)
+        sities = await get_table("sities")
+        const new_sity = sities.find(s => s.name == sity)
+        selected_sity_id = new_sity.id
     }
-    selected_sity_id = await get_sity_by_name(namesity).id
 
-
-
-    let sex = document.getElementById("sexMen").checked
-
-    let name = nameInp.value == "" ? "Null" : nameInp.value
-    let dr = dateInp.value == "" ? "Null" : dateInp.value
-    let phone = phoneInp.value == "" ? "Null" : phoneInp.value
-
-    if (name == "") {
+    if (!name || name === null || name == "" || name == "Null") {
         alert_element(nameInp)
-
         open_modal({
             title: "Ошибка",
-            body: "Для начала введите имя!",
+            body: "Сначала укажите имя не указана!",
             controls: [{ type: "btn", text: "ОК" }]
         })
         return;
     }
 
-    if (dr == "" && document.getElementById("turn_on_birth").checked) {
-        alert_element(dateInp)
-
-        open_modal({
-            title: "Ошибка",
-            body: "Дата рождения не указана!",
-            controls: [{ type: "btn", text: "ОК" }]
-        })
-        return;
+    if (on_dr) {
+        if (dr == "1900-01-01") {
+            alert_element(dateInp)
+            open_modal({
+                title: "Ошибка",
+                body: "Дата рождения не указана!",
+                controls: [{ type: "btn", text: "ОК" }]
+            })
+            return;
+        }
     }
-    if (selected_sity_id == "" && document.getElementById("turn_on_sity").checked) {
-        alert_element(sityInp)
 
-        open_modal({
-            title: "Ошибка",
-            body: "Город не указан!",
-            controls: [{ type: "btn", text: "ОК" }]
-        })
-        return;
+    if (on_sity) {
+        if (!sity || sity === null || sity == "" || sity == "Null") {
+            alert_element(sityTextInp)
+            open_modal({
+                title: "Ошибка",
+                body: "Введите название Города!",
+                controls: [{ type: "btn", text: "ОК" }]
+            })
+            return;
+        }
     }
-    if (phone == "" && document.getElementById("turn_on_phone").checked) {
-        alert_element(phoneInp)
-
-        open_modal({
-            title: "Ошибка",
-            body: "Номер телефона не указан!",
-            controls: [{ type: "btn", text: "ОК" }]
-        })
-        return;
+    if (on_phone) {
+        if (!phone || phone === null || phone == "" || phone == "Null") {
+            alert_element(phoneInp)
+            open_modal({
+                title: "Ошибка",
+                body: "Номер телефона является обязательным!",
+                controls: [{ type: "btn", text: "ОК" }]
+            })
+            return;
+        }
     }
-    // await fetch(`/api/add_sity?name=${name}`, {
-    //         method: "POST"
-    //     })
 
-    await fetch(`/api/add_visitor?name=${name}&dr=${dr}&phone=${phone}&sex=${sex}`, {
+    await fetch(`/api/add_visitor?name=${name}&dr=${dr}&phone=${phone}&sex=${sex}&sity_id=${selected_sity_id}`, {
         method: "POST"
     })
+    const new_visitor = await get_last("visitors")
+    if (on_preplase) {
+        const bed_new_visitor = document.getElementById("bed_new_visitor")
+        const bed_id = bed_new_visitor.value
+        const money = document.getElementById("money_new_visitor").value
+        await place(new_visitor.id, bed_id, 'busy', arrival_id, money)
+    }
 
     nameInp.value = ""
     dateInp.value = ""
@@ -142,6 +153,7 @@ async function addVisitor() {
 
 // Добавить заезд
 async function addArrival(id_button_close = null) {
+
     const buttonClose = document.getElementById(id_button_close)
     const NameEl = document.getElementById("arrivalName")
     const costEl = document.getElementById("arrivalCost")
@@ -154,6 +166,9 @@ async function addArrival(id_button_close = null) {
     let cost = costEl.value
     let start = startEl.value
     let stop = stopEl.value
+
+    // Автоматическое предрасселение
+
 
 
     if (cost == "") cost = 0
@@ -287,13 +302,13 @@ async function addBed() {
     loadData()
 }
 
-async function addSity(sity_name){
-    console.log("Добавляем новый город",sity_name)
+async function addSity(sity_name) {
+    console.log("Добавляем новый город", sity_name)
     await fetch(`/api/add_sity?name=${sity_name}`, {
         method: "POST"
     })
 }
-async function get_sity_by_name(sity_name){
+async function get_sity_by_name(sity_name) {
     const sities = await get_table("sities")
-    return sities.find(el=>el.name == sity_name)
+    return sities.find(el => el.name == sity_name)
 }

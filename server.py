@@ -147,9 +147,9 @@ def get_arrivals():
     }
 
 @app.post("/api/add_visitor")
-def add_visitor(name: str,dr:datetime.date,phone:str,sex:boolean):
+def add_visitor(name: str,dr:datetime.date,phone:str,sex:boolean,sity_id:int):
     db = Session()
-    v = Visitor(name=name,dr=dr,phone=phone,sex=sex)
+    v = Visitor(name=name,dr=dr,phone=phone,sex=sex,sity_id=sity_id)
     db.add(v)
     db.commit()
     db.close()

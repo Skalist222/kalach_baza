@@ -22,6 +22,17 @@ sortVisitorElement.addEventListener("input", (e) => {
 });
 
 
+function preplace_on_off() {
+    const on_off_preplace = document.getElementById("on_off_preplace")
+    const preplace = document.getElementById("preplace")
+    if(on_off_preplace.checked){
+        preplace.classList.remove("invisible")
+    }
+    else{
+        preplace.classList.add("invisible")
+    }
+}
+
 async function alert_element(e) {
     color = e.style.backgroundColor
     e.style.backgroundColor = "#f09292"
@@ -36,7 +47,10 @@ async function get_table(table_name) {
     let result_table = (await res.json())[table_name]
     return result_table
 }
-
+async function get_last(table_name){
+    const result = await get_table(table_name)
+    return result[result.length-1]
+}
 
 async function getTemplateFromFile(path) {
     const res = await fetch(path);
@@ -105,5 +119,7 @@ function toggleMenu() {
 document.getElementById("collapse_visitor_add").click()
 document.getElementById("collapse_arrival_add").click()
 document.getElementById("collapse_settings").click()
+// document.getElementById("collapse_plase_new_visitor").click()
+document.getElementById("on_off_preplace").click()
 init();
 set_today();

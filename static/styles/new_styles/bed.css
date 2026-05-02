@@ -15,9 +15,11 @@
 .free {
     background: linear-gradient(#fff, #eaffea);
 }
+
 .busy {
     background: #b8f5c8;
 }
+
 .reserved {
     background: #ffd6b3;
 }
@@ -26,9 +28,11 @@
 .upper {
     border-top: 3px solid var(--border-dark);
 }
+
 .lower {
     border-bottom: 3px solid var(--border-dark);
 }
+
 /* большая лево/право */
 .bigger-left {
     border-bottom: 3px solid var(--border-dark);
@@ -36,12 +40,14 @@
     border-bottom-right-radius: 0px;
     margin-right: 0px;
 }
+
 .bigger-rigth {
     border-bottom: 3px solid var(--border-dark);
     border-right: 2px solid var(--border-dark);
     border-bottom-left-radius: 0px;
     margin-left: 0px;
 }
+
 /* пол */
 .bedsex {
     position: absolute;
@@ -55,9 +61,20 @@
     border-bottom-right-radius: 4px;
 }
 
+.bedcount {
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    margin: auto;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle;
+}
+
 .boy {
     background: #7db8ff;
 }
+
 .girl {
     background: #ff9ec7;
 }
@@ -77,6 +94,7 @@
 .unpayed {
     background: red;
 }
+
 /* .payed {
     content: "✓";
     color: green;

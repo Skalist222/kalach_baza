@@ -1,6 +1,3 @@
-// ------------------------------
-// Tooltip
-// ------------------------------
 function add_chase_tooltip(el, text, visual_element) {
     const tooltip = document.getElementById('tooltip')
     if (text != "") {
@@ -35,21 +32,29 @@ function add_chase_tooltip(el, text, visual_element) {
     });
 }
 async function renderArrivalInfo(data) {
-    const costEl = document.getElementById("current_arrival_cost"); // судя по index.html
+    const costEl = document.getElementById("current_arrival_cost");
     const startEl = document.getElementById("current_arrival_start");
     const stopEl = document.getElementById("current_arrival_stop");
+    const busy = document.getElementById("current_busy");
+    const not_busy = document.getElementById("current_not_busy");
 
     cur_ar_id = current_arrival_id()
-
     if (!cur_ar_id) {
         return;
     }
+
     const arrival = data.arrivals.find(a => a.id == cur_ar_id);
+
+    const placed = data.placements.filter(p=>p.arrival_id == cur_ar_id).length
+    const freeBeds = data.beds.length - placed
+
     if (!arrival) return;
 
     costEl.innerText = `Желательное пожертвование: ${arrival.cost}`;
     startEl.innerHTML = `Начало:${arrival.start}`;
     stopEl.innerHTML = `Конец: ${arrival.stop}`;
+    busy.innerHTML =`<div class="bed upper busy"><div class="bedcount">${placed}</div></div>`;
+    not_busy.innerHTML =`<div class="bed upper"><div class="bedcount">${freeBeds}</div></div>`;
 }
 // ------------------------------
 // Render Visitors
@@ -69,11 +74,11 @@ async function renderVisitors(data) {
 
 
         const vPlacements = data.placements.filter(p => p.visitor_id == v.id && p.arrival_id == current_arrival);
-        let sity = data.sities.find(s=>s.id ==v.sity)
-        if(!sity) sity = {name:""}
+        let sity = data.sities.find(s => s.id == v.sity)
+        if (!sity) sity = { name: "" }
         const sel = document.getElementById("visitors_types");
-        if(sel.value == 2 && vPlacements.length == 0)  return;
-        if(sel.value == 3 && vPlacements.length > 0) return;
+        if (sel.value == 2 && vPlacements.length == 0) return;
+        if (sel.value == 3 && vPlacements.length > 0) return;
 
         // if (document.getElementById("turn_on_selected_visitors").checked && vPlacements.length == 0) return;
 
@@ -94,10 +99,10 @@ async function renderVisitors(data) {
 
         const el = puzzle(
             [
-                {text:repl(v.name),class:"visitor_name"},
-                {text:repl(sity.name),class:"visitor_sity"},
+                { text: repl(v.name), class: "visitor_name" },
+                { text: repl(sity.name), class: "visitor_sity" },
             ]
-            ,"visitor greed column");
+            , "visitor greed column");
         // el.className = "visitor";
         // el.innerHTML = (repl(v.name));
 
@@ -130,11 +135,11 @@ async function renderVisitors(data) {
 
         el.addEventListener('contextmenu', (e) => {
             document.querySelectorAll('.bed-overlay').forEach(o => o.remove());
-            open_menu(e, visitor_menu(v, vPlacements, current_arrival,current_arrival_cost,data.sities));
+            open_menu(e, visitor_menu(v, vPlacements, current_arrival, current_arrival_cost, data.sities));
         });
         const age = v.dr ? calculate_age_str(v.dr) : 0;
-        
-        ve = tooltips_elements([non_placemant ? "Оплатил без заселения" : "", `Дата рождения: ${v.dr}`, `Телефон: ${v.phone}`, `Пол:`+repl(v.sex ? "М" : "Ж"), `Возраст: ${age}`])
+
+        ve = tooltips_elements([non_placemant ? "Оплатил без заселения" : "", `Дата рождения: ${v.dr}`, `Телефон: ${v.phone}`, `Пол:` + repl(v.sex ? "М" : "Ж"), `Возраст: ${age}`])
         add_chase_tooltip(el, "", ve);
 
         el.draggable = true;

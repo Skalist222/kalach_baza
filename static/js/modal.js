@@ -196,7 +196,10 @@ function modal_redact_visitor(visitor,sities) {
                     visitor.id,
                     document.getElementById("redact_name_visitor").value,
                     document.getElementById("redact_dr").value.replace(".", "-"),
-                    document.getElementById("redact_phone").value.replace("(", "").replace(")", "").replace("-", ""));
+                    document.getElementById("redact_phone").value.replace("(", "").replace(")", "").replace("-", ""),
+                    document.getElementById("redact_sity")
+                    
+                );
                 closeModal();
             }
         },
