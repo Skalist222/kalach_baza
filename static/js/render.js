@@ -37,6 +37,7 @@ async function renderArrivalInfo(data) {
     const stopEl = document.getElementById("current_arrival_stop");
     const busy = document.getElementById("current_busy");
     const not_busy = document.getElementById("current_not_busy");
+    const reserved = document.getElementById("current_reserved");
 
     cur_ar_id = current_arrival_id()
     if (!cur_ar_id) {
@@ -45,22 +46,24 @@ async function renderArrivalInfo(data) {
 
     const arrival = data.arrivals.find(a => a.id == cur_ar_id);
 
-    const placed = data.placements.filter(p=>p.arrival_id == cur_ar_id).length
-    const freeBeds = data.beds.length - placed
-
+    const count_busy = data.placements.filter(p=>p.arrival_id == cur_ar_id && p.status == "busy").length
+    const count_reserved =  data.placements.filter(p=>p.arrival_id == cur_ar_id && p.status == "reserved").length
+    const count_free = data.beds.length - (count_busy+count_reserved)
+   
     if (!arrival) return;
 
-    costEl.innerText = `Желательное пожертвование: ${arrival.cost}`;
-    startEl.innerHTML = `Начало:${arrival.start}`;
-    stopEl.innerHTML = `Конец: ${arrival.stop}`;
-    busy.innerHTML =`<div class="bed upper busy"><div class="bedcount">${placed}</div></div>`;
-    not_busy.innerHTML =`<div class="bed upper"><div class="bedcount">${freeBeds}</div></div>`;
+    costEl.innerText = `💵${arrival.cost}`;
+    startEl.innerHTML = `📅▶️${arrival.start}`;
+    stopEl.innerHTML = `📅✅${arrival.stop}`;
+    busy.innerHTML =`<div class="minibed upper busy"><div class="bedcount">${count_busy}</div></div>`;
+    not_busy.innerHTML =`<div class="minibed upper"><div class="bedcount">${count_free}</div></div>`;
+    reserved.innerHTML =`<div class="minibed upper reserved"><div class="bedcount">${count_reserved}</div></div>`;
 }
 // ------------------------------
 // Render Visitors
 // ------------------------------
 async function renderVisitors(data) {
-
+    
     const sort = document.getElementById("sortVisitors").value;
     const search = sort.toLowerCase();
     const list = document.getElementById("visitorList");
